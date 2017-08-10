@@ -360,7 +360,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER, STM32F051, STM32F0_DISCOVERY</Define>
+              <Define>USE_STDPERIPH_DRIVER, STM32F051, STM32F0_DISCOVERY, TMP_FAHRENHEIT</Define>
               <Undefine></Undefine>
               <IncludePath>..\src;..\src\APP;..\src\STM32F0-Discovery;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\inc;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\CMSIS\Device\ST\STM32F0xx\Include</IncludePath>
             </VariousControls>

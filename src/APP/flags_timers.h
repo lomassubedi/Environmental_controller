@@ -1,37 +1,8 @@
 #ifndef FLAGS_TIMERS_H_
 #define FLAGS_TIMERS_H_
 
-#include <stdint.h>
-
-#define 		YES 	1
-#define 		NO		0
-
-#define 		OFF		0
-#define 		ON		1
-
-#define 		LIGHT		0
-#define 		DARK		1
-
-#define 		AM			0
-#define 		PM			1
-
-typedef struct tmr {
-	uint16_t HH;
-	uint16_t MM;
-	uint16_t SS;
-} TMR;
-
-typedef struct timer {
-	uint16_t mn;
-	uint16_t sec;
-} TIMER;
-
-typedef struct time {
-	uint16_t hour;
-	uint16_t minute;
-	uint16_t second;
-	uint8_t amPm;
-} TIME;
+#include "config.h"
+#include "data_types.h"
 
 extern uint8_t flagPowerUp;
 extern uint8_t flagProfileTranstionFunction;
@@ -78,10 +49,10 @@ extern uint8_t flagHdVLCSrtDly;
 extern uint8_t flgHdVDCSrtDly;
 extern uint8_t flagCirLCSrtDly;
 
-extern uint8_t flagCir_DC_SrtDly;
-extern uint8_t flagVen_LC_SrtDly;
-extern uint8_t flagVen_DC_SrtDly;
-extern uint8_t flagFXP1_LC_SrtDly;
+extern uint8_t flagCirDCSrtDly;
+extern uint8_t flagVenLCSrtDly;
+extern uint8_t flagVenDCSrtDly;
+extern uint8_t flagFXP1LCSrtDly;
 extern uint8_t flagFXP1DCSrtDly;
 extern uint8_t flagFXP2LCSrtDly;
 extern uint8_t flagFXP2DCSrtDly;
@@ -96,16 +67,16 @@ extern uint8_t flagPreviousFXP1DCSrtDly;
 extern uint8_t flagPreviousFXP2LCSrtDly;
 extern uint8_t flagPreviousFXP2DCSrtDly;
 	
-extern TMR tmrHdV_LC_SrtDly;
-extern TMR tmrHdVDCSrtDly;
-extern TMR tmrCirLCSrtDly;
-extern TMR tmrCirDCSrtDly;	
-extern TMR tmrVenLCSrtDly;
-extern TMR tmrVenDCSrtDly;
-extern TMR tmrFXP1LCSrtDly;
-extern TMR tmrFXP1DCSrtDly;
-extern TMR tmrFXP2LCSrtDly;
-extern TMR tmrFXP2DCSrtDly;
+extern TIME_M tmrHdVLCSrtDly;
+extern TIME_M tmrHdVDCSrtDly;
+extern TIME_M tmrCirLCSrtDly;
+extern TIME_M tmrCirDCSrtDly;	
+extern TIME_M tmrVenLCSrtDly;
+extern TIME_M tmrVenDCSrtDly;
+extern TIME_M tmrFXP1LCSrtDly;
+extern TIME_M tmrFXP1DCSrtDly;
+extern TIME_M tmrFXP2LCSrtDly;
+extern TIME_M tmrFXP2DCSrtDly;
 
 extern uint8_t flagHdVLCRptTmrCclTime;
 extern uint8_t flagHdVDCRptTmrCclTime;
@@ -118,16 +89,16 @@ extern uint8_t flagFXP1DCRptTmrCclTime;
 extern uint8_t flagFXP2LCRptTmrCclTime;
 extern uint8_t flagFXP2DCRptTmrCclTime;
 
-extern TMR tmrHdVLCRptTmrCclTime;
-extern TMR tmrHdVDCRptTmrCclTime;
-extern TMR tmrCirLCRptTmrCclTime;
-extern TMR tmrCirDCRptTmrCclTime;
-extern TMR tmrVenLCRptTmrCclTime;
-extern TMR tmrVenDCRptTmrCclTime;
-extern TMR tmrFXP1LCRptTmrCclTime;
-extern TMR tmrFXP1DCRptTmrCclTime;
-extern TMR tmrFXP2LCRptTmrCclTime;
-extern TMR tmrFXP2DCRptTmrCclTime;
+extern TIME_M tmrHdVLCRptTmrCclTime;
+extern TIME_M tmrHdVDCRptTmrCclTime;
+extern TIME_M tmrCirLCRptTmrCclTime;
+extern TIME_M tmrCirDCRptTmrCclTime;
+extern TIME_M tmrVenLCRptTmrCclTime;
+extern TIME_M tmrVenDCRptTmrCclTime;
+extern TIME_M tmrFXP1LCRptTmrCclTime;
+extern TIME_M tmrFXP1DCRptTmrCclTime;
+extern TIME_M tmrFXP2LCRptTmrCclTime;
+extern TIME_M tmrFXP2DCRptTmrCclTime;
 
 extern uint8_t flagPreviousHdVLCRptTmrCclTime;
 extern uint8_t flagPreviousHdVDCRptTmrCclTime;
@@ -151,16 +122,16 @@ extern uint8_t flagFXP1DCRptTmrRptAfter;
 extern uint8_t flagFXP2LCRptTmrRptAfter;
 extern uint8_t flagFXP2DCRptTmrRptAfter;
 
-extern TMR tmrHdVLCRptTmrRptAfter;
-extern TMR tmrHdVDCRptTmrRptAfter;
-extern TMR tmrCirLCRptTmrRptAfter;
-extern TMR tmrCirDCRptTmrRptAfter;
-extern TMR tmrVenLCRptTmrRptAfter;
-extern TMR tmrVenDCRptTmrRptAfter;
-extern TMR tmrFXP1LCRptTmrRptAfter;
-extern TMR tmrFXP1DCRptTmrRptAfter;
-extern TMR tmrFXP2LCRptTmrRptAfter;
-extern TMR tmrFXP2DCRptTmrRptAfter;
+extern TIME_M tmrHdVLCRptTmrRptAfter;
+extern TIME_M tmrHdVDCRptTmrRptAfter;
+extern TIME_M tmrCirLCRptTmrRptAfter;
+extern TIME_M tmrCirDCRptTmrRptAfter;
+extern TIME_M tmrVenLCRptTmrRptAfter;
+extern TIME_M tmrVenDCRptTmrRptAfter;
+extern TIME_M tmrFXP1LCRptTmrRptAfter;
+extern TIME_M tmrFXP1DCRptTmrRptAfter;
+extern TIME_M tmrFXP2LCRptTmrRptAfter;
+extern TIME_M tmrFXP2DCRptTmrRptAfter;
 
 extern uint8_t flagMasterSuspOnVent;
 extern uint8_t flagHdVSuspOnVent;
@@ -184,11 +155,11 @@ const extern TIMER tmrHdVDCDeActDelayFactSet;
 	
 extern uint8_t flagHdVDCDeActDelay;
 
-extern TMR tmrHdVDCDeActDelay;
+extern TIME_M tmrHdVDCDeActDelay;
 
 const extern TIMER tmrCO2PostVenActDelayFactSet;
 
-extern TMR tmrCO2PostVenActDelay;
+extern TIME_M tmrCO2PostVenActDelay;
 
 extern uint8_t flagCO2PostVenActDelay;
 
@@ -196,11 +167,11 @@ extern uint8_t flagPreviousCO2PostVenActDelay;
 
 extern uint8_t flagAd1CO2Inj;
 
-extern TMR tmrHdVCO2Inj;
+extern TIME_M tmrHdVCO2Inj;
 
-extern TMR tmrCirCO2Inj;
-extern TMR tmrFXP1CO2Inj;
-extern TMR tmrFXP2CO2Inj;
+extern TIME_M tmrCirCO2Inj;
+extern TIME_M tmrFXP1CO2Inj;
+extern TIME_M tmrFXP2CO2Inj;
 
 extern uint8_t flagPreviousHdVMode;
 extern uint8_t flagPreviousCirMode;

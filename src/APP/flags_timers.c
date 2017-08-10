@@ -29,31 +29,39 @@ uint8_t flagPreviousCriticalOverTempFault = NO;
 uint8_t flagPreviousSensorComFault = NO;
 uint8_t flagPreviousWiFiComFault = NO;
 
-uint8_t flagWiFiComDTS; 
+uint8_t flagWiFiComDTS = NO; 
 
 uint8_t flagPreviousRS485FuseFault = NO;
 uint8_t flagPreviousEMRFuseFault = NO;
 uint8_t flagPreviousBackUpBattFault = NO;
 uint8_t flagAd1ReStrikeFault = NO;
 
-TIMER timerReStrikeFault = {0, 625};
+TIMER timerReStrikeFault = {15, 0};
 
-float tempVenDCTempThresholdOff = 65.0;
-float tempVenLCTempThresholdOff = 65.0;
+#ifdef TMP_FAHRENHEIT
+	float tempVenDCTempThresholdOff = 65.0;
+	float tempVenLCTempThresholdOff = 65.0;
+#endif
+
+#ifdef TMP_CELCIUS
+	float tempVenDCTempThresholdOff = 18.3333;
+	float tempVenLCTempThresholdOff = 18.3333;
+#endif
+
 float humVenDCHumThresholdOff = 0.5;
 float humVenLCHumThresholdOff = 0.5;
 
 uint8_t flagHdVLCSrtDly = NO;
 uint8_t flgHdVDCSrtDly = NO;
 uint8_t flagCirLCSrtDly = NO;
-
-uint8_t flagCir_DC_SrtDly = NO;
-uint8_t flagVen_LC_SrtDly = NO;
-uint8_t flagVen_DC_SrtDly = NO;
-uint8_t flagFXP1_LC_SrtDly = NO;
+uint8_t flagCirDCSrtDly = NO;
+uint8_t flagVenLCSrtDly = NO;
+uint8_t flagVenDCSrtDly = NO;
+uint8_t flagFXP1LCSrtDly = NO;
 uint8_t flagFXP1DCSrtDly = NO;
 uint8_t flagFXP2LCSrtDly = NO;
 uint8_t flagFXP2DCSrtDly = NO;
+
 uint8_t flagPreviousHdVLCSrtDly = NO;
 uint8_t flagPreviousHdVDCSrtDly = NO;
 uint8_t flagPreviousCirLCSrtDly = NO;
@@ -65,16 +73,16 @@ uint8_t flagPreviousFXP1DCSrtDly = NO;
 uint8_t flagPreviousFXP2LCSrtDly = NO;
 uint8_t flagPreviousFXP2DCSrtDly = NO;
 
-TMR tmrHdV_LC_SrtDly = {0, 0};
-TMR tmrHdVDCSrtDly = {0, 0};
-TMR tmrCirLCSrtDly = {0, 0};
-TMR tmrCirDCSrtDly = {0, 0};	
-TMR tmrVenLCSrtDly = {0, 0};
-TMR tmrVenDCSrtDly = {0, 0};
-TMR tmrFXP1LCSrtDly = {0, 0};
-TMR tmrFXP1DCSrtDly = {0, 0};
-TMR tmrFXP2LCSrtDly = {0, 0};
-TMR tmrFXP2DCSrtDly = {0, 0};
+TIME_M tmrHdVLCSrtDly = {0, 0, 0};
+TIME_M tmrHdVDCSrtDly = {0, 0, 0};
+TIME_M tmrCirLCSrtDly = {0, 0, 0};
+TIME_M tmrCirDCSrtDly = {0, 0, 0};	
+TIME_M tmrVenLCSrtDly = {0, 0, 0};
+TIME_M tmrVenDCSrtDly = {0, 0, 0};
+TIME_M tmrFXP1LCSrtDly = {0, 0, 0};
+TIME_M tmrFXP1DCSrtDly = {0, 0, 0};
+TIME_M tmrFXP2LCSrtDly = {0, 0, 0};
+TIME_M tmrFXP2DCSrtDly = {0, 0, 0};
 
 uint8_t flagHdVLCRptTmrCclTime = NO;
 uint8_t flagHdVDCRptTmrCclTime = NO;
@@ -87,16 +95,16 @@ uint8_t flagFXP1DCRptTmrCclTime = NO;
 uint8_t flagFXP2LCRptTmrCclTime = NO;
 uint8_t flagFXP2DCRptTmrCclTime = NO;
 
-TMR tmrHdVLCRptTmrCclTime = {0, 5, 0};
-TMR tmrHdVDCRptTmrCclTime = {0, 5, 0};
-TMR tmrCirLCRptTmrCclTime = {0, 5, 0};
-TMR tmrCirDCRptTmrCclTime = {0, 5, 0};
-TMR tmrVenLCRptTmrCclTime = {0, 5, 0};
-TMR tmrVenDCRptTmrCclTime = {0, 5, 0};
-TMR tmrFXP1LCRptTmrCclTime = {0, 5, 0};
-TMR tmrFXP1DCRptTmrCclTime = {0, 5, 0};
-TMR tmrFXP2LCRptTmrCclTime = {0, 5, 0};
-TMR tmrFXP2DCRptTmrCclTime = {0, 5, 0};
+TIME_M tmrHdVLCRptTmrCclTime = {0, 5, 0};
+TIME_M tmrHdVDCRptTmrCclTime = {0, 5, 0};
+TIME_M tmrCirLCRptTmrCclTime = {0, 5, 0};
+TIME_M tmrCirDCRptTmrCclTime = {0, 5, 0};
+TIME_M tmrVenLCRptTmrCclTime = {0, 5, 0};
+TIME_M tmrVenDCRptTmrCclTime = {0, 5, 0};
+TIME_M tmrFXP1LCRptTmrCclTime = {0, 5, 0};
+TIME_M tmrFXP1DCRptTmrCclTime = {0, 5, 0};
+TIME_M tmrFXP2LCRptTmrCclTime = {0, 5, 0};
+TIME_M tmrFXP2DCRptTmrCclTime = {0, 5, 0};
 
 uint8_t flagPreviousHdVLCRptTmrCclTime = NO;
 uint8_t flagPreviousHdVDCRptTmrCclTime = NO;
@@ -120,32 +128,36 @@ uint8_t flagFXP1DCRptTmrRptAfter = NO;
 uint8_t flagFXP2LCRptTmrRptAfter = NO;
 uint8_t flagFXP2DCRptTmrRptAfter = NO;
 
-TMR tmrHdVLCRptTmrRptAfter  = {1, 30, 0};
-TMR tmrHdVDCRptTmrRptAfter  = {1, 30, 0};
-TMR tmrCirLCRptTmrRptAfter  = {1, 30, 0};
-TMR tmrCirDCRptTmrRptAfter  = {1, 30, 0};
-TMR tmrVenLCRptTmrRptAfter  = {1, 30, 0};
-TMR tmrVenDCRptTmrRptAfter  = {1, 30, 0};
-TMR tmrFXP1LCRptTmrRptAfter  = {1, 30, 0};
-TMR tmrFXP1DCRptTmrRptAfter  = {1, 30, 0};
-TMR tmrFXP2LCRptTmrRptAfter  = {1, 30, 0};
-TMR tmrFXP2DCRptTmrRptAfter  = {1, 30, 0};
+TIME_M tmrHdVLCRptTmrRptAfter  = {1, 30, 0};
+TIME_M tmrHdVDCRptTmrRptAfter  = {1, 30, 0};
+TIME_M tmrCirLCRptTmrRptAfter  = {1, 30, 0};
+TIME_M tmrCirDCRptTmrRptAfter  = {1, 30, 0};
+TIME_M tmrVenLCRptTmrRptAfter  = {1, 30, 0};
+TIME_M tmrVenDCRptTmrRptAfter  = {1, 30, 0};
+TIME_M tmrFXP1LCRptTmrRptAfter  = {1, 30, 0};
+TIME_M tmrFXP1DCRptTmrRptAfter  = {1, 30, 0};
+TIME_M tmrFXP2LCRptTmrRptAfter  = {1, 30, 0};
+TIME_M tmrFXP2DCRptTmrRptAfter  = {1, 30, 0};
 
 uint8_t flagMasterSuspOnVent = NO;
+
 uint8_t flagHdVSuspOnVent = NO;
 uint8_t flagCirSuspOnVent = NO;
 uint8_t flagVenSuspOnVent = NO;
 uint8_t flagFXP1SuspOnVent = NO;
 uint8_t flagFXP2SuspOnVent = NO;
+
 uint8_t flagPreviousHdVSuspOnVent = NO;
 uint8_t flagPreviousCirSuspOnVent = NO;
 uint8_t flagPreviousVenSuspOnVent = NO;
 uint8_t flagPreviousFXP1SuspOnVent = NO;
 uint8_t flagPreviousFXP2SuspOnVent = NO;
+
 uint8_t flagPreviousLightForceOn = NO;
+
 uint8_t flagPreviousHdVForceOn = NO;
 uint8_t flagPreviousCirForceOn = NO;
-uint8_t flagPreviousVen = NO;
+uint8_t flagPreviousVenForceOn = NO; // Added ForceOn not mentioned in excel file
 uint8_t flagPreviousFXP1ForceOn = NO;
 uint8_t flagPreviousFXP2ForceOn = NO;
 
@@ -153,11 +165,11 @@ const TIMER tmrHdVDCDeActDelayFactSet = {5, 0};
 	
 uint8_t flagHdVDCDeActDelay = NO;
 
-TMR tmrHdVDCDeActDelay = {0, 0, 0};
+TIME_M tmrHdVDCDeActDelay = {0, 0, 0};
 
 const TIMER tmrCO2PostVenActDelayFactSet = {5, 0};
 
-TMR tmrCO2PostVenActDelay = {0, 0, 0};
+TIME_M tmrCO2PostVenActDelay = {0, 0, 0};
 
 uint8_t flagCO2PostVenActDelay = NO;
 
@@ -165,10 +177,10 @@ uint8_t flagPreviousCO2PostVenActDelay = NO;
 
 uint8_t flagAd1CO2Inj = NO;
 
-TMR tmrHdVCO2Inj = {0 , 5, 0};
-TMR tmrCirCO2Inj = {0 , 5, 0};
-TMR tmrFXP1CO2Inj = {0 , 5, 0};
-TMR tmrFXP2CO2Inj = {0 , 5, 0};
+TIME_M tmrHdVCO2Inj = {0 , 5, 0};
+TIME_M tmrCirCO2Inj = {0 , 5, 0};
+TIME_M tmrFXP1CO2Inj = {0 , 5, 0};
+TIME_M tmrFXP2CO2Inj = {0 , 5, 0};
 
 uint8_t flagPreviousHdVMode = NO;
 uint8_t flagPreviousCirMode = NO;
