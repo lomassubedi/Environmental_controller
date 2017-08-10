@@ -153,12 +153,13 @@ enum ROM_PERMANENT_VAR_PAGE3 {
 	Ad1_Pr1_FXP1_FlexFunc,
 	Ad1_Pr1_FXP1_Tmr_LC_CclTime = Ad1_Pr1_FXP1_FlexFunc + 4,	
 	Ad1_Pr1_FXP1_Tmr_LC_RptAftr = Ad1_Pr1_FXP1_Tmr_LC_CclTime + 4,
-	Ad1_Pr1_FXP1_Tmr_DC_CclTime = Ad1_Pr1_FXP1_Tmr_LC_RptAftr + 4
+	
 };
 
 enum ROM_PERMANENT_VAR_PAGE4 {	
 	
-	Ad1_Pr1_FXP1_Tmr_DC_RptAftr = 0,
+	Ad1_Pr1_FXP1_Tmr_DC_CclTime = 0,
+	Ad1_Pr1_FXP1_Tmr_DC_RptAftr = Ad1_Pr1_FXP1_Tmr_DC_CclTime + 4,
 	Ad1_Pr1_FXP1_Htr_LC_OnTemp = Ad1_Pr1_FXP1_Tmr_DC_RptAftr + 4,
 	Ad1_Pr1_FXP1_Htr_LC_OffTemp = Ad1_Pr1_FXP1_Htr_LC_OnTemp + 4,
 	Ad1_Pr1_FXP1_Htr_DC_OnTemp = Ad1_Pr1_FXP1_Htr_LC_OffTemp + 4,
@@ -178,40 +179,281 @@ enum ROM_PERMANENT_VAR_PAGE4 {
 	Ad1_Pr1_FXP1_Co2_Opnlp_InjTime = Ad1_Pr1_FXP1_DeH_DC_OffHum + 4,
 	Ad1_Pr1_FXP1_Co2_CylGen = Ad1_Pr1_FXP1_Co2_Opnlp_InjTime + 4,
 	
-	Ad1_Pr1_FXP1_Co2_Cyl_StPtPPM = Ad1_Pr1_FXP1_Co2_CylGen + 4,
-	Ad1_Pr1_FXP1_Co2_Gen_OnPPM = Ad1_Pr1_FXP1_Co2_Cyl_StPtPPM + 4,
-	Ad1_Pr1_FXP1_Co2_Gen_OffPPM = Ad1_Pr1_FXP1_Co2_Gen_OnPPM + 4
+	Ad1_Pr1_FXP1_Co2_Cyl_StPtPPM,
+	Ad1_Pr1_FXP1_Co2_Gen_OnPPM = Ad1_Pr1_FXP1_Co2_Cyl_StPtPPM + 2,
+	Ad1_Pr1_FXP1_Co2_Gen_OffPPM = Ad1_Pr1_FXP1_Co2_Gen_OnPPM + 2,
 	
-//	Ad1_Pr1_FXP2_OnOff
-//	Ad1_Pr1_FXP2_LC_OnOff
-//	Ad1_Pr1_FXP2_LC_SrtDly
-//	Ad1_Pr1_FXP2_DC_OnOff
-//	Ad1_Pr1_FXP2_DC_SrtDly      
-//	Ad1_Pr1_FXP2_VentLoc_YesNo
-//	Ad1_Pr1_FXP2_FlexFunc
-//	Ad1_Pr1_FXP2_Tmr_LC_CclTime
-//	Ad1_Pr1_FXP2_Tmr_LC_RptAftr
-//	Ad1_Pr1_FXP2_Tmr_DC_CclTime
-//	Ad1_Pr1_FXP2_Tmr_DC_RptAftr
-//	Ad1_Pr1_FXP2_Htr_LC_OnTemp
-//	Ad1_Pr1_FXP2_Htr_LC_OffTemp
-//	Ad1_Pr1_FXP2_Htr_DC_OnTemp
-//	Ad1_Pr1_FXP2_Htr_DC_OffTemp
-//	Ad1_Pr1_FXP2_Cool_LC_OnTemp
-//	Ad1_Pr1_FXP2_Cool_LC_OffTemp
-//	Ad1_Pr1_FXP2_Cool_DC_OnTemp
-//	Ad1_Pr1_FXP2_Cool_DC_OffTemp
-//	Ad1_Pr1_FXP2_Hum_LC_OnHum
-//	Ad1_Pr1_FXP2_Hum_LC_OffHum
-//	Ad1_Pr1_FXP2_Hum_DC_OnHum
-//	Ad1_Pr1_FXP2_Hum_DC_OffHum
-//	Ad1_Pr1_FXP2_DeH_LC_OnHum
-//	Ad1_Pr1_FXP2_DeH_LC_OffHum
-//	Ad1_Pr1_FXP2_DeH_DC_OnHum
-//	Ad1_Pr1_FXP2_DeH_DC_OffHum
-//	Ad1_Pr1_FXP2_Co2_Opnlp_InjTime
-//	Ad1_Pr1_FXP2_Co2_CylGen
-
+	Ad1_Pr1_FXP2_OnOff = Ad1_Pr1_FXP1_Co2_Gen_OffPPM + 2,
+	
+	Ad1_Pr1_FXP2_LC_OnOff,
+	Ad1_Pr1_FXP2_LC_SrtDly,
+	Ad1_Pr1_FXP2_DC_OnOff = Ad1_Pr1_FXP2_LC_SrtDly + 4,
+	Ad1_Pr1_FXP2_DC_SrtDly,
+	Ad1_Pr1_FXP2_VentLoc_YesNo = Ad1_Pr1_FXP2_DC_SrtDly + 4,
+	Ad1_Pr1_FXP2_FlexFunc,
+	Ad1_Pr1_FXP2_Tmr_LC_CclTime,
+	Ad1_Pr1_FXP2_Tmr_LC_RptAftr = Ad1_Pr1_FXP2_Tmr_LC_CclTime + 4,
+	Ad1_Pr1_FXP2_Tmr_DC_CclTime = Ad1_Pr1_FXP2_Tmr_LC_RptAftr + 4,
+	Ad1_Pr1_FXP2_Tmr_DC_RptAftr = Ad1_Pr1_FXP2_Tmr_DC_CclTime + 4,
+	Ad1_Pr1_FXP2_Htr_LC_OnTemp = Ad1_Pr1_FXP2_Tmr_DC_RptAftr + 4,	
+	
 };
+
+enum ROM_PERMENANT_VAR_PAGE5 {
+	
+	Ad1_Pr1_FXP2_Htr_LC_OffTemp = 0,
+	Ad1_Pr1_FXP2_Htr_DC_OnTemp = Ad1_Pr1_FXP2_Htr_LC_OffTemp + 4,
+	Ad1_Pr1_FXP2_Htr_DC_OffTemp = Ad1_Pr1_FXP2_Htr_DC_OnTemp + 4,
+	Ad1_Pr1_FXP2_Cool_LC_OnTemp = Ad1_Pr1_FXP2_Htr_DC_OffTemp + 4,
+	Ad1_Pr1_FXP2_Cool_LC_OffTemp = Ad1_Pr1_FXP2_Cool_LC_OnTemp + 4,
+	Ad1_Pr1_FXP2_Cool_DC_OnTemp = Ad1_Pr1_FXP2_Cool_LC_OffTemp + 4,
+	Ad1_Pr1_FXP2_Cool_DC_OffTemp = Ad1_Pr1_FXP2_Cool_DC_OnTemp + 4,
+	Ad1_Pr1_FXP2_Hum_LC_OnHum = Ad1_Pr1_FXP2_Cool_DC_OffTemp + 4,
+	Ad1_Pr1_FXP2_Hum_LC_OffHum = Ad1_Pr1_FXP2_Hum_LC_OnHum + 4,
+	Ad1_Pr1_FXP2_Hum_DC_OnHum = Ad1_Pr1_FXP2_Hum_LC_OffHum + 4,
+	Ad1_Pr1_FXP2_Hum_DC_OffHum = Ad1_Pr1_FXP2_Hum_DC_OnHum + 4,
+	Ad1_Pr1_FXP2_DeH_LC_OnHum = Ad1_Pr1_FXP2_Hum_DC_OffHum + 4,
+	Ad1_Pr1_FXP2_DeH_LC_OffHum = Ad1_Pr1_FXP2_DeH_LC_OnHum + 4,
+	Ad1_Pr1_FXP2_DeH_DC_OnHum = Ad1_Pr1_FXP2_DeH_LC_OffHum + 4,
+	Ad1_Pr1_FXP2_DeH_DC_OffHum = Ad1_Pr1_FXP2_DeH_DC_OnHum + 4,
+	Ad1_Pr1_FXP2_Co2_Opnlp_InjTime = Ad1_Pr1_FXP2_DeH_DC_OffHum + 4,
+	Ad1_Pr1_FXP2_Co2_CylGen = Ad1_Pr1_FXP2_Co2_Opnlp_InjTime + 4,	
+	Ad1_Pr1_FXP2_Co2_Cyl_StPtPPM,
+	Ad1_Pr1_FXP2_Co2_Gen_OnPPM = Ad1_Pr1_FXP2_Co2_Cyl_StPtPPM + 2,
+	Ad1_Pr1_FXP2_Co2_Gen_OffPPM = Ad1_Pr1_FXP2_Co2_Gen_OnPPM + 2,
+	Ad1_Pr2_Light_Operation_Mode = Ad1_Pr1_FXP2_Co2_Gen_OffPPM + 2,
+	Ad1_Pr2_Light_OnTime,
+	Ad1_Pr2_Light_OffTime = Ad1_Pr2_Light_OnTime + 4,
+	Ad1_Pr2_Light_LC_Duration = Ad1_Pr2_Light_OffTime + 4,
+	Ad1_Pr2_Light_DC_Duration = Ad1_Pr2_Light_LC_Duration + 4,
+	Ad1_Pr2_Light_LC_TimeRemain = Ad1_Pr2_Light_DC_Duration + 4,
+	Ad1_Pr2_Light_DC_TimeRemain = Ad1_Pr2_Light_LC_TimeRemain + 4,
+	Ad1_Pr2_HdV_OnOff = Ad1_Pr2_Light_DC_TimeRemain + 4,
+	Ad1_Pr2_HdV_LC_OnOff,
+	Ad1_Pr2_HdV_LC_SrtDly,
+	Ad1_Pr2_HdV_DC_OnOff = Ad1_Pr2_HdV_LC_SrtDly + 4,
+	Ad1_Pr2_HdV_DC_SrtDly,   
+	Ad1_Pr2_HdV_VentLoc_YesNo = Ad1_Pr2_HdV_DC_SrtDly + 4,
+//	Ad1_Pr2_HdV_LC_OnOff,
+//	Ad1_Pr2_HdV_DC_OnOff,
+	Ad1_Pr2_HdV_FlexFunc,
+	Ad1_Pr2_HdV_Tmr_LC_CclTime = Ad1_Pr2_HdV_FlexFunc + 4,
+	Ad1_Pr2_HdV_Tmr_LC_RptAftr = Ad1_Pr2_HdV_Tmr_LC_CclTime + 4,
+	Ad1_Pr2_HdV_Tmr_DC_CclTime = Ad1_Pr2_HdV_Tmr_LC_RptAftr + 4,
+	Ad1_Pr2_HdV_Tmr_DC_RptAftr = Ad1_Pr2_HdV_Tmr_DC_CclTime + 4,
+	Ad1_Pr2_HdV_Htr_LC_OnTemp = Ad1_Pr2_HdV_Tmr_DC_RptAftr + 4
+	
+};
+
+enum ROM_PERMENANT_VAR_PAGE6 {
+	
+	Ad1_Pr2_HdV_Htr_LC_OffTemp = 0,
+	Ad1_Pr2_HdV_Htr_DC_OnTemp = Ad1_Pr2_HdV_Htr_LC_OffTemp + 4,
+	Ad1_Pr2_HdV_Htr_DC_OffTemp = Ad1_Pr2_HdV_Htr_DC_OnTemp + 4,
+	Ad1_Pr2_HdV_Cool_LC_OnTemp = Ad1_Pr2_HdV_Htr_DC_OffTemp + 4,
+	Ad1_Pr2_HdV_Cool_LC_OffTemp = Ad1_Pr2_HdV_Cool_LC_OnTemp + 4,
+	Ad1_Pr2_HdV_Cool_DC_OnTemp = Ad1_Pr2_HdV_Cool_LC_OffTemp + 4,
+	Ad1_Pr2_HdV_Cool_DC_OffTemp = Ad1_Pr2_HdV_Cool_DC_OnTemp + 4,
+	Ad1_Pr2_HdV_Hum_LC_OnHum = Ad1_Pr2_HdV_Cool_DC_OffTemp + 4,
+	Ad1_Pr2_HdV_Hum_LC_OffHum = Ad1_Pr2_HdV_Hum_LC_OnHum + 4,
+	Ad1_Pr2_HdV_Hum_DC_OnHum = Ad1_Pr2_HdV_Hum_LC_OffHum + 4,
+	Ad1_Pr2_HdV_Hum_DC_OffHum = Ad1_Pr2_HdV_Hum_DC_OnHum + 4,
+	Ad1_Pr2_HdV_DeH_LC_OnHum = Ad1_Pr2_HdV_Hum_DC_OffHum + 4,
+	Ad1_Pr2_HdV_DeH_LC_OffHum = Ad1_Pr2_HdV_DeH_LC_OnHum + 4,
+	Ad1_Pr2_HdV_DeH_DC_OnHum = Ad1_Pr2_HdV_DeH_LC_OffHum + 4,
+	Ad1_Pr2_HdV_DeH_DC_OffHum = Ad1_Pr2_HdV_DeH_DC_OnHum + 4,
+	Ad1_Pr2_HdV_Co2_Opnlp_InjTime = Ad1_Pr2_HdV_DeH_DC_OffHum + 4,
+	Ad1_Pr2_HdV_Co2_CylGen = Ad1_Pr2_HdV_Co2_Opnlp_InjTime + 4,
+	Ad1_Pr2_HdV_Co2_Cyl_StPtPPM,
+	Ad1_Pr2_HdV_Co2_Gen_OnPPM = Ad1_Pr2_HdV_Co2_Cyl_StPtPPM + 2,
+	Ad1_Pr2_HdV_Co2_Gen_OffPPM = Ad1_Pr2_HdV_Co2_Gen_OnPPM + 2,
+	Ad1_Pr2_Cir_OnOff = Ad1_Pr2_HdV_Co2_Gen_OffPPM + 2,
+	Ad1_Pr2_Cir_LC_OnOff,
+	Ad1_Pr2_Cir_LC_SrtDly,    
+	Ad1_Pr2_Cir_DC_OnOff = Ad1_Pr2_Cir_LC_SrtDly + 4,    
+	Ad1_Pr2_Cir_DC_SrtDly,
+	Ad1_Pr2_Cir_VentLoc_YesNo = Ad1_Pr2_Cir_DC_SrtDly + 4,
+	Ad1_Pr2_Cir_FlexFunc,
+	Ad1_Pr2_Cir_Tmr_LC_CclTime = Ad1_Pr2_Cir_FlexFunc + 4,
+	Ad1_Pr2_Cir_Tmr_LC_RptAftr = Ad1_Pr2_Cir_Tmr_LC_CclTime + 4,
+	Ad1_Pr2_Cir_Tmr_DC_CclTime = Ad1_Pr2_Cir_Tmr_LC_RptAftr + 4,
+	Ad1_Pr2_Cir_Tmr_DC_RptAftr = Ad1_Pr2_Cir_Tmr_DC_CclTime + 4,
+	Ad1_Pr2_Cir_Htr_LC_OnTemp = Ad1_Pr2_Cir_Tmr_DC_RptAftr + 4,
+	Ad1_Pr2_Cir_Htr_LC_OffTemp = Ad1_Pr2_Cir_Htr_LC_OnTemp + 4,
+	Ad1_Pr2_Cir_Htr_DC_OnTemp = Ad1_Pr2_Cir_Htr_LC_OffTemp + 4,
+	Ad1_Pr2_Cir_Htr_DC_OffTemp = Ad1_Pr2_Cir_Htr_DC_OnTemp + 4,
+	Ad1_Pr2_Cir_Cool_LC_OnTemp = Ad1_Pr2_Cir_Htr_DC_OffTemp + 4,
+	Ad1_Pr2_Cir_Cool_LC_OffTemp = Ad1_Pr2_Cir_Cool_LC_OnTemp + 4,
+	
+};
+
+enum ROM_PERMENANT_VAR_PAGE7 {
+	
+	Ad1_Pr2_Cir_Cool_DC_OnTemp = 0,
+	Ad1_Pr2_Cir_Cool_DC_OffTemp = Ad1_Pr2_Cir_Cool_DC_OnTemp + 4,
+	Ad1_Pr2_Cir_Hum_LC_OnHum = Ad1_Pr2_Cir_Cool_DC_OffTemp + 4,
+	Ad1_Pr2_Cir_Hum_LC_OffHum = Ad1_Pr2_Cir_Hum_LC_OnHum + 4,
+	Ad1_Pr2_Cir_Hum_DC_OnHum = Ad1_Pr2_Cir_Hum_LC_OffHum + 4,
+	Ad1_Pr2_Cir_Hum_DC_OffHum = Ad1_Pr2_Cir_Hum_DC_OnHum + 4,
+	Ad1_Pr2_Cir_DeH_LC_OnHum = Ad1_Pr2_Cir_Hum_DC_OffHum + 4,
+	Ad1_Pr2_Cir_DeH_LC_OffHum = Ad1_Pr2_Cir_DeH_LC_OnHum + 4,
+	Ad1_Pr2_Cir_DeH_DC_OnHum = Ad1_Pr2_Cir_DeH_LC_OffHum + 4,
+	Ad1_Pr2_Cir_DeH_DC_OffHum = Ad1_Pr2_Cir_DeH_DC_OnHum + 4,
+	Ad1_Pr2_Cir_Co2_Opnlp_InjTime = Ad1_Pr2_Cir_DeH_DC_OffHum + 4,
+	Ad1_Pr2_Cir_Co2_CylGen = Ad1_Pr2_Cir_Co2_Opnlp_InjTime + 4,
+	Ad1_Pr2_Cir_Co2_Cyl_StPtPPM,
+	Ad1_Pr2_Cir_Co2_Gen_OnPPM = Ad1_Pr2_Cir_Co2_Cyl_StPtPPM + 2,
+	Ad1_Pr2_Cir_Co2_Gen_OffPPM = Ad1_Pr2_Cir_Co2_Gen_OnPPM + 2,
+	Ad1_Pr2_Ven_OnOff = Ad1_Pr2_Cir_Co2_Gen_OffPPM + 2,
+	Ad1_Pr2_Ven_LC_OnOff,
+	Ad1_Pr2_Ven_LC_SrtDly,
+	Ad1_Pr2_Ven_RptVnt_LC_OnOff = Ad1_Pr2_Ven_LC_SrtDly + 4,
+	Ad1_Pr2_Ven_RptVnt_LC_CclTime,
+	Ad1_Pr2_Ven_RptVnt_LC_RptAftr = Ad1_Pr2_Ven_RptVnt_LC_CclTime + 4,
+	Ad1_Pr2_Ven_TempVnt_OnOff = Ad1_Pr2_Ven_RptVnt_LC_RptAftr + 4,
+	Ad1_Pr2_Ven_TempVnt_LC_OnTemp,
+	Ad1_Pr2_Ven_TempVnt_LC_OffTemp = Ad1_Pr2_Ven_TempVnt_LC_OnTemp + 4,
+	Ad1_Pr2_Ven_HumVnt_OnOff = Ad1_Pr2_Ven_TempVnt_LC_OffTemp + 4,
+	Ad1_Pr2_Ven_LC_HumVnt_OnHum,
+	Ad1_Pr2_Ven_LC_HumVnt_OffHum = Ad1_Pr2_Ven_LC_HumVnt_OnHum + 4,
+	Ad1_Pr2_Ven_DC_OnOff = Ad1_Pr2_Ven_LC_HumVnt_OffHum + 4,
+	Ad1_Pr2_Ven_DC_SrtDly,
+	Ad1_Pr2_Ven_RptVnt_DC_OnOff = Ad1_Pr2_Ven_DC_SrtDly + 4,
+	Ad1_Pr2_Ven_RptVnt_DC_CclTime,
+	Ad1_Pr2_Ven_RptVnt_DC_RptAftr = Ad1_Pr2_Ven_RptVnt_DC_CclTime + 4,
+//	Ad1_Pr2_Ven_TempVnt_OnOff,
+	Ad1_Pr2_Ven_TempVnt_DC_OnTemp = Ad1_Pr2_Ven_RptVnt_DC_RptAftr + 4,
+	Ad1_Pr2_Ven_TempVnt_DC_OffTemp = Ad1_Pr2_Ven_TempVnt_DC_OnTemp + 4,
+//	Ad1_Pr2_Ven_HumVnt_OnOff,
+	Ad1_Pr2_Ven_HumVnt_DC_OnHum = Ad1_Pr2_Ven_TempVnt_DC_OffTemp + 4,
+	Ad1_Pr2_Ven_HumVnt_DC_OffHum = Ad1_Pr2_Ven_HumVnt_DC_OnHum + 4,
+	Ad1_Pr2_FXP1_OnOff = Ad1_Pr2_Ven_HumVnt_DC_OffHum + 4,
+	Ad1_Pr2_FXP1_LC_OnOff,
+	Ad1_Pr2_FXP1_LC_SrtDly,
+	Ad1_Pr2_FXP1_DC_OnOff = Ad1_Pr2_FXP1_LC_SrtDly + 4,
+	Ad1_Pr2_FXP1_DC_SrtDly
+};
+
+enum ROM_PERMENANT_VAR_PAGE8 {
+	
+	Ad1_Pr2_FXP1_VentLoc_YesNo = 0,	
+	Ad1_Pr2_FXP1_FlexFunc,
+	Ad1_Pr2_FXP1_Tmr_LC_CclTime = Ad1_Pr2_FXP1_FlexFunc + 4,
+	Ad1_Pr2_FXP1_Tmr_LC_RptAftr = Ad1_Pr2_FXP1_Tmr_LC_CclTime + 4,
+	Ad1_Pr2_FXP1_Tmr_DC_CclTime = Ad1_Pr2_FXP1_Tmr_LC_RptAftr + 4,
+	Ad1_Pr2_FXP1_Tmr_DC_RptAftr = Ad1_Pr2_FXP1_Tmr_DC_CclTime + 4,
+	Ad1_Pr2_FXP1_Htr_LC_OnTemp = Ad1_Pr2_FXP1_Tmr_DC_RptAftr + 4,
+	Ad1_Pr2_FXP1_Htr_LC_OffTemp = Ad1_Pr2_FXP1_Htr_LC_OnTemp + 4,
+	Ad1_Pr2_FXP1_Htr_DC_OnTemp = Ad1_Pr2_FXP1_Htr_LC_OffTemp + 4,
+	Ad1_Pr2_FXP1_Htr_DC_OffTemp = Ad1_Pr2_FXP1_Htr_DC_OnTemp + 4,
+	Ad1_Pr2_FXP1_Cool_LC_OnTemp = Ad1_Pr2_FXP1_Htr_DC_OffTemp + 4,
+	Ad1_Pr2_FXP1_Cool_LC_OffTemp = Ad1_Pr2_FXP1_Cool_LC_OnTemp + 4,
+	Ad1_Pr2_FXP1_Cool_DC_OnTemp = Ad1_Pr2_FXP1_Cool_LC_OffTemp + 4,
+	Ad1_Pr2_FXP1_Cool_DC_OffTemp = Ad1_Pr2_FXP1_Cool_DC_OnTemp + 4,
+	Ad1_Pr2_FXP1_Hum_LC_OnHum = Ad1_Pr2_FXP1_Cool_DC_OffTemp + 4,
+	Ad1_Pr2_FXP1_Hum_LC_OffHum = Ad1_Pr2_FXP1_Hum_LC_OnHum + 4,
+	Ad1_Pr2_FXP1_Hum_DC_OnHum = Ad1_Pr2_FXP1_Hum_LC_OffHum + 4,
+	Ad1_Pr2_FXP1_Hum_DC_OffHum = Ad1_Pr2_FXP1_Hum_DC_OnHum + 4,
+	Ad1_Pr2_FXP1_DeH_LC_OnHum = Ad1_Pr2_FXP1_Hum_DC_OffHum + 4,
+	Ad1_Pr2_FXP1_DeH_LC_OffHum = Ad1_Pr2_FXP1_DeH_LC_OnHum + 4,
+	Ad1_Pr2_FXP1_DeH_DC_OnHum = Ad1_Pr2_FXP1_DeH_LC_OffHum + 4,
+	Ad1_Pr2_FXP1_DeH_DC_OffHum = Ad1_Pr2_FXP1_DeH_DC_OnHum + 4,
+	Ad1_Pr2_FXP1_Co2_Opnlp_InjTime = Ad1_Pr2_FXP1_DeH_DC_OffHum + 4,
+	Ad1_Pr2_FXP1_Co2_CylGen = Ad1_Pr2_FXP1_Co2_Opnlp_InjTime + 4,
+	Ad1_Pr2_FXP1_Co2_Cyl_StPtPPM,
+	Ad1_Pr2_FXP1_Co2_Gen_OnPPM = Ad1_Pr2_FXP1_Co2_Cyl_StPtPPM + 2,
+	Ad1_Pr2_FXP1_Co2_Gen_OffPPM = Ad1_Pr2_FXP1_Co2_Gen_OnPPM + 2,
+	Ad1_Pr2_FXP2_OnOff = Ad1_Pr2_FXP1_Co2_Gen_OffPPM + 2,
+	Ad1_Pr2_FXP2_LC_OnOff,
+	Ad1_Pr2_FXP2_LC_SrtDly,
+	Ad1_Pr2_FXP2_DC_OnOff = Ad1_Pr2_FXP2_LC_SrtDly + 4,
+	Ad1_Pr2_FXP2_DC_SrtDly,      
+	Ad1_Pr2_FXP2_VentLoc_YesNo = Ad1_Pr2_FXP2_DC_SrtDly + 4,
+	Ad1_Pr2_FXP2_FlexFunc,
+	Ad1_Pr2_FXP2_Tmr_LC_CclTime = Ad1_Pr2_FXP2_FlexFunc + 4,
+	Ad1_Pr2_FXP2_Tmr_LC_RptAftr = Ad1_Pr2_FXP2_Tmr_LC_CclTime + 4,
+	Ad1_Pr2_FXP2_Tmr_DC_CclTime = Ad1_Pr2_FXP2_Tmr_LC_RptAftr + 4
+};
+
+enum ROM_PERMENANT_VAR_PAGE9 {
+	
+	Ad1_Pr2_FXP2_Tmr_DC_RptAftr = 0,
+	Ad1_Pr2_FXP2_Htr_LC_OnTemp = Ad1_Pr2_FXP2_Tmr_DC_RptAftr + 4,
+	Ad1_Pr2_FXP2_Htr_LC_OffTemp = Ad1_Pr2_FXP2_Htr_LC_OnTemp + 4,
+	Ad1_Pr2_FXP2_Htr_DC_OnTemp = Ad1_Pr2_FXP2_Htr_LC_OffTemp + 4,
+	Ad1_Pr2_FXP2_Htr_DC_OffTemp = Ad1_Pr2_FXP2_Htr_DC_OnTemp + 4,
+	Ad1_Pr2_FXP2_Cool_LC_OnTemp = Ad1_Pr2_FXP2_Htr_DC_OffTemp + 4,
+	Ad1_Pr2_FXP2_Cool_LC_OffTemp = Ad1_Pr2_FXP2_Cool_LC_OnTemp + 4,
+	Ad1_Pr2_FXP2_Cool_DC_OnTemp = Ad1_Pr2_FXP2_Cool_LC_OffTemp + 4,
+	Ad1_Pr2_FXP2_Cool_DC_OffTemp = Ad1_Pr2_FXP2_Cool_DC_OnTemp + 4,
+	Ad1_Pr2_FXP2_Hum_LC_OnHum = Ad1_Pr2_FXP2_Cool_DC_OffTemp + 4,
+	Ad1_Pr2_FXP2_Hum_LC_OffHum = Ad1_Pr2_FXP2_Hum_LC_OnHum + 4,
+	Ad1_Pr2_FXP2_Hum_DC_OnHum = Ad1_Pr2_FXP2_Hum_LC_OffHum + 4,
+	Ad1_Pr2_FXP2_Hum_DC_OffHum = Ad1_Pr2_FXP2_Hum_DC_OnHum + 4,
+	Ad1_Pr2_FXP2_DeH_LC_OnHum = Ad1_Pr2_FXP2_Hum_DC_OffHum + 4,
+	Ad1_Pr2_FXP2_DeH_LC_OffHum = Ad1_Pr2_FXP2_DeH_LC_OnHum + 4,
+	Ad1_Pr2_FXP2_DeH_DC_OnHum = Ad1_Pr2_FXP2_DeH_LC_OffHum + 4,
+	Ad1_Pr2_FXP2_DeH_DC_OffHum = Ad1_Pr2_FXP2_DeH_DC_OnHum + 4,
+	Ad1_Pr2_FXP2_Co2_Opnlp_InjTime = Ad1_Pr2_FXP2_DeH_DC_OffHum + 4,
+	Ad1_Pr2_FXP2_Co2_CylGen = Ad1_Pr2_FXP2_Co2_Opnlp_InjTime + 4,
+	Ad1_Pr2_FXP2_Co2_Cyl_StPtPPM,
+	Ad1_Pr2_FXP2_Co2_Gen_OnPPM = Ad1_Pr2_FXP2_Co2_Cyl_StPtPPM + 2,
+	Ad1_Pr2_FXP2_Co2_Gen_OffPPM = Ad1_Pr2_FXP2_Co2_Gen_OnPPM + 2,
+	Ad1_Pr3_Light_Operation_Mode = Ad1_Pr2_FXP2_Co2_Gen_OffPPM + 2,
+	Ad1_Pr3_Light_OnTime,
+	Ad1_Pr3_Light_OffTime = Ad1_Pr3_Light_OnTime + 4,
+	Ad1_Pr3_Light_LC_Duration = Ad1_Pr3_Light_OffTime + 4,
+	Ad1_Pr3_Light_DC_Duration = Ad1_Pr3_Light_LC_Duration + 4,
+	Ad1_Pr3_Light_LC_TimeRemain = Ad1_Pr3_Light_DC_Duration + 4,
+	Ad1_Pr3_Light_DC_TimeRemain = Ad1_Pr3_Light_LC_TimeRemain + 4,
+	Ad1_Pr3_HdV_OnOff = Ad1_Pr3_Light_DC_TimeRemain + 4,
+	Ad1_Pr3_HdV_LC_OnOff,
+	Ad1_Pr3_HdV_LC_SrtDly,
+	Ad1_Pr3_HdV_DC_OnOff = Ad1_Pr3_HdV_LC_SrtDly + 4, 
+	Ad1_Pr3_HdV_DC_SrtDly,   
+	Ad1_Pr3_HdV_VentLoc_YesNo = Ad1_Pr3_HdV_DC_SrtDly + 4,
+	
+//	Ad1_Pr3_HdV_LC_OnOff,
+//	Ad1_Pr3_HdV_DC_OnOff,		// Repeated variables 
+
+	Ad1_Pr3_HdV_FlexFunc,
+	Ad1_Pr3_HdV_Tmr_LC_CclTime = Ad1_Pr3_HdV_FlexFunc + 4
+	
+};
+
+/*
+
+enum ROM_PERMENANT_VAR_PAGE10 {
+	
+};
+
+enum ROM_PERMENANT_VAR_PAGE11 {
+	
+};
+
+enum ROM_PERMENANT_VAR_PAGE12 {
+	
+};
+
+enum ROM_PERMENANT_VAR_PAGE13 {
+	
+};
+
+enum ROM_PERMENANT_VAR_PAGE14 {
+	
+};
+
+enum ROM_PERMENANT_VAR_PAGE15 {
+	
+};
+
+enum ROM_PERMENANT_VAR_PAGE16 {
+	
+};
+
+enum ROM_PERMENANT_VAR_PAGE17 {
+	
+};
+*/
 
 #endif // REG_LIST_H_
