@@ -1,5 +1,5 @@
 Dependencies for Project 'ENV_CTRL_F051_REV0', Target 'STM32F051R8T6': (DO NOT MODIFY !)
-F (..\src\main.c)(0x598CC479)(-c --cpu Cortex-M0 -g -O2 -Otime --apcs=interwork -I..\src -I..\src\APP -I..\src\STM32F0-Discovery -I..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\inc -I..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\CMSIS\Device\ST\STM32F0xx\Include-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F0xx-DUSE_STDPERIPH_DRIVER -DSTM32F051 -DSTM32F0_DISCOVERY -DTMP_FAHRENHEIT -DSTM32F051-o ..\outputs\main.o --omf_browse ..\outputs\main.crf --depend ..\outputs\main.d)
+F (..\src\main.c)(0x598DCF96)(-c --cpu Cortex-M0 -g -O2 -Otime --apcs=interwork -I..\src -I..\src\APP -I..\src\STM32F0-Discovery -I..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\inc -I..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\CMSIS\Device\ST\STM32F0xx\Include-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F0xx-DUSE_STDPERIPH_DRIVER -DSTM32F051 -DSTM32F0_DISCOVERY -DTMP_FAHRENHEIT -DSTM32F051-o ..\outputs\main.o --omf_browse ..\outputs\main.crf --depend ..\outputs\main.d)
 I (..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\CMSIS\Device\ST\STM32F0xx\Include\stm32f0xx.h)(0x58E44476)
 I (C:\Keil\ARM\CMSIS\Include\core_cm0.h)(0x57CA3299)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7E4F8)
@@ -33,7 +33,7 @@ I (..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\inc
 I (..\src\APP\flags_timers.h)(0x5989E808)
 I (..\src\APP\config.h)(0x5989C4B7)
 I (..\src\APP\data_types.h)(0x5989E446)
-I (..\src\APP\reg_list.h)(0x598CC473)
+I (..\src\APP\reg_list.h)(0x598DD189)
 F (..\src\APP\flags_timers.c)(0x5989E424)(-c --cpu Cortex-M0 -g -O2 -Otime --apcs=interwork -I..\src -I..\src\APP -I..\src\STM32F0-Discovery -I..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\inc -I..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\CMSIS\Device\ST\STM32F0xx\Include-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F0xx-DUSE_STDPERIPH_DRIVER -DSTM32F051 -DSTM32F0_DISCOVERY -DTMP_FAHRENHEIT -DSTM32F051-o ..\outputs\flags_timers.o --omf_browse ..\outputs\flags_timers.crf --depend ..\outputs\flags_timers.d)
 I (..\src\APP\flags_timers.h)(0x5989E808)
 I (..\src\APP\config.h)(0x5989C4B7)
