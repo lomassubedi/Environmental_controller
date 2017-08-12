@@ -2,6 +2,7 @@
 
 #include "flags_timers.h"
 #include "reg_list.h"
+#include <stdint.h>
 
 uint16_t hr, mn, sec;
 uint16_t testEnumP1, testEnumP2, testEnumP3, testEnumP5, testEnumP6, testEnumP7;
@@ -48,6 +49,7 @@ int main(void)
 	testEnumTools = Ad1_Tools_CO2_PVA_PostVent_FactSet_Delay;
 	i = Ad1_Pr1_Light_Operation_Mode;
 	testEnumPr1 = Ad1_Pr1_FXP2_Co2_Gen_OffPPM;
+	testEnum25 = Ad1_Pr20_FXP2_Co2_Gen_OffPPM;
 //	Ad1_Pr1_FXP2_Co2_Gen_OffPPM
   }
 }
