@@ -17,15 +17,13 @@ static __IO uint32_t TimingDelay;
 
 #define LEDToggleValue ((uint16_t) 3000)
 
-void Delay(__IO uint32_t nTime)
-{
+extern void Delay(__IO uint32_t nTime) {
   TimingDelay = nTime;
 
   while(TimingDelay != 0);
 }
 
-extern void TimingDelay_Decrement(void)
-{
+extern void TimingDelay_Decrement(void) {
   if (TimingDelay != 0x00) {
     TimingDelay--;
   }
@@ -46,6 +44,7 @@ int main(void) {
 	init_modbus();
 		
   while (1) {			
-		dispFrame();
+//		dispFrame();
+//		modbus_update();
 	}
 }
