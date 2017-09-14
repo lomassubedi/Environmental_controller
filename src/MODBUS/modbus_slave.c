@@ -6,21 +6,26 @@
 #include "mbcrc.h"
 #include "stm32f0_discovery.h"
 
-#define 	BUFFER_SIZE 	100
+#define 	BUFFER_SIZE 			100
+#define 	DEVICE_SLAVE_ID			1
+#define		EEPROM_MAX_SIZE			65535	
 
 TIM_TimeBaseInitTypeDef timerInitStructure; 
 
 uint8_t frame[BUFFER_SIZE];
-volatile unsigned int buffer = 0;
-volatile unsigned char flag_rx_complete = 0;
 
-volatile unsigned int holdingRegsSize; // size of the register array 
-volatile unsigned char broadcastFlag;
-volatile unsigned char slaveID = 01;
-volatile unsigned char function;
-volatile unsigned char TxEnablePin;
-volatile unsigned int errorCount;
-volatile unsigned char timerInit = 0;
+volatile uint16_t buffer = 0;
+volatile uint16_t flag_rx_complete = 0;
+
+// Size of register array is assumed to be equal to the EEPROM Size
+// EEPROM space is being treated as a Modbus register 
+const uint16_t holdingRegsSize = EEPROM_MAX_SIZE; 
+
+volatile uint8_t broadcastFlag;
+volatile uint8_t slaveID = DEVICE_SLAVE_ID;
+volatile uint8_t function;
+volatile uint16_t errorCount;
+volatile uint8_t timerInit = 0;
 
 void initUsartModbus(void) {
 		// USART periferial initialization settings
@@ -64,25 +69,9 @@ void InitializeTimerRxTimeout() {
 	NVIC_EnableIRQ(TIM2_IRQn);
 }
 
-//void InitializeTimer6() {
-//	
-//	TIM_TimeBaseInitTypeDef timerInitStructure; 
-//	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6, ENABLE);
-//	
-//	
-//	NVIC_EnableIRQ(TIM2_IRQn);
-//}
-
 void usartPutc(unsigned char c) {
     while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
     USART_SendData(USART1, c);
-}
-
-void usartPuts(unsigned char *c) {
-	while(*c) {
-		usartPutc(*c);
-		c++;
-	}
 }
 
 void TIM2_IRQHandler(){
@@ -93,14 +82,13 @@ void TIM2_IRQHandler(){
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 		
 //		Disable interrupts
+		USART_ITConfig(USART1, USART_IT_RXNE, DISABLE);
 		TIM_Cmd(TIM2, DISABLE);	
 		TIM_ITConfig(TIM2, TIM_IT_Update, DISABLE);
 		TIM_DeInit(TIM2);
 
 		flag_rx_complete = 1;
-		modbus_update();
 		STM_EVAL_LEDToggle(LED4);
-		
     }
 }
 
@@ -138,47 +126,13 @@ void sendPacket(uint8_t bufferSize) {
     
   for (i = 0; i < bufferSize; i++) {
 		usartPutc(frame[i]);
-//		Delay(1);
-	}
-//   Delay(4); 
-		// Need to put delay of 3.5 chars 
-}
-
-//static uint8_t calculateCRC(uint8_t bufferSize) {
-//  unsigned int temp, temp2, flag;
-//	unsigned char i, j;
-//  temp = 0xFFFF;
-//  for (i = 0; i < bufferSize; i++)
-//  {
-//    temp = temp ^ frame[i];
-//    for (j = 1; j <= 8; j++)
-//    {
-//      flag = temp & 0x0001;
-//      temp >>= 1;
-//      if (flag)
-//        temp ^= 0xA001;
-//    }
-//  }
-//  // Reverse byte order. 
-//  temp2 = temp >> 8;
-//  temp = (temp << 8) | temp2;
-//  temp &= 0xFFFF;
-//  return temp; // the returned value is already swopped - crcLo byte is first & crcHi byte is last
-//}
-
-void dispFrame() {
-	
-	uint8_t char_ctr = 0;
-	
-	if(flag_rx_complete == 1) {
-			
-			for(char_ctr = 0; char_ctr < buffer; char_ctr++) {
-				usartPutc(frame[char_ctr]);
-			}
-			
-			buffer = 0;
-			flag_rx_complete = 0;
-		}
+		
+		// TODO
+		// Put space of about 1.5 characters while sending each bytes from a frame
+	} 
+		// TODO
+		// Put space of about 3.5 characters as the end of the transmission
+		// Or utilize the timer 2
 }
 
 void exceptionResponse(unsigned char exception) {
@@ -186,8 +140,8 @@ void exceptionResponse(unsigned char exception) {
 	
   errorCount++; 				// each call to exceptionResponse() will increment the errorCount
 	
-  if (!broadcastFlag) 	// don't respond if its a broadcast message
-  {
+  if (!broadcastFlag) {	// don't respond if its a broadcast message
+  
     frame[0] = slaveID;
     frame[1] = (function | 0x80); 	// set the MSB bit high, informs the master of an exception
     frame[2] = exception;
@@ -208,17 +162,16 @@ uint8_t modbus_update() {
 	uint16_t index;
 	uint16_t address;
 	uint16_t crc16;
-	uint8_t noOfBytes;
-	uint8_t responseFrameSize;
+	uint16_t noOfBytes;
+	uint16_t responseFrameSize;
 	
 	uint16_t temp;
 	uint16_t tmpCRC = 0;
 	
   
 //  The minimum request packet is 8 bytes for function 3 & 16
-	
-	if(flag_rx_complete)
-  {
+	if(flag_rx_complete) {
+
 		if(buffer > 6) {
 			
 			id = frame[0];
@@ -227,15 +180,14 @@ uint8_t modbus_update() {
 			if (id == 0)
 				broadcastFlag = 1;
 			
-			if (id == slaveID || broadcastFlag) // if the recieved ID matches the slaveID or broadcasting id (0), continue
-			{
-				
-				crc = ((frame[buffer - 2] << 8) | frame[buffer - 1]); // combine the crc Low & High bytes
+			if (id == slaveID || broadcastFlag) { // if the recieved ID matches the slaveID or broadcasting id (0), continue
+				// crc = ((frame[buffer - 2] << 8) | frame[buffer - 1]); // combine the crc Low & High bytes
+				crc = ((frame[buffer - 1] << 8) | frame[buffer - 2]);
 				tmpCRC = CRC16(frame, (buffer - 2));
 				
-	//      if (calculateCRC(buffer - 2) == crc) // if the calculated crc matches the recieved crc continue
-	//      {
-					STM_EVAL_LEDToggle(LED3);
+		    	if (tmpCRC == crc) { // if the calculated crc matches the recieved crc continue
+					
+					// STM_EVAL_LEDToggle(LED3);
 					function = frame[1];
 					startingAddress = ((frame[2] << 8) | frame[3]); // combine the starting address bytes
 					no_of_registers = ((frame[4] << 8) | frame[5]); // combine the number of register bytes  
@@ -251,34 +203,36 @@ uint8_t modbus_update() {
 						address = 3; // PDU starts at the 4th byte					
 						
 						for (index = startingAddress; index < maxData; index++) {
-							temp = 0x4567;
+							temp = 0x4567; // Just a dummy value 
+							// TODO
+							// Insert code that reads specified data from EEPROM
+							// and feed in this value
 							frame[address] = temp >> 8; // split the register into 2 bytes
 							address++;
 							frame[address] = temp & 0xFF;
 							address++;
-						} 
+						}
 						
 						crc16 = CRC16(frame, (responseFrameSize - 2));
-						frame[responseFrameSize - 2] = crc16 >> 8; // split crc into 2 bytes
-						frame[responseFrameSize - 1] = crc16 & 0xFF;
+						frame[responseFrameSize - 2] = crc16 & 0xFF; // split crc into 2 bytes
+						frame[responseFrameSize - 1] = crc16 >> 8;
 						sendPacket(responseFrameSize);
 					} 
-	//			}
+				} else { // Checksum failed 
+					errorCount++;
+				}
 			}
-			buffer = 0;
+		} else if (buffer > 0 && buffer < 8) {
+			errorCount++; // corrupted packet
 		}
-		flag_rx_complete = 0;
-  } else if (buffer > 0 && buffer < 8) {
-		errorCount++; // corrupted packet
-		buffer = 0;
-		flag_rx_complete = 0;
-	} else {
-		// Nothing to do right now
+		
+		buffer = 0;						// Reset the queue
+		flag_rx_complete = 0; // Reset the receive complete flag for new reception
+		// Ready for next data reception on the bus
+		USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 	}
-//	buffer = 0;
   return errorCount;
 }
-
 
 void init_modbus() {
 	initUsartModbus();	

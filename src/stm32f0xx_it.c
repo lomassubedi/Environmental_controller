@@ -90,8 +90,13 @@ void PendSV_Handler(void)
   * @param  None
   * @retval None
   */
+unsigned char flagLEDIndi = 0;
 void SysTick_Handler(void){
+	static unsigned int tmrTmpVal = 0;	
 	TimingDelay_Decrement();
+	tmrTmpVal++;
+	if(!(tmrTmpVal % 100))
+		flagLEDIndi = 1;
 }
 
 /******************************************************************************/

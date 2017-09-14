@@ -62,9 +62,9 @@ uint16_t CRC16 (uint8_t *puchMsg, uint16_t usDataLen)
         uchCRCLo = uchCRCHi ^ auchCRCHi[uIndex];
         uchCRCHi = auchCRCLo[uIndex];
     }
-//    return (uchCRCHi << 8 | uchCRCLo);
+    return (uchCRCHi << 8 | uchCRCLo);
 		// Initially tsted this peice of software with the software tool Modbus Poll
 		// Found that CRC Low byte is sent first in the software
 		// TODO need to figure this out
-		return (uchCRCLo << 8 | uchCRCHi);
+//		return (uchCRCLo << 8 | uchCRCHi);
 }

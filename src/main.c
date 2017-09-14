@@ -1,5 +1,7 @@
 #include <stdint.h>
 #include "stm32f0xx.h"
+#include "stm32f0xx_it.h"
+
 #include "stm32f0xx_tim.h"
 #include "stm32f0xx_gpio.h"
 #include "stm32f0xx_usart.h"
@@ -12,6 +14,8 @@
 #include "modbus_slave.h"
 
 GPIO_InitTypeDef GPIO_InitStructure;
+
+
 
 static __IO uint32_t TimingDelay;
 
@@ -31,11 +35,6 @@ extern void TimingDelay_Decrement(void) {
 
 
 int main(void) {		
-//	uint16_t CurrentCountValue = 0;
-//	int timerValue = 0;
-
-	
-//	InitializeTimer();
 	SysTick_Config(SystemCoreClock / 1000);
 	
 	STM_EVAL_LEDInit(LED3);
@@ -44,7 +43,10 @@ int main(void) {
 	init_modbus();
 		
   while (1) {			
-//		dispFrame();
-//		modbus_update();
+		if(flagLEDIndi) {
+			flagLEDIndi = 0;
+			STM_EVAL_LEDToggle(LED3);
+		}
+		modbus_update();
 	}
 }
