@@ -3552,7 +3552,8 @@ enum ROM_PERMANENT {
 	Ad1_Pr20_FXP2_Co2_CylGen = Ad1_Pr20_FXP2_Co2_Opnlp_InjTime + 4,	
 	Ad1_Pr20_FXP2_Co2_Cyl_StPtPPM,
 	Ad1_Pr20_FXP2_Co2_Gen_OnPPM = Ad1_Pr20_FXP2_Co2_Cyl_StPtPPM + 2,
-	Ad1_Pr20_FXP2_Co2_Gen_OffPPM = Ad1_Pr20_FXP2_Co2_Gen_OnPPM + 2
+	Ad1_Pr20_FXP2_Co2_Gen_OffPPM = Ad1_Pr20_FXP2_Co2_Gen_OnPPM + 2,
+	EEPROM_DATA_TOP = Ad1_Pr20_FXP2_Co2_Gen_OffPPM + 2
 };
 
 #endif // REG_LIST_H_

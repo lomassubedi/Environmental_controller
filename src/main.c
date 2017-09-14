@@ -33,7 +33,6 @@ extern void TimingDelay_Decrement(void) {
   }
 }
 
-
 int main(void) {		
 	SysTick_Config(SystemCoreClock / 1000);
 	

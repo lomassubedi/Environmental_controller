@@ -4,22 +4,24 @@
 
 #include "modbus_slave.h"
 #include "mbcrc.h"
+#include "reg_list.h"
 #include "stm32f0_discovery.h"
 
 #define 	BUFFER_SIZE 			100
 #define 	DEVICE_SLAVE_ID			1
-#define		EEPROM_MAX_SIZE			65535	
 
 TIM_TimeBaseInitTypeDef timerInitStructure; 
 
 uint8_t frame[BUFFER_SIZE];
+uint16_t dummyHoldingReg[BUFFER_SIZE];
 
 volatile uint16_t buffer = 0;
 volatile uint16_t flag_rx_complete = 0;
 
-// Size of register array is assumed to be equal to the EEPROM Size
+// Size of register array is assumed to be the highest location 
+// up to which data is stored in the EEPROM
 // EEPROM space is being treated as a Modbus register 
-const uint16_t holdingRegsSize = EEPROM_MAX_SIZE; 
+const uint16_t holdingRegsSize = EEPROM_DATA_TOP;
 
 volatile uint8_t broadcastFlag;
 volatile uint8_t slaveID = DEVICE_SLAVE_ID;
@@ -81,7 +83,7 @@ void TIM2_IRQHandler(){
 	if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) {
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 		
-//		Disable interrupts
+		// Disable interrupts
 		USART_ITConfig(USART1, USART_IT_RXNE, DISABLE);
 		TIM_Cmd(TIM2, DISABLE);	
 		TIM_ITConfig(TIM2, TIM_IT_Update, DISABLE);
@@ -119,7 +121,6 @@ void USART1_IRQHandler(void) {			/* RXNE handler */
 		}
 	}
 }
-
 
 void sendPacket(uint8_t bufferSize) {
 	unsigned char i;
@@ -185,7 +186,7 @@ uint8_t modbus_update() {
 				crc = ((frame[buffer - 1] << 8) | frame[buffer - 2]);
 				tmpCRC = CRC16(frame, (buffer - 2));
 				
-		    	if (tmpCRC == crc) { // if the calculated crc matches the recieved crc continue
+		    if (tmpCRC == crc) { // if the calculated crc matches the recieved crc continue
 					
 					// STM_EVAL_LEDToggle(LED3);
 					function = frame[1];
@@ -195,37 +196,94 @@ uint8_t modbus_update() {
 					
 					// broadcasting is not supported for function 3 
 					if (!broadcastFlag && (function == 3)) {
-						noOfBytes = no_of_registers * 2;
-						responseFrameSize = 5 + noOfBytes; // ID, function, noOfBytes, (dataLo + dataHi) * number of registers, crcLo, crcHi
-						frame[0] = slaveID;
-						frame[1] = function;
-						frame[2] = noOfBytes;
-						address = 3; // PDU starts at the 4th byte					
-						
-						for (index = startingAddress; index < maxData; index++) {
-							temp = 0x4567; // Just a dummy value 
-							// TODO
-							// Insert code that reads specified data from EEPROM
-							// and feed in this value
-							frame[address] = temp >> 8; // split the register into 2 bytes
-							address++;
-							frame[address] = temp & 0xFF;
-							address++;
+
+						if (startingAddress < holdingRegsSize) { // check exception 2 ILLEGAL DATA ADDRESS
+
+						  if (maxData <= holdingRegsSize) { // check exception 3 ILLEGAL DATA VALUE
+			
+								noOfBytes = no_of_registers * 2;
+								responseFrameSize = 5 + noOfBytes; // ID, function, noOfBytes, (dataLo + dataHi) * number of registers, crcLo, crcHi
+								frame[0] = slaveID;
+								frame[1] = function;
+								frame[2] = noOfBytes;
+								address = 3; // PDU starts at the 4th byte					
+								
+								for (index = startingAddress; index < maxData; index++) {
+									temp = 0x4567; // Just a dummy value 
+									// TODO
+									// Insert code that reads specified data from EEPROM
+									// and feed in this value
+									// IMPORTANT: Read Write error exception encorporating EEPROM read write drivers
+									frame[address] = temp >> 8; // split the register into 2 bytes
+									address++;
+									frame[address] = temp & 0xFF;
+									address++;
+								}
+								
+								crc16 = CRC16(frame, (responseFrameSize - 2));
+								frame[responseFrameSize - 2] = crc16 & 0xFF; // split crc into 2 bytes
+								frame[responseFrameSize - 1] = crc16 >> 8;
+								sendPacket(responseFrameSize);
+							} else {
+								exceptionResponse(3); // exception 3 ILLEGAL DATA VALUE
+							}
+						} else {
+							exceptionResponse(2); // exception 2 ILLEGAL DATA ADDRESS
 						}
 						
-						crc16 = CRC16(frame, (responseFrameSize - 2));
-						frame[responseFrameSize - 2] = crc16 & 0xFF; // split crc into 2 bytes
-						frame[responseFrameSize - 1] = crc16 >> 8;
-						sendPacket(responseFrameSize);
-					} 
+					// Function 16 write to holding registers
+					} else if(function == 16) {
+
+						// check if the recieved number of bytes matches the calculated bytes minus the request bytes
+						// id + function + (2 * address bytes) + (2 * no of register bytes) + byte count + (2 * CRC bytes) = 9 bytes
+						if (frame[6] == (buffer - 9)) {
+
+							if (startingAddress < holdingRegsSize) { // check exception 2 ILLEGAL DATA ADDRESS
+							
+								if (maxData <= holdingRegsSize) { // check exception 3 ILLEGAL DATA VALUE
+								
+									address = 7; // start at the 8th byte in the frame
+
+									for (index = startingAddress; index < maxData; index++) {
+										// Just a dummy write test
+										dummyHoldingReg[index] = ((frame[address] << 8) | frame[address + 1]);
+										address += 2;
+										// TODO
+										// Implement mechanism to write bytes to the EEPROM to specified address
+										// IMPORTANT : Add Read/Write exceptions
+										// holdingRegs[index] = ((frame[address] << 8) | frame[address + 1]);
+										// address += 2;
+									} 
+
+									// only the first 6 bytes are used for CRC calculation
+									crc16 = CRC16(frame, 6); 
+									frame[6] = crc16 & 0xFF; // split crc into 2 bytes
+									frame[7] = crc16 >> 8;
+
+									// a function 16 response is an echo of the first 6 bytes from the request + 2 crc bytes
+									if (!broadcastFlag) // don't respond if it's a broadcast message
+										sendPacket(8); 
+
+								} else {
+									exceptionResponse(3); // exception 3 ILLEGAL DATA VALUE
+								} 
+							} else {
+								exceptionResponse(2); // exception 2 ILLEGAL DATA ADDRESS
+							}
+						} else {
+							errorCount++; // corrupted packet
+						}   
+					} else {
+						exceptionResponse(1); // exception 1 ILLEGAL FUNCTION
+					}
 				} else { // Checksum failed 
 					errorCount++;
+					// No response on CRC error !!
 				}
 			}
 		} else if (buffer > 0 && buffer < 8) {
 			errorCount++; // corrupted packet
 		}
-		
 		buffer = 0;						// Reset the queue
 		flag_rx_complete = 0; // Reset the receive complete flag for new reception
 		// Ready for next data reception on the bus
