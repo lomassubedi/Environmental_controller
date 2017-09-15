@@ -169,7 +169,7 @@ uint8_t modbus_update() {
 	uint16_t temp;
 	uint16_t tmpCRC = 0;
 	
-  
+
 //  The minimum request packet is 8 bytes for function 3 & 16
 	if(flag_rx_complete) {
 
