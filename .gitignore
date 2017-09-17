@@ -1,17 +1,14 @@
+# Files to ignore from output directory
+# All files so far
 outputs/*.*
 
-uv4/ENV_CTRL_F051_REV0.uvgui.LOMAS
-uv4/ENV_CTRL_F051_REV0.uvgui_LOMAS.bak
-uv4/ENV_CTRL_F051_REV0_STM32F051R8T6.dep
-uv4/ENV_CTRL_F051_REV0_uvopt.bak
-uv4/ENV_CTRL_F051_REV0_uvproj.bak
-uv4/startup_stm32f0xx.lst
-
-
-uv4/*.uvgui.LOMAS
+# Files to ignore from the project directory
+uv4/*.*.*
 uv4/*.*.bak
 uv4/*.dep
 uv4/*.bak
 uv4/*.lst
 uv4/*.scvd
 uv4/*.BAT
+uv4/*.uvopt
+uv4/*.uvoptx
