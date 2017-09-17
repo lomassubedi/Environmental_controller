@@ -12,3 +12,6 @@ uv4/*.scvd
 uv4/*.BAT
 uv4/*.uvopt
 uv4/*.uvoptx
+
+# Automatically created TMP files
+*/*.TMP

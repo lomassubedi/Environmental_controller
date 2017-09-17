@@ -8,12 +8,14 @@
 #include "stm32f0xx_usart.h"
 #include "stm32f0xx_rcc.h"
 #include "stm32f0xx_rtc.h"
+#include "stm32f0xx_pwr.h"
 
 #include "flags_timers.h"
 #include "reg_list.h"
 #include "stm32f0_discovery.h"
 
 #include "modbus_slave.h"
+#include "util_prj.h"
 
 #define 		TMP_BUFFER_SIZE			200
 uint8_t buffr[TMP_BUFFER_SIZE];
@@ -36,7 +38,7 @@ extern void TimingDelay_Decrement(void) {
   }
 }
 
-static void RTC_Config(void) {
+static void RTC_Config_LSE(void) {
 	
   RTC_InitTypeDef  RTC_InitStructure;
   RTC_TimeTypeDef  RTC_TimeStruct;
@@ -75,6 +77,61 @@ static void RTC_Config(void) {
   RTC_SetTime(RTC_Format_BCD, &RTC_TimeStruct);
 	
 	RTC_TimeStructInit(&RTC_TimeStruct); 
+}
+
+RTC_InitTypeDef   RTC_InitStructure;
+
+static void RTC_Config_LSI(void)
+{
+  RTC_TimeTypeDef RTC_TimeStructure;
+	RTC_DateTypeDef RTC_DateStructure;
+	
+  /* Enable the PWR clock */
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
+  
+  /* Allow access to RTC */
+  PWR_BackupAccessCmd(ENABLE);
+
+/* LSI used as RTC source clock */
+/* The RTC Clock may varies due to LSI frequency dispersion. */   
+  /* Enable the LSI OSC */ 
+  RCC_LSICmd(ENABLE);
+
+  /* Wait till LSI is ready */  
+  while(RCC_GetFlagStatus(RCC_FLAG_LSIRDY) == RESET)
+  {
+  }
+
+  /* Select the RTC Clock Source */
+  RCC_RTCCLKConfig(RCC_RTCCLKSource_LSI);
+   
+  /* Enable the RTC Clock */
+  RCC_RTCCLKCmd(ENABLE);
+
+  /* Wait for RTC APB registers synchronisation */
+  RTC_WaitForSynchro();
+
+  /* Calendar Configuration */
+  RTC_InitStructure.RTC_AsynchPrediv = 99;
+  RTC_InitStructure.RTC_SynchPrediv	=  399; /* (40KHz / 100) - 1 = 399*/
+  RTC_InitStructure.RTC_HourFormat = RTC_HourFormat_24;
+  RTC_Init(&RTC_InitStructure);  
+  
+	
+  /* Set the time to 00h 00mn 00s AM */
+  RTC_TimeStructure.RTC_H12     = RTC_H12_AM;
+  RTC_TimeStructure.RTC_Hours   = CMPL_HOUR;
+  RTC_TimeStructure.RTC_Minutes = CMPL_MIN;
+  RTC_TimeStructure.RTC_Seconds = CMPL_SEC;  
+	
+  RTC_SetTime(RTC_Format_BIN, &RTC_TimeStructure);
+	
+// Date is not necessary 
+//	RTC_DateStructure.RTC_Year = CMPL_YEAR;
+//	RTC_DateStructure.RTC_Month = getmonth();
+//	RTC_DateStructure.RTC_Date = CMPL_DATE;
+//	
+//	RTC_SetDate(RTC_Format_BIN, &RTC_DateStructure);
 }
 
 void init_usart2(void) {
@@ -134,7 +191,7 @@ int main(void) {
 	init_usart2();
 	init_modbus();
 	
-	RTC_Config();
+	RTC_Config_LSI();
 	
   while (1) {
 		
@@ -143,13 +200,19 @@ int main(void) {
 			STM_EVAL_LEDToggle(LED3);
 		}
 //		modbus_update();
-		RTC_GetTime(RTC_Format_BCD, &myRTCTime);
+		RTC_GetTime(RTC_Format_BIN, &myRTCTime);
 		sprintf((char *)buffr, "Hour: %d\tMinute: %d\tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);
 		usart2_puts(buffr);
 		
-		RTC_GetDate(RTC_Format_BCD, &myRTCDate);
-		sprintf((char *)buffr, "Year: %d\tMonths: %d\tDay: %d\r\n", myRTCDate.RTC_Year, myRTCDate.RTC_Month, myRTCDate.RTC_Date);
-		usart2_puts(buffr);
+//		RTC_GetDate(RTC_Format_BIN, &myRTCDate);
+//		sprintf((char *)buffr, "Year: %d\tMonths: %d\tDay: %d\r\n", myRTCDate.RTC_Year, myRTCDate.RTC_Month, myRTCDate.RTC_Date);
+//		usart2_puts(buffr);
+//		
+//		sprintf((char *)buffr, "Current Date: %s\r\n", __DATE__);
+//		usart2_puts(buffr);
+//		
+//		sprintf((char *)buffr, "Year: %d\t Months: %d\t Date: %d\t\r\n", CMPL_YEAR, getmonth(), CMPL_DATE);
+//		usart2_puts(buffr);
 	
 		Delay(1000);
 	}

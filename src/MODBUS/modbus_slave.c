@@ -78,8 +78,6 @@ void usartPutc(unsigned char c) {
 
 void TIM2_IRQHandler(){
 	
-	uint8_t counter = 0;
-	
 	if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) {
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 		
