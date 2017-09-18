@@ -24,11 +24,16 @@ GPIO_InitTypeDef GPIO_InitStructure;
 
 static __IO uint32_t TimingDelay;
 
-#define LEDToggleValue ((uint16_t) 3000)
+//#define LEDToggleValue ((uint16_t) 3000)
+
+struct __FILE {
+    int dummy;
+};
+
+FILE __stdout;
 
 extern void Delay(__IO uint32_t nTime) {
   TimingDelay = nTime;
-
   while(TimingDelay != 0);
 }
 
@@ -118,20 +123,14 @@ static void RTC_Config_LSI(void)
   RTC_Init(&RTC_InitStructure);  
   
 	
-  /* Set the time to 00h 00mn 00s AM */
+  /* Set the time to code compiled time*/
   RTC_TimeStructure.RTC_H12     = RTC_H12_AM;
   RTC_TimeStructure.RTC_Hours   = CMPL_HOUR;
   RTC_TimeStructure.RTC_Minutes = CMPL_MIN;
   RTC_TimeStructure.RTC_Seconds = CMPL_SEC;  
 	
   RTC_SetTime(RTC_Format_BIN, &RTC_TimeStructure);
-	
-// Date is not necessary 
-//	RTC_DateStructure.RTC_Year = CMPL_YEAR;
-//	RTC_DateStructure.RTC_Month = getmonth();
-//	RTC_DateStructure.RTC_Date = CMPL_DATE;
-//	
-//	RTC_SetDate(RTC_Format_BIN, &RTC_DateStructure);
+
 }
 
 void init_usart2(void) {
@@ -169,13 +168,25 @@ void usart2_putchar(uint8_t c) {
 	return;
 }
 
-void usart2_puts(uint8_t *str) {
-	while(*str) {
-		usart2_putchar(*str);
-		str++;
-	}
-	return;
+int fputc(int ch, FILE *f) {
+    /* Do your stuff here */
+    /* Send your custom byte */
+    /* Send byte to USART */
+    usart2_putchar(ch);
+    
+    /* If everything is OK, you have to return character written */
+    return ch;
+    /* If character is not correct, you can return EOF (-1) to stop writing */
+    //return -1;
 }
+
+//void usart2_puts(uint8_t *str) {
+//	while(*str) {
+//		usart2_putchar(*str);
+//		str++;
+//	}
+//	return;
+//}
 
 
 int main(void) {
@@ -193,6 +204,7 @@ int main(void) {
 	
 	RTC_Config_LSI();
 	
+	
   while (1) {
 		
 		if(flagLEDIndi) {
@@ -201,19 +213,7 @@ int main(void) {
 		}
 //		modbus_update();
 		RTC_GetTime(RTC_Format_BIN, &myRTCTime);
-		sprintf((char *)buffr, "Hour: %d\tMinute: %d\tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);
-		usart2_puts(buffr);
-		
-//		RTC_GetDate(RTC_Format_BIN, &myRTCDate);
-//		sprintf((char *)buffr, "Year: %d\tMonths: %d\tDay: %d\r\n", myRTCDate.RTC_Year, myRTCDate.RTC_Month, myRTCDate.RTC_Date);
-//		usart2_puts(buffr);
-//		
-//		sprintf((char *)buffr, "Current Date: %s\r\n", __DATE__);
-//		usart2_puts(buffr);
-//		
-//		sprintf((char *)buffr, "Year: %d\t Months: %d\t Date: %d\t\r\n", CMPL_YEAR, getmonth(), CMPL_DATE);
-//		usart2_puts(buffr);
-	
+		printf("Hour: %d\tMinute: %d\tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);
 		Delay(1000);
 	}
 }
