@@ -180,15 +180,6 @@ int fputc(int ch, FILE *f) {
     //return -1;
 }
 
-//void usart2_puts(uint8_t *str) {
-//	while(*str) {
-//		usart2_putchar(*str);
-//		str++;
-//	}
-//	return;
-//}
-
-
 int main(void) {
 	
 	RTC_TimeTypeDef myRTCTime;
@@ -200,10 +191,14 @@ int main(void) {
 	STM_EVAL_LEDInit(LED4);
 	
 	init_usart2();
+	
 	init_modbus();
 	
 	RTC_Config_LSI();
 	
+	tmrHdVLCSrtDly.HH = 7;
+	tmrHdVLCSrtDly.MM = 52;
+	tmrHdVLCSrtDly.SS = 0;
 	
   while (1) {
 		
@@ -214,6 +209,10 @@ int main(void) {
 //		modbus_update();
 		RTC_GetTime(RTC_Format_BIN, &myRTCTime);
 		printf("Hour: %d\tMinute: %d\tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);
+		if((tmrHdVLCSrtDly.HH == myRTCTime.RTC_Hours) && (tmrHdVLCSrtDly.MM == myRTCTime.RTC_Minutes) && (tmrHdVLCSrtDly.SS == myRTCTime.RTC_Seconds)) {
+			printf("Time matched !!");
+			while(1);
+		}
 		Delay(1000);
 	}
 }

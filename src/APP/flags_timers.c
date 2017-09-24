@@ -7,8 +7,8 @@ uint8_t flagCycleFlipToLightCycle = NO;
 uint8_t flagCycleFlipToDarkCycle = NO;
 uint8_t flagAd1PreviousCycle = DARK;
 
-TIME timePreviousLightOn = {6, 0, 0, AM};
-TIME timePreviousLightOff = {6, 0, 0, PM};
+TIME_M timePreviousLightOn = {6, 0, 0};
+TIME_M timePreviousLightOff = {18, 0, 0};
 
 uint8_t flagPreviousLightStatus = OFF;
 uint8_t flagPreviousHdVStatus = OFF;
