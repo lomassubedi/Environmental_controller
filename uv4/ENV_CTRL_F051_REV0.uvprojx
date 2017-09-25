@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER, STM32F051, STM32F0_DISCOVERY, TMP_FAHRENHEIT</Define>
               <Undefine></Undefine>
-              <IncludePath>..\src;..\src\APP;..\src\MODBUS;..\src\STM32F0-Discovery;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\inc;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\CMSIS\Device\ST\STM32F0xx\Include</IncludePath>
+              <IncludePath>..\src;..\src\APP;..\src\MODBUS;..\src\RTC;..\src\STM32F0-Discovery;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\inc;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\CMSIS\Device\ST\STM32F0xx\Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -388,22 +388,47 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>BOARD</GroupName>
-          <Files>
-            <File>
-              <FileName>stm32f0_discovery.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\STM32F0-Discovery\stm32f0_discovery.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>APP</GroupName>
           <Files>
             <File>
               <FileName>flags_timers.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\APP\flags_timers.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>MODBUS</GroupName>
+          <Files>
+            <File>
+              <FileName>modbus_slave.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\MODBUS\modbus_slave.c</FilePath>
+            </File>
+            <File>
+              <FileName>mbcrc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\MODBUS\mbcrc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>RTC</GroupName>
+          <Files>
+            <File>
+              <FileName>RTC_STM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\RTC\RTC_STM.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>BOARD</GroupName>
+          <Files>
+            <File>
+              <FileName>stm32f0_discovery.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\STM32F0-Discovery\stm32f0_discovery.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -479,21 +504,6 @@
               <FileName>stm32f0xx_pwr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_pwr.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>MODBUS</GroupName>
-          <Files>
-            <File>
-              <FileName>modbus_slave.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\MODBUS\modbus_slave.c</FilePath>
-            </File>
-            <File>
-              <FileName>mbcrc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\MODBUS\mbcrc.c</FilePath>
             </File>
           </Files>
         </Group>

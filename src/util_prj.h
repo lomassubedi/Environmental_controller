@@ -45,28 +45,4 @@
 #define CMPL_MIN ((__TIME__[3] - '0') * 10 + __TIME__[4] - '0')
 #define CMPL_SEC ((__TIME__[6] - '0') * 10 + __TIME__[7] - '0')
 
-
-
-const char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
-                            "Sep", "Oct", "Nov", "Dec"};
-
-unsigned char getmonth(void)
-{
-//	unsigned char month;
-  char temp [] = __DATE__;
-  unsigned char i;
-
-//  year = atoi(temp + 9);
-//  *(temp + 6) = 0;
-//  day = atoi(temp + 4);
-  *(temp + 3) = 0;
-  for (i = 0; i < 12; i++)
-  {
-    if (!strcmp(temp, months[i]))
-    {
-      return i + 1;
-    }
-  }
-}
-
 #endif // UTIL_PRJ_H_
