@@ -15,6 +15,20 @@
 #define 		AM			0
 #define 		PM			1
 
+#define			TRUE		1
+#define 		FALSE		0
+
+#define			ALWAYS_OFF	0
+#define			ALWAYS_ON		1
+#define			NORMAL			2
+
+#define 		CYCL				1
+#define 		GEN					0
+
+typedef 		uint8_t		BOOL;
+typedef			uint8_t 	TRISTATE_OPERATION_MODE;
+typedef			uint8_t		CYL_GEN;
+
 typedef struct mTIME {
 	uint8_t HH;
 	uint8_t MM;
