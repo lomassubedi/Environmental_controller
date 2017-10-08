@@ -91,6 +91,7 @@ int fputc(int ch, FILE *f) {
     //return -1;
 }
 
+
 int main(void) {
 	
 	RTC_TimeTypeDef myRTCTime;
@@ -117,13 +118,5 @@ int main(void) {
 			flagLEDIndi = 0;
 			STM_EVAL_LEDToggle(LED3);
 		}
-//		modbus_update();
-		RTC_GetTime(RTC_Format_BIN, &myRTCTime);
-		printf("Hour: %d\tMinute: %d\tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);
-		if((tmrHdVLCSrtDly.HH == myRTCTime.RTC_Hours) && (tmrHdVLCSrtDly.MM == myRTCTime.RTC_Minutes) && (tmrHdVLCSrtDly.SS == myRTCTime.RTC_Seconds)) {
-			printf("Time matched !!");
-			while(1);
-		}
-		Delay(1000);
 	}
 }

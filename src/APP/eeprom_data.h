@@ -259,6 +259,29 @@ typedef struct profile {
 	
 } PROFILE;
 
+// --- 20 profile decleration ---
 extern PROFILE profile1;
+
+/*
+extern PROFILE profile2;
+extern PROFILE profile3;
+extern PROFILE profile4;
+extern PROFILE profile5;
+extern PROFILE profile6;
+extern PROFILE profile7;
+extern PROFILE profile8;
+extern PROFILE profile9;
+extern PROFILE profile10;
+extern PROFILE profile11;
+extern PROFILE profile12;
+extern PROFILE profile13;
+extern PROFILE profile14;
+extern PROFILE profile15;
+extern PROFILE profile16;
+extern PROFILE profile17;
+extern PROFILE profile18;
+extern PROFILE profile19;
+extern PROFILE profile20;
+*/
 
 #endif // EEPROM_DATA_H_

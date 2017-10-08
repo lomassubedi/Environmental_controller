@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER, STM32F051, STM32F0_DISCOVERY, TMP_FAHRENHEIT</Define>
               <Undefine></Undefine>
-              <IncludePath>..\src;..\src\APP;..\src\MODBUS;..\src\RTC;..\src\STM32F0-Discovery;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\inc;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\CMSIS\Device\ST\STM32F0xx\Include</IncludePath>
+              <IncludePath>..\src;..\src\APP;..\src\MODBUS;..\src\RTC;..\src\EEPROM;..\src\STM32F0-Discovery;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\inc;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\CMSIS\Device\ST\STM32F0xx\Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -428,6 +428,16 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>EEPROM</GroupName>
+          <Files>
+            <File>
+              <FileName>eeprom_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\EEPROM\eeprom_i2c.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>BOARD</GroupName>
           <Files>
             <File>
@@ -509,6 +519,11 @@
               <FileName>stm32f0xx_pwr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_pwr.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f0xx_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_i2c.c</FilePath>
             </File>
           </Files>
         </Group>
