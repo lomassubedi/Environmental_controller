@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER, STM32F051, STM32F0_DISCOVERY, TMP_FAHRENHEIT</Define>
               <Undefine></Undefine>
-              <IncludePath>..\src;..\src\APP;..\src\MODBUS;..\src\RTC;..\src\EEPROM;..\src\STM32F0-Discovery;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\inc;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\CMSIS\Device\ST\STM32F0xx\Include</IncludePath>
+              <IncludePath>..\src;..\src\APP;..\src\MODBUS;..\src\RTC;..\src\USART;..\src\EEPROM;..\src\STM32F0-Discovery;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\inc;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\CMSIS\Device\ST\STM32F0xx\Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -431,9 +431,19 @@
           <GroupName>EEPROM</GroupName>
           <Files>
             <File>
-              <FileName>eeprom_i2c.c</FileName>
+              <FileName>iso_i2c_ee.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\EEPROM\eeprom_i2c.c</FilePath>
+              <FilePath>..\src\EEPROM\iso_i2c_ee.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>USART</GroupName>
+          <Files>
+            <File>
+              <FileName>util_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\USART\util_usart.c</FilePath>
             </File>
           </Files>
         </Group>
