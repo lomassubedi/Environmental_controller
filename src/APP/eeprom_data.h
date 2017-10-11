@@ -13,6 +13,7 @@ typedef struct profile {
 	
 	TIME_M Ad1_Light_OnTime;
 	TIME_M Ad1_Light_OffTime;
+	/*
 	TIME_M Ad1_Light_LC_Duration;
 	TIME_M Ad1_Light_DC_Duration;
 	TIME_M Ad1_Light_LC_TimeRemain;
@@ -256,11 +257,13 @@ typedef struct profile {
 	uint16_t Ad1_FXP2_Co2_Cyl_StPtPPM;
 	uint16_t Ad1_FXP2_Co2_Gen_OnPPM;
 	uint16_t Ad1_FXP2_Co2_Gen_OffPPM;
+	*/
 	
 } PROFILE;
 
 // --- 20 profile decleration ---
 extern PROFILE profile1;
+extern PROFILE profile2;
 
 /*
 extern PROFILE profile2;
@@ -284,4 +287,5 @@ extern PROFILE profile19;
 extern PROFILE profile20;
 */
 
+//extern void initProfile1(PROFILE *profile);
 #endif // EEPROM_DATA_H_

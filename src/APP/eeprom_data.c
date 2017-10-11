@@ -4,11 +4,11 @@
 
 #include "eeprom_data.h"
 
-PROFILE profile1 = {
-	NORMAL,
-	
-	
-};
+//PROFILE profile1 = {
+//	NORMAL,
+//	
+//	
+//};
 
 /* 
 PROFILE profile2;
@@ -31,3 +31,30 @@ PROFILE profile18;
 PROFILE profile19;
 PROFILE profile20;
 */
+
+// ---- Function to initialize the profile1 data with defaul
+//void initProfile1(PROFILE *profile) {
+//	profile->Ad1_Light_Operation_Mode = NORMAL;
+//	
+//	profile->Ad1_Light_OnTime.HH = 0;
+//	profile->Ad1_Light_OnTime.MM = 0;
+//	profile->Ad1_Light_OnTime.SS = 0;
+//	
+//	profile->Ad1_Light_OffTime.HH = 0;
+//	profile->Ad1_Light_OffTime.MM = 1;
+//	profile->Ad1_Light_OffTime.SS = 0;
+//	
+//}
+
+PROFILE profile1 = {
+	NORMAL,
+	{0, 0, 0},
+	{0, 1, 0}
+};
+
+PROFILE profile2 = {
+	1,
+	{1, 1, 1},
+	{2, 2, 2}
+};
+

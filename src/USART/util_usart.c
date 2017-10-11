@@ -43,6 +43,7 @@ int fputc(int ch, FILE *f) {
     /* Do your stuff here */
     /* Send your custom byte */
     /* Send byte to USART */
+//		init_usart2();
     usart2_putchar(ch);
     
     /* If everything is OK, you have to return character written */

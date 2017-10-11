@@ -8,6 +8,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx.h"
+#include "eeprom_data.h"
 
 /** @addtogroup Utilities
   * @{

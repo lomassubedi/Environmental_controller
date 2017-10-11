@@ -17,6 +17,7 @@
 #include "modbus_slave.h"
 #include "RTC_STM.h"
 #include "eeprom_data.h"
+#include "util_usart.h"
 
 #define 		TMP_BUFFER_SIZE			200
 uint8_t buffr[TMP_BUFFER_SIZE];
@@ -44,9 +45,16 @@ extern void TimingDelay_Decrement(void) {
   }
 }
 
+uint8_t write_buffr_eprm[] = "Hi lomas this is the data to write into an EEPROM !\r\n";
+uint8_t read_buffr_eprm[100];
+
+uint16_t size_profile = 100;
+const uint8_t* ptrProfile = ((const uint8_t*)(const void*)&profile2);
+
+//uint8_t* ptrProfileRx = (uint8_t*)(void*)&profile1;
 
 int main(void) {
-	
+	int ctr = 0;
 	RTC_TimeTypeDef myRTCTime;
 	RTC_DateTypeDef myRTCDate;
 	
@@ -65,8 +73,50 @@ int main(void) {
 	tmrHdVLCSrtDly.MM = 52;
 	tmrHdVLCSrtDly.SS = 0;
 	
+//	initProfile1(profile1);
+	
 	I2C_EEPROM_24C0x_Init();
-  I2C_EEPROM_24C0x_WriteAndRead();
+	
+//	sEE_WriteBuffer(write_buffr_eprm, 0x00, sizeof(write_buffr_eprm));
+//	
+//	sEE_ReadBuffer(read_buffr_eprm,0x10,sizeof(read_buffr_eprm));
+//	
+//	printf(read_buffr_eprm);
+
+
+	sEE_WriteBuffer(ptrProfile, 0x00, size_profile);
+	
+// ptrProfileRx
+
+	sEE_ReadBuffer(read_buffr_eprm, 0x00, size_profile);
+	
+	
+//	printf(read_buffr_eprm);
+	
+//	printf("Read Profile values : %d\t%d\t%d\t%d\t%d\t%d\t%d\r\n", \
+//					
+//					profile1.Ad1_Light_Operation_Mode,
+//					
+//					profile1.Ad1_Light_OnTime.HH,
+//					profile1.Ad1_Light_OnTime.MM,
+//					profile1.Ad1_Light_OnTime.SS,
+//					
+//					profile1.Ad1_Light_OffTime.HH,
+//					profile1.Ad1_Light_OffTime.MM,
+//					profile1.Ad1_Light_OffTime.SS
+//					
+//					);
+
+	
+	for(ctr = 0; ctr < 100; ctr++) {
+		usart2_putchar(read_buffr_eprm[ctr]);
+	}
+	
+	
+	
+
+
+//  I2C_EEPROM_24C0x_WriteAndRead();
 	
   while (1) {
 		
@@ -74,5 +124,6 @@ int main(void) {
 			flagLEDIndi = 0;
 			STM_EVAL_LEDToggle(LED3);
 		}
+		
 	}
 }

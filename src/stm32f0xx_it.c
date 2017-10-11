@@ -29,6 +29,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_it.h"
+#include "util_usart.h"
 
 /** @addtogroup Template_Project
   * @{
@@ -64,6 +65,7 @@ void HardFault_Handler(void)
   /* Go to infinite loop when Hard Fault exception occurs */
   while (1)
   {
+		printf("Hardware Fault !!!\r\n");
   }
 }
 
