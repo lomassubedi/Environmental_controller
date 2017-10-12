@@ -273,6 +273,7 @@ uint32_t sEE_ReadBuffer(uint8_t* pBuffer, uint16_t ReadAddr, uint16_t NumByteToR
         
         /* Read data from RXDR */
         pBuffer[DataNum]= I2C_ReceiveData(sEE_I2C);
+//				*pBuffer++ = I2C_ReceiveData(sEE_I2C);
         
         /* Update number of received data */
         DataNum++;
@@ -668,11 +669,25 @@ uint32_t sEE_TIMEOUT_UserCallback(void)
 
 /*-------------------------------------------------------------------------------------*/
 
+void I2C_EEPROM_24C0x_WriteStructProfile(PROFILE * profile, uint16_t WriteAddr, uint16_t NumByteToWrite) {
+	uint8_t * ptrProfile = ((uint8_t * )(void * )profile);
+	sEE_WriteBuffer(ptrProfile, WriteAddr, NumByteToWrite);
+}
+
+void I2C_EEPROM_24C0x_ReadStructProfile(PROFILE * profile, uint16_t ReadAddr, uint16_t NumByteToRead) {
+	uint8_t * ptrProfile = (uint8_t * )(void * )profile;
+//	uint8_t * ptrProfile = read_buffr_EEPROM;
+	sEE_ReadBuffer(read_buffr_EEPROM, ReadAddr, NumByteToRead);
+	
+//	uint8_t * ptrProfile = (uint8_t * )(void * )read_buffr_EEPROM;
+	memcpy(ptrProfile, read_buffr_EEPROM, NumByteToRead);
+//	(uint8_t*)(void * )profile = (uint8_t*)read_buffr;
+}
 
 void I2C_EEPROM_24C0x_WriteAndRead(void)
 {
 	uint8_t i;
-	uint8_t Write_Buffer[] = "Thank you for choosing the M0-ISO STM32F0 development board\r\ http://shop71177993.taobao.com";
+	uint8_t Write_Buffer[] = "Thank you for choosing the M0-ISO STM32F0 development board\r\n http://shop71177993.taobao.com";
 	uint8_t Read_Buffer[BufferSize];
 	printf("\r\n This is the hardware I2C on AT24C02 read and write experiments \r\n");
 	sEE_WriteBuffer(Write_Buffer,0x00,(uint16_t)BufferSize);

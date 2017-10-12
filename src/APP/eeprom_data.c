@@ -46,15 +46,48 @@ PROFILE profile20;
 //	
 //}
 
-PROFILE profile1 = {
+//void init_profile1(void) {
+//	profile1->Ad1_Light_Operation_Mode = NORMAL;
+//	
+//	profile1->Ad1_Light_OnTime.HH = 2;
+//	profile1->Ad1_Light_OnTime.MM = 3;
+//	profile1->Ad1_Light_OnTime.SS = 4;
+//	
+//	
+//	profile1->Ad1_Light_OffTime.HH = 5;
+//	profile1->Ad1_Light_OffTime.MM = 6;
+//	profile1->Ad1_Light_OffTime.SS = 7;
+//	
+//}
+
+//void init_profile2(void) {
+//	
+//	profile2->Ad1_Light_Operation_Mode = 1;
+//	
+//	profile2->Ad1_Light_OnTime.HH = 10;
+//	profile2->Ad1_Light_OnTime.MM = 11;
+//	profile2->Ad1_Light_OnTime.SS = 12;
+//	
+//	
+//	profile2->Ad1_Light_OffTime.HH = 15;
+//	profile2->Ad1_Light_OffTime.MM = 16;
+//	profile2->Ad1_Light_OffTime.SS = 17;
+//	
+//}
+
+PROFILE xyz = {
 	NORMAL,
-	{0, 0, 0},
-	{0, 1, 0}
+	{2, 3, 4},
+	{5, 6, 7}
 };
 
-PROFILE profile2 = {
-	1,
-	{1, 1, 1},
-	{2, 2, 2}
+PROFILE *profile1;
+
+PROFILE abc = {
+	10,
+	{11, 12, 13},
+	{21, 22, 23}
 };
+
+PROFILE *profile2 = &abc;
 

@@ -124,6 +124,11 @@ uint32_t sEE_WritePage(uint8_t* pBuffer, uint16_t WriteAddr, uint8_t NumByteToWr
 void     sEE_WriteBuffer(uint8_t* pBuffer, uint16_t WriteAddr, uint16_t NumByteToWrite);
 uint32_t sEE_WaitEepromStandbyState(void);
 void     I2C_EEPROM_24C0x_WriteAndRead(void);
+
+// Function later added to write a structure
+void I2C_EEPROM_24C0x_WriteStructProfile(PROFILE * profile, uint16_t WriteAddr, uint16_t NumByteToWrite);
+void I2C_EEPROM_24C0x_ReadStructProfile(PROFILE * profile, uint16_t ReadAddr, uint16_t NumByteToRead);
+
 /* USER Callbacks: These are functions for which prototypes only are declared in
    EEPROM driver and that should be implemented into user application. */  
 /* sEE_TIMEOUT_UserCallback() function is called whenever a timeout condition 

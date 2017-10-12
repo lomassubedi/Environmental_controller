@@ -7,6 +7,23 @@
 
 #include "data_types.h"
 
+
+ /* -----------------------------------------
+  * Data Types used in a profile and their count
+  * TIME_M -> 41 (41x3)
+  * float  -> 72
+  * uint16_t -> 12
+  * BOOL -> 72
+  * CYL_GEN -> 4
+  * TRISTATE_OPERATION_MODE -> 1
+  */
+	
+// ----- Defines -----------
+// Profile size 522 Bytes 
+#define			PROFILE_SIZE		522
+
+uint8_t read_buffr_EEPROM[PROFILE_SIZE];
+
 typedef struct profile {
 	
 	TRISTATE_OPERATION_MODE Ad1_Light_Operation_Mode;
@@ -258,12 +275,10 @@ typedef struct profile {
 	uint16_t Ad1_FXP2_Co2_Gen_OnPPM;
 	uint16_t Ad1_FXP2_Co2_Gen_OffPPM;
 	*/
-	
-} PROFILE;
-
+} PROFILE ;
 // --- 20 profile decleration ---
-extern PROFILE profile1;
-extern PROFILE profile2;
+extern PROFILE *profile1;
+extern PROFILE *profile2;
 
 /*
 extern PROFILE profile2;
@@ -287,5 +302,8 @@ extern PROFILE profile19;
 extern PROFILE profile20;
 */
 
-//extern void initProfile1(PROFILE *profile);
+//extern void init_profile1(void);
+
+//extern void init_profile2(void);
+
 #endif // EEPROM_DATA_H_
