@@ -55,9 +55,9 @@ uint8_t read_buffr_eprm[100];
 //uint8_t* ptrProfileRx = (uint8_t*)(void * )&profile1;
 
 int main(void) {
-	int ctr = 0;
+//	int ctr = 0;
 //	RTC_TimeTypeDef myRTCTime;
-	RTC_DateTypeDef myRTCDate;
+//	RTC_DateTypeDef myRTCDate;
 	
 	SysTick_Config(SystemCoreClock / 1000);
 	
@@ -73,52 +73,28 @@ int main(void) {
 	tmrHdVLCSrtDly.HH = 7;
 	tmrHdVLCSrtDly.MM = 52;
 	tmrHdVLCSrtDly.SS = 0;
-	
-//	initProfile1(profile1);
-	
+
 	I2C_EEPROM_24C0x_Init();
 	
-//	sEE_WriteBuffer(write_buffr_eprm, 0x00, sizeof(write_buffr_eprm));
-//	
-//	sEE_ReadBuffer(read_buffr_eprm,0x10,sizeof(read_buffr_eprm));
-//	
-//	printf(read_buffr_eprm);
-
-
-//	sEE_WriteBuffer(ptrProfile, 0x00, size_profile);
-	
-// ptrProfileRx
-	
-	I2C_EEPROM_24C0x_WriteStructProfile(profile2, 0x00, 10);
-	I2C_EEPROM_24C0x_ReadStructProfile(profile1, 0x00, 10);
-
-//	sEE_ReadBuffer(read_buffr_eprm, 0x00, 10);
-	
-//	(uint8_t*)(void * )profile1 = (uint8_t*)read_buffr_eprm;
+	// Test -- Copy Profile 2 data to profile 1 ----
+	I2C_EEPROM_24C0x_WriteStructProfile(profile, 0x00, 10);
+	I2C_EEPROM_24C0x_ReadStructProfile(profile, 0x00, 10);
 	
 
 	printf("Read Profile values : %d\t%d\t%d\t%d\t%d\t%d\t%d\r\n", \
 					
-					profile1->Ad1_Light_Operation_Mode,
+					profile->Ad1_Light_Operation_Mode,
 					
-					profile1->Ad1_Light_OnTime.HH,
-					profile1->Ad1_Light_OnTime.MM,
-					profile1->Ad1_Light_OnTime.SS,
+					profile->Ad1_Light_OnTime.HH,
+					profile->Ad1_Light_OnTime.MM,
+					profile->Ad1_Light_OnTime.SS,
 					
-					profile1->Ad1_Light_OffTime.HH,
-					profile1->Ad1_Light_OffTime.MM,
-					profile1->Ad1_Light_OffTime.SS
+					profile->Ad1_Light_OffTime.HH,
+					profile->Ad1_Light_OffTime.MM,
+					profile->Ad1_Light_OffTime.SS
 					
 					);
 
-printf("Hello World !!\r\n"); 
-	
-//	for(ctr = 0; ctr < 100; ctr++) {
-//		usart2_putchar(read_buffr_eprm[ctr]);
-//	}
-
-//  I2C_EEPROM_24C0x_WriteAndRead();
-	
   while (1) {
 		
 		if(flagLEDIndi) {

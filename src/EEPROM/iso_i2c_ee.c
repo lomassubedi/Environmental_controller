@@ -29,8 +29,7 @@
 /** @addtogroup Utilities
   * @{
   */
-	uint8_t read_buffr_EEPROM[PROFILE_SIZE];
-
+	
 /** @addtogroup ISO_M0 Board
   * @{
   */ 

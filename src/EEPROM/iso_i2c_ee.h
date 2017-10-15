@@ -12,7 +12,7 @@
 
 /*  ----- Defines for profile ----------- */
 // Profile size 522 Bytes 
-#define			PROFILE_SIZE		522
+//#define			PROFILE_SIZE		522
 	 
 /** @addtogroup Utilities
   * @{
