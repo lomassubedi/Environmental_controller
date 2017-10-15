@@ -29,18 +29,18 @@ typedef 		uint8_t		BOOL;
 typedef			uint8_t 	TRISTATE_OPERATION_MODE;
 typedef			uint8_t		CYL_GEN;
 
-typedef struct mTIME {
+typedef __packed struct mTIME {
 	uint8_t HH;
 	uint8_t MM;
 	uint8_t SS;
 } TIME_M;
 
-typedef struct timer {
+typedef __packed struct timer {
 	uint8_t mn;
 	uint8_t sec;
 } TIMER;
 
-typedef struct time {
+typedef __packed struct time {
 	uint8_t hour;
 	uint8_t minute;
 	uint8_t second;

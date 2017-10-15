@@ -20,17 +20,17 @@
 	
 // ----- Defines -----------
 // Profile size 522 Bytes 
-#define			PROFILE_SIZE		522
+//#define			PROFILE_SIZE		522
 
-uint8_t read_buffr_EEPROM[PROFILE_SIZE];
+//uint8_t read_buffr_EEPROM[PROFILE_SIZE];
 
-typedef struct profile {
+typedef __packed struct profile {
 	
 	TRISTATE_OPERATION_MODE Ad1_Light_Operation_Mode;
 	
 	TIME_M Ad1_Light_OnTime;
 	TIME_M Ad1_Light_OffTime;
-	/*
+
 	TIME_M Ad1_Light_LC_Duration;
 	TIME_M Ad1_Light_DC_Duration;
 	TIME_M Ad1_Light_LC_TimeRemain;
@@ -274,7 +274,7 @@ typedef struct profile {
 	uint16_t Ad1_FXP2_Co2_Cyl_StPtPPM;
 	uint16_t Ad1_FXP2_Co2_Gen_OnPPM;
 	uint16_t Ad1_FXP2_Co2_Gen_OffPPM;
-	*/
+
 } PROFILE ;
 // --- 20 profile decleration ---
 extern PROFILE *profile1;

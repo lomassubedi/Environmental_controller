@@ -81,12 +81,12 @@ PROFILE xyz = {
 	{5, 6, 7}
 };
 
-PROFILE *profile1;
+PROFILE *profile1 = &xyz;
 
 PROFILE abc = {
-	10,
-	{11, 12, 13},
-	{21, 22, 23}
+	1,
+	{42, 41, 43},
+	{61, 62, 73}
 };
 
 PROFILE *profile2 = &abc;

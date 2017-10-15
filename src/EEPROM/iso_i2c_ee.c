@@ -25,9 +25,11 @@
 #include "iso_i2c_ee.h"
 #include "util_usart.h"
 
+
 /** @addtogroup Utilities
   * @{
   */
+	uint8_t read_buffr_EEPROM[PROFILE_SIZE];
 
 /** @addtogroup ISO_M0 Board
   * @{
@@ -674,15 +676,14 @@ void I2C_EEPROM_24C0x_WriteStructProfile(PROFILE * profile, uint16_t WriteAddr, 
 	sEE_WriteBuffer(ptrProfile, WriteAddr, NumByteToWrite);
 }
 
+
 void I2C_EEPROM_24C0x_ReadStructProfile(PROFILE * profile, uint16_t ReadAddr, uint16_t NumByteToRead) {
+	// Typecast structure to a uint8_t pointer
 	uint8_t * ptrProfile = (uint8_t * )(void * )profile;
-//	uint8_t * ptrProfile = read_buffr_EEPROM;
-	sEE_ReadBuffer(read_buffr_EEPROM, ReadAddr, NumByteToRead);
 	
-//	uint8_t * ptrProfile = (uint8_t * )(void * )read_buffr_EEPROM;
-	memcpy(ptrProfile, read_buffr_EEPROM, NumByteToRead);
-//	(uint8_t*)(void * )profile = (uint8_t*)read_buffr;
-}
+	sEE_ReadBuffer(ptrProfile, ReadAddr, NumByteToRead);
+	
+} 
 
 void I2C_EEPROM_24C0x_WriteAndRead(void)
 {

@@ -10,6 +10,10 @@
 #include "stm32f0xx.h"
 #include "eeprom_data.h"
 
+/*  ----- Defines for profile ----------- */
+// Profile size 522 Bytes 
+#define			PROFILE_SIZE		522
+	 
 /** @addtogroup Utilities
   * @{
   */

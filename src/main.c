@@ -47,7 +47,7 @@ extern void TimingDelay_Decrement(void) {
 }
 
 //uint8_t write_buffr_eprm[] = "Hi lomas this is the data to write into an EEPROM !\r\n";
-//uint8_t read_buffr_eprm[100];
+uint8_t read_buffr_eprm[100];
 
 //uint16_t size_profile = 100;
 //const uint8_t* ptrProfile = ((const uint8_t*)(const void*)&profile2);
@@ -55,7 +55,7 @@ extern void TimingDelay_Decrement(void) {
 //uint8_t* ptrProfileRx = (uint8_t*)(void * )&profile1;
 
 int main(void) {
-//	int ctr = 0;
+	int ctr = 0;
 //	RTC_TimeTypeDef myRTCTime;
 	RTC_DateTypeDef myRTCDate;
 	
@@ -111,15 +111,11 @@ int main(void) {
 					
 					);
 
-printf("Hello World !!\r\n");
+printf("Hello World !!\r\n"); 
 	
 //	for(ctr = 0; ctr < 100; ctr++) {
 //		usart2_putchar(read_buffr_eprm[ctr]);
 //	}
-	
-	
-	
-
 
 //  I2C_EEPROM_24C0x_WriteAndRead();
 	
@@ -129,6 +125,5 @@ printf("Hello World !!\r\n");
 			flagLEDIndi = 0;
 			STM_EVAL_LEDToggle(LED3);
 		}
-		
 	}
 }
