@@ -3,31 +3,48 @@
 
 #include <stdint.h>
 
+// Decisions constants 
 #define 		YES 	1
 #define 		NO		0
 
+// Status Constants 
 #define 		OFF		0
 #define 		ON		1
 
+// --- Light Status Constants ---
 #define 		LIGHT		0
 #define 		DARK		1
 
+// AM-PM constants
 #define 		AM			0
 #define 		PM			1
 
+// --- BOOL constants ---
 #define			TRUE		1
 #define 		FALSE		0
 
+// --- Tri state operation constants -- 
 #define			ALWAYS_OFF	0
 #define			ALWAYS_ON		1
 #define			NORMAL			2
 
+// -- CYCL or GEN Constants ---
 #define 		CYL					1
 #define 		GEN					0
 
+// --- Unit Standard Flag Constants
+#define 		ENGLISH			0
+#define 		METRIC			1
+
+// Open / Close Constants
+#define 		CLOSE				0
+#define			OPEN				1
+
+// ---- Typedefs --
 typedef 		uint8_t		BOOL;
 typedef			uint8_t 	TRISTATE_OPERATION_MODE;
 typedef			uint8_t		CYL_GEN;
+typedef 		uint8_t 	UNIT_S;
 
 typedef __packed struct mTIME {
 	uint8_t HH;

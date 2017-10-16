@@ -4,7 +4,63 @@
 
 #include "eeprom_data.h"
 
-PROFILE dummyInit = {
+TOOLS dummyInitTools = {
+	1,						// Ad1_DeviceType
+	
+	METRIC,				// Ad1_Tools_Units_EnglishMetric
+	
+	YES,					// Ad1_Tools_Sensor_Fault
+	YES,					// Ad1_Tools_ACFault_Message_YesNo
+	YES,					// Ad1_Tools_LoTemp_Warning_YesNo
+	YES,					// Ad1_Tools_LoTemp_Warning_StPt
+	YES,					// Ad1_Tools_HiTemp_Warning_YesNo
+	
+	38.0,					// Ad1_Tools_HiTemp_Warning_StPt
+	
+	YES,					// Ad1_Tools_LoHum_Warning_YesNo
+	
+	30.0,					// Ad1_Tools_LoHum_Warning_StPt
+	
+	YES,					// Ad1_Tools_HiHum_Warning_YesNo
+	
+	70.0,					// Ad1_Tools_HiHum_Warning_StPt
+	
+	YES,					// Ad1_Tools_Critical_OverTemp_Fault_YesNo
+	YES,					// Ad1_Tools_Critical_OverTemp_Fault_Flag
+	
+	38.0,					// Ad1_Tools_Critical_OverTemp_StPt
+	
+	// TODO Need to see this variable type again 
+	YES,					// Ad1_Tools_Critical_OverTemp_Response
+	YES,					// Ad1_Tools_Critical_OverTemp_Message_YesNo
+	
+	YES,					// Ad1_Tools_ReStrike_Fault_YesNo  
+	
+	/* --- This variable has been moved to TEMP FLAGS ----
+	YES,					// Ad1_Tools_ReStrike_Fault_Flag
+	 ---------------------------------------------------- */
+	{0, 0, 0},		// Ad1_Tools_ReStrike_Delay_Time
+	
+	YES,					// Ad1_Tools_ReStrike_Message_YesNo
+	YES,					// Ad1_Tools_LoBat_Fault_Message_YesNo
+	0.0,					// Ad1_Tools_Batt_Current_Volt
+	0,						// Ad1_Tools_Light_Relay_Cycle_Counter
+	0,						// Ad1_Tools_HdVent_Relay_Cycle_Counter
+	0,						// Ad1_Tools_Circ_Relay_Cycle_Counter
+	0,						// Ad1_Tools_Vent_Relay_Cycle_Counter
+	0,						// Ad1_Tools_FXP1_Relay_Cycle_Counter
+	0,						// Ad1_Tools_FXP2_Relay_Cycle_Counter
+	
+	OPEN,					// Ad1_Tools_Switch_YesNo
+	
+	{0, 5, 0},		// Ad1_Tools_HdVent_DC_DeAct_FactSet_Delay
+	{0, 5, 0},		// Ad1_Tools_CO2_PVA_PostVent_FactSet_Delay
+	ON,						// Ad1_Tools_LED_OnOff	
+};
+
+TOOLS *tools = &dummyInitTools;
+
+PROFILE dummyInitProfile = {
 	NORMAL,				// Ad1_Light_Operation_Mode
 	{0, 0, 0},		// Ad1_Light_OnTime
 	{1, 0, 0},		// Ad1_Light_OffTime
@@ -259,8 +315,7 @@ PROFILE dummyInit = {
 	1500,						// Ad1_FXP2_Co2_Cyl_StPtPPM;
 	1500,						// Ad1_FXP2_Co2_Gen_OnPPM;
 	100							// Ad1_FXP2_Co2_Gen_OffPPM;
-
 };
 
-PROFILE *profile = &dummyInit;
+PROFILE *profile = &dummyInitProfile;
 

@@ -130,6 +130,12 @@ uint32_t sEE_WaitEepromStandbyState(void);
 void     I2C_EEPROM_24C0x_WriteAndRead(void);
 
 // Function later added to write a structure
+
+// For Tools Data
+void I2C_EEPROM_24C0x_WriteStructTools(TOOLS * tool, uint16_t WriteAddr, uint16_t NumByteToWrite);
+void I2C_EEPROM_24C0x_ReadStructTools(TOOLS * tool, uint16_t ReadAddr, uint16_t NumByteToRead);
+
+// For Profile Data
 void I2C_EEPROM_24C0x_WriteStructProfile(PROFILE * profile, uint16_t WriteAddr, uint16_t NumByteToWrite);
 void I2C_EEPROM_24C0x_ReadStructProfile(PROFILE * profile, uint16_t ReadAddr, uint16_t NumByteToRead);
 

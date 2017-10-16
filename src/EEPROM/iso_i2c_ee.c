@@ -670,19 +670,27 @@ uint32_t sEE_TIMEOUT_UserCallback(void)
 
 /*-------------------------------------------------------------------------------------*/
 
+void I2C_EEPROM_24C0x_WriteStructTools(TOOLS * tool, uint16_t WriteAddr, uint16_t NumByteToWrite) {
+	uint8_t * ptrTool = ((uint8_t * )(void * )tool);
+	sEE_WriteBuffer(ptrTool, WriteAddr, NumByteToWrite);
+}
+
+void I2C_EEPROM_24C0x_ReadStructTools(TOOLS * tool, uint16_t ReadAddr, uint16_t NumByteToRead) {
+	// Typecast structure to a uint8_t pointer
+	uint8_t * ptrTool = (uint8_t * )(void * )tool;
+	sEE_ReadBuffer(ptrTool, ReadAddr, NumByteToRead);
+}
+
 void I2C_EEPROM_24C0x_WriteStructProfile(PROFILE * profile, uint16_t WriteAddr, uint16_t NumByteToWrite) {
 	uint8_t * ptrProfile = ((uint8_t * )(void * )profile);
 	sEE_WriteBuffer(ptrProfile, WriteAddr, NumByteToWrite);
 }
 
-
 void I2C_EEPROM_24C0x_ReadStructProfile(PROFILE * profile, uint16_t ReadAddr, uint16_t NumByteToRead) {
 	// Typecast structure to a uint8_t pointer
 	uint8_t * ptrProfile = (uint8_t * )(void * )profile;
-	
 	sEE_ReadBuffer(ptrProfile, ReadAddr, NumByteToRead);
-	
-} 
+}
 
 void I2C_EEPROM_24C0x_WriteAndRead(void)
 {

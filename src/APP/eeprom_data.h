@@ -19,10 +19,93 @@
   */
 	
 // ----- Defines -----------
-// Profile size 522 Bytes 
-//#define			PROFILE_SIZE		522
+#define 		TOOLS_SIZE			100		// TOOLS size (60 Bytes in actual)
+#define			PROFILE_SIZE		600		// Profile size 600 Bytes (In actual its 496 Bytes)
 
-//uint8_t read_buffr_EEPROM[PROFILE_SIZE];
+enum EEPROM_ADDRESS {
+	// Address 0-99 is reserved now !!
+	EEPROM_ADDRESS_TOOLS = 100,
+	EEPROM_ADDRESS_PROFILE_1 = EEPROM_ADDRESS_TOOLS + TOOLS_SIZE,		// 200
+	EEPROM_ADDRESS_PROFILE_2 = EEPROM_ADDRESS_PROFILE_1 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_3 = EEPROM_ADDRESS_PROFILE_2 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_4 = EEPROM_ADDRESS_PROFILE_3 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_5 = EEPROM_ADDRESS_PROFILE_4 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_6 = EEPROM_ADDRESS_PROFILE_5 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_7 = EEPROM_ADDRESS_PROFILE_6 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_8 = EEPROM_ADDRESS_PROFILE_7 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_9 = EEPROM_ADDRESS_PROFILE_8 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_10 = EEPROM_ADDRESS_PROFILE_9 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_11 = EEPROM_ADDRESS_PROFILE_10 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_12 = EEPROM_ADDRESS_PROFILE_11 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_13 = EEPROM_ADDRESS_PROFILE_12 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_14 = EEPROM_ADDRESS_PROFILE_13 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_15 = EEPROM_ADDRESS_PROFILE_14 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_16 = EEPROM_ADDRESS_PROFILE_15 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_17 = EEPROM_ADDRESS_PROFILE_16 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_18 = EEPROM_ADDRESS_PROFILE_17 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_19 = EEPROM_ADDRESS_PROFILE_18 + PROFILE_SIZE,
+	EEPROM_ADDRESS_PROFILE_20 = EEPROM_ADDRESS_PROFILE_19 + PROFILE_SIZE
+};
+
+typedef __packed struct tools {
+	
+	uint8_t Ad1_DeviceType;
+	
+	UNIT_S Ad1_Tools_Units_EnglishMetric;
+	
+	BOOL Ad1_Tools_Sensor_Fault;
+	BOOL Ad1_Tools_ACFault_Message_YesNo;
+	BOOL Ad1_Tools_LoTemp_Warning_YesNo;
+	
+	float Ad1_Tools_LoTemp_Warning_StPt;
+	
+	BOOL Ad1_Tools_HiTemp_Warning_YesNo;
+	
+	float Ad1_Tools_HiTemp_Warning_StPt;
+	
+	BOOL Ad1_Tools_LoHum_Warning_YesNo;
+	
+	float Ad1_Tools_LoHum_Warning_StPt;
+	
+	BOOL Ad1_Tools_HiHum_Warning_YesNo;
+	
+	float Ad1_Tools_HiHum_Warning_StPt;
+	
+	BOOL Ad1_Tools_Critical_OverTemp_Fault_YesNo;
+	BOOL Ad1_Tools_Critical_OverTemp_Fault_Flag;
+	
+	float Ad1_Tools_Critical_OverTemp_StPt;
+	
+	BOOL Ad1_Tools_Critical_OverTemp_Response;
+	BOOL Ad1_Tools_Critical_OverTemp_Message_YesNo;
+	BOOL Ad1_Tools_ReStrike_Fault_YesNo;
+	
+	// Moved to tmp flags 
+//	BOOL Ad1_Tools_ReStrike_Fault_Flag; 
+	
+	TIME_M Ad1_Tools_ReStrike_Delay_Time;
+	
+	BOOL Ad1_Tools_ReStrike_Message_YesNo;
+	BOOL Ad1_Tools_LoBat_Fault_Message_YesNo;
+	
+	float Ad1_Tools_Batt_Current_Volt;
+	
+	uint16_t Ad1_Tools_Light_Relay_Cycle_Counter;
+	uint16_t Ad1_Tools_HdVent_Relay_Cycle_Counter;
+	uint16_t Ad1_Tools_Circ_Relay_Cycle_Counter;
+	uint16_t Ad1_Tools_Vent_Relay_Cycle_Counter;
+	uint16_t Ad1_Tools_FXP1_Relay_Cycle_Counter;
+	uint16_t Ad1_Tools_FXP2_Relay_Cycle_Counter;
+	
+	BOOL Ad1_Tools_Switch_YesNo;
+	TIME_M Ad1_Tools_HdVent_DC_DeAct_FactSet_Delay;
+	TIME_M Ad1_Tools_CO2_PVA_PostVent_FactSet_Delay;
+	BOOL Ad1_Tools_LED_OnOff;
+	
+} TOOLS;
+
+// --- tools instantiation ---
+extern TOOLS *tools;
 
 typedef __packed struct profile {
 	

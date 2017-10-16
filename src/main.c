@@ -24,8 +24,8 @@
 uint8_t buffr[TMP_BUFFER_SIZE];
 
 // Currently EEPROM data is 496 Bytes
-#define 		SIZE_EEPROM_DATA		500
-uint8_t tmeEEPBuffr[1000];
+#define 		SIZE_EEPROM_DATA		1024
+uint8_t tmeEEPBuffr[SIZE_EEPROM_DATA];
 
 GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -50,16 +50,7 @@ extern void TimingDelay_Decrement(void) {
   }
 }
 
-//uint8_t write_buffr_eprm[] = "Hi lomas this is the data to write into an EEPROM !\r\n";
-uint8_t read_buffr_eprm[100];
-
-//uint16_t size_profile = 100;
-//const uint8_t* ptrProfile = ((const uint8_t*)(const void*)&profile2);
-
-//uint8_t* ptrProfileRx = (uint8_t*)(void * )&profile1;
-
 int main(void) {
-	PROFILE *testProfile;
 	int ctr = 0;
 //	RTC_TimeTypeDef myRTCTime;
 //	RTC_DateTypeDef myRTCDate;
@@ -82,13 +73,26 @@ int main(void) {
 	I2C_EEPROM_24C0x_Init();
 	
 	// Test -- Write a profile ----
-	I2C_EEPROM_24C0x_WriteStructProfile(profile, 0x00, SIZE_EEPROM_DATA);
+////	I2C_EEPROM_24C0x_WriteStructProfile(profile, 0x00, SIZE_EEPROM_DATA);
+
+//	I2C_EEPROM_24C0x_WriteStructTools(tools, EEPROM_ADDRESS_TOOLS, TOOLS_SIZE);
 	
-	// Write another profile again
-	I2C_EEPROM_24C0x_WriteStructProfile(profile, SIZE_EEPROM_DATA+1, SIZE_EEPROM_DATA);
+	profile->Ad1_FXP2_Co2_Gen_OffPPM = 5000;
 	
-	sEE_ReadBuffer(tmeEEPBuffr, 0x00, SIZE_EEPROM_DATA);
-//	printf("This is the size of a Profile %d\r\n", sizeof(PROFILE));
+	I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_1, PROFILE_SIZE);
+	
+	profile->Ad1_FXP2_Co2_Gen_OffPPM = 1200;
+	I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_2, PROFILE_SIZE);
+	
+	I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_TOOLS, TOOLS_SIZE);
+	printf("This is a tools data i.e. Ad1_Tools_Critical_OverTemp_StPt = %f\r\n", tools->Ad1_Tools_Critical_OverTemp_StPt);
+	
+	I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_1, PROFILE_SIZE);
+	printf("This is a profile data i.e. Ad1_FXP2_Co2_Gen_OffPPM = %d\r\n", profile->Ad1_FXP2_Co2_Gen_OffPPM);
+
+//	sEE_ReadBuffer(tmeEEPBuffr, 0x00, SIZE_EEPROM_DATA);
+	
+	
 //	I2C_EEPROM_24C0x_ReadStructProfile(testProfile, 0x00, 700);
 
 /*
@@ -97,12 +101,12 @@ for(ctr = 0; ctr < SIZE_EEPROM_DATA; ctr++) {
 	}
 */
 		
-		sEE_ReadBuffer(tmeEEPBuffr, SIZE_EEPROM_DATA+1, SIZE_EEPROM_DATA);
-		printf("\r\n\r\n");
-	
-	for(ctr = 0; ctr < (SIZE_EEPROM_DATA); ctr++) {
-		usart2_putchar(tmeEEPBuffr[ctr]);
-	}
+//		sEE_ReadBuffer(tmeEEPBuffr, SIZE_EEPROM_DATA+1, SIZE_EEPROM_DATA);
+//		printf("\r\n\r\n");
+//	
+//	for(ctr = 0; ctr < (SIZE_EEPROM_DATA); ctr++) {
+//		usart2_putchar(tmeEEPBuffr[ctr]);
+//	}
 
 /*
 printf("\r\n");
