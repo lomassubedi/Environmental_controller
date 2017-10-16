@@ -23,6 +23,10 @@
 #define 		TMP_BUFFER_SIZE			200
 uint8_t buffr[TMP_BUFFER_SIZE];
 
+// Currently EEPROM data is 496 Bytes
+#define 		SIZE_EEPROM_DATA		500
+uint8_t tmeEEPBuffr[1000];
+
 GPIO_InitTypeDef GPIO_InitStructure;
 
 static __IO uint32_t TimingDelay;
@@ -55,7 +59,8 @@ uint8_t read_buffr_eprm[100];
 //uint8_t* ptrProfileRx = (uint8_t*)(void * )&profile1;
 
 int main(void) {
-//	int ctr = 0;
+	PROFILE *testProfile;
+	int ctr = 0;
 //	RTC_TimeTypeDef myRTCTime;
 //	RTC_DateTypeDef myRTCDate;
 	
@@ -76,25 +81,57 @@ int main(void) {
 
 	I2C_EEPROM_24C0x_Init();
 	
-	// Test -- Copy Profile 2 data to profile 1 ----
-	I2C_EEPROM_24C0x_WriteStructProfile(profile, 0x00, 10);
-	I2C_EEPROM_24C0x_ReadStructProfile(profile, 0x00, 10);
+	// Test -- Write a profile ----
+	I2C_EEPROM_24C0x_WriteStructProfile(profile, 0x00, SIZE_EEPROM_DATA);
+	
+	// Write another profile again
+	I2C_EEPROM_24C0x_WriteStructProfile(profile, SIZE_EEPROM_DATA+1, SIZE_EEPROM_DATA);
+	
+	sEE_ReadBuffer(tmeEEPBuffr, 0x00, SIZE_EEPROM_DATA);
+//	printf("This is the size of a Profile %d\r\n", sizeof(PROFILE));
+//	I2C_EEPROM_24C0x_ReadStructProfile(testProfile, 0x00, 700);
+
+/*
+for(ctr = 0; ctr < SIZE_EEPROM_DATA; ctr++) {
+	usart2_putchar(tmeEEPBuffr[ctr]);
+	}
+*/
+		
+		sEE_ReadBuffer(tmeEEPBuffr, SIZE_EEPROM_DATA+1, SIZE_EEPROM_DATA);
+		printf("\r\n\r\n");
+	
+	for(ctr = 0; ctr < (SIZE_EEPROM_DATA); ctr++) {
+		usart2_putchar(tmeEEPBuffr[ctr]);
+	}
+
+/*
+printf("\r\n");
 	
 
-	printf("Read Profile values : %d\t%d\t%d\t%d\t%d\t%d\t%d\r\n", \
+printf("Read Profile values : %d\t %d:%d:%d \t%d:%d:%d\t %d:%d:%d\t %f\t %f\t%d\r\n", \
 					
-					profile->Ad1_Light_Operation_Mode,
+					testProfile->Ad1_Light_Operation_Mode,
 					
-					profile->Ad1_Light_OnTime.HH,
-					profile->Ad1_Light_OnTime.MM,
-					profile->Ad1_Light_OnTime.SS,
+					testProfile->Ad1_Light_OnTime.HH,
+					testProfile->Ad1_Light_OnTime.MM,
+					testProfile->Ad1_Light_OnTime.SS,
 					
-					profile->Ad1_Light_OffTime.HH,
-					profile->Ad1_Light_OffTime.MM,
-					profile->Ad1_Light_OffTime.SS
+					testProfile->Ad1_Light_OffTime.HH,
+					testProfile->Ad1_Light_OffTime.MM,
+					testProfile->Ad1_Light_OffTime.SS,
 					
-					);
+					testProfile->Ad1_Light_LC_Duration.HH,
+					testProfile->Ad1_Light_LC_Duration.MM,
+					testProfile->Ad1_Light_LC_Duration.SS,
+					
+					testProfile->Ad1_HdV_DeH_DC_OffHum,
+					
+					testProfile->Ad1_HdV_DeH_DC_OnHum,
+					
+					testProfile->Ad1_FXP2_Tmr_LC_RptAftr.MM
 
+					);
+*/
   while (1) {
 		
 		if(flagLEDIndi) {

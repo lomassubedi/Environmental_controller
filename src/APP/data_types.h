@@ -22,7 +22,7 @@
 #define			ALWAYS_ON		1
 #define			NORMAL			2
 
-#define 		CYCL				1
+#define 		CYL					1
 #define 		GEN					0
 
 typedef 		uint8_t		BOOL;

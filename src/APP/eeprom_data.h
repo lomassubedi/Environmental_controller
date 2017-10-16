@@ -96,9 +96,7 @@ typedef __packed struct profile {
 	TIME_M Ad1_Cir_DC_SrtDly;
 	
 	BOOL Ad1_Cir_FlexFunc_YesNo;
-	
-	TIME_M Ad1_Cir_FlexFunc_RptTmr;
-	
+	BOOL Ad1_Cir_FlexFunc_RptTmr;
 	BOOL Ad1_Cir_FlexFunc_Heat;
 	BOOL Ad1_Cir_FlexFunc_Cool;
 	BOOL Ad1_Cir_FlexFunc_Hum;
@@ -275,7 +273,7 @@ typedef __packed struct profile {
 	uint16_t Ad1_FXP2_Co2_Gen_OnPPM;
 	uint16_t Ad1_FXP2_Co2_Gen_OffPPM;
 
-} PROFILE ;
+} PROFILE;
 
 // --- profile instantiation ---
 extern PROFILE *profile;
