@@ -148,10 +148,13 @@ printf("Read Profile values : %d\t %d:%d:%d \t%d:%d:%d\t %d:%d:%d\t %f\t %f\t%d\
 					);
 
   while (1) {
-		
-		if(flagLEDIndi) {
-			flagLEDIndi = 0;
-			STM_EVAL_LEDToggle(LED3);
-		}
+		modbus_update();
+		printf("Hello World !!\r\n");
+		printf("var_code_Ad1_Tools_HiHum_Warning_StPt number = %d\r\n", var_code_Ad1_Tools_HiHum_Warning_StPt);
+		Delay(1000);
+//		if(flagLEDIndi) {
+//			flagLEDIndi = 0;
+//			STM_EVAL_LEDToggle(LED3);
+//		}
 	}
 }

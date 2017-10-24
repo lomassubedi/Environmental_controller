@@ -318,4 +318,3 @@ PROFILE dummyInitProfile = {
 };
 
 PROFILE *profile = &dummyInitProfile;
-

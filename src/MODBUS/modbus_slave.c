@@ -167,6 +167,11 @@ uint8_t modbus_update() {
 	uint16_t temp;
 	uint16_t tmpCRC = 0;
 	
+	// EEPROM management Vars
+	uint8_t profileNo;
+	uint8_t varCode;
+	uint8_t byteCount = 0;
+	
 
 //  The minimum request packet is 8 bytes for function 3 & 16
 	if(flag_rx_complete) {
@@ -271,6 +276,9 @@ uint8_t modbus_update() {
 						} else {
 							errorCount++; // corrupted packet
 						}   
+					} else if (function == 20) {		// If the function Code is 20 i.e. read EEPRM Registers
+						profileNo = frame[2];					// Get profile Number
+						varCode = frame[3];						// Get variable code 
 					} else {
 						exceptionResponse(1); // exception 1 ILLEGAL FUNCTION
 					}
