@@ -676,9 +676,12 @@ void I2C_EEPROM_24C0x_WriteStructTools(TOOLS * tool, uint16_t WriteAddr, uint16_
 }
 
 void I2C_EEPROM_24C0x_ReadStructTools(TOOLS * tool, uint16_t ReadAddr, uint16_t NumByteToRead) {
+//	volatile uint8_t readBffr[TOOLS_SIZE];
 	// Typecast structure to a uint8_t pointer
 	uint8_t * ptrTool = (uint8_t * )(void * )tool;
 	sEE_ReadBuffer(ptrTool, ReadAddr, NumByteToRead);
+//	sEE_ReadBuffer(readBffr, EEPROM_ADDRESS_TOOLS, TOOLS_SIZE);
+//	memcpy(tools, readBffr, TOOLS_SIZE);
 }
 
 void I2C_EEPROM_24C0x_WriteStructProfile(PROFILE * profile, uint16_t WriteAddr, uint16_t NumByteToWrite) {

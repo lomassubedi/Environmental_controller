@@ -26,7 +26,7 @@
 #define			PROFILE_SIZE		600		// Profile size 600 Bytes (In actual its 496 Bytes)
 
 enum EEPROM_ADDRESS {
-	// Address 0-99 is reserved now !!
+	// Address 0-99 is reserved for now !!
 	EEPROM_ADDRESS_TOOLS = 100,
 	EEPROM_ADDRESS_PROFILE_1 = EEPROM_ADDRESS_TOOLS + TOOLS_SIZE,				// Profile1 address starts from 200 - 799
 	EEPROM_ADDRESS_PROFILE_2 = EEPROM_ADDRESS_PROFILE_1 + PROFILE_SIZE,	// Profile2 address starts from 800 - 1399
@@ -127,8 +127,7 @@ typedef __packed struct tools {
 	BOOL Ad1_Tools_Switch_YesNo;
 	TIME_M Ad1_Tools_HdVent_DC_DeAct_FactSet_Delay;
 	TIME_M Ad1_Tools_CO2_PVA_PostVent_FactSet_Delay;
-	BOOL Ad1_Tools_LED_OnOff;
-	
+	BOOL Ad1_Tools_LED_OnOff;	
 } TOOLS;
 
 // --- tools instantiation ---

@@ -6,6 +6,7 @@
 #include "mbcrc.h"
 #include "reg_list.h"
 #include "stm32f0_discovery.h"
+#include "eeprom_profile.h"
 
 #define 	BUFFER_SIZE 			100
 #define 	DEVICE_SLAVE_ID			1
@@ -154,8 +155,8 @@ void exceptionResponse(unsigned char exception) {
 uint8_t modbus_update() {
 	
 	uint8_t id;
-	uint16_t crc = 0;
-	uint16_t startingAddress;
+	volatile uint16_t crc = 0;
+	volatile uint16_t startingAddress;
 	uint16_t no_of_registers;
 	uint16_t maxData;
 	uint16_t index;
@@ -165,18 +166,20 @@ uint8_t modbus_update() {
 	uint16_t responseFrameSize;
 	
 	uint16_t temp;
-	uint16_t tmpCRC = 0;
+	volatile uint16_t tmpCRC = 0;
 	
 	// EEPROM management Vars
 	uint8_t profileNo;
 	uint8_t varCode;
 	uint8_t byteCount = 0;
+	uint8_t bytesArry[6];
+	uint8_t byteIndex = 0;
 	
 
 //  The minimum request packet is 8 bytes for function 3 & 16
 	if(flag_rx_complete) {
 
-		if(buffer > 6) {
+		if(buffer > 4) {
 			
 			id = frame[0];
 			broadcastFlag = 0;
@@ -276,9 +279,17 @@ uint8_t modbus_update() {
 						} else {
 							errorCount++; // corrupted packet
 						}   
-					} else if (function == 20) {		// If the function Code is 20 i.e. read EEPRM Registers
+					} else if (function == 0x14) {		// If the function Code is 20 i.e. read EEPRM Registers
 						profileNo = frame[2];					// Get profile Number
 						varCode = frame[3];						// Get variable code 
+						eeprom_get_var(profileNo, varCode, &byteCount, bytesArry);
+						frame[4] = byteCount;
+						address = 5;
+						for(byteIndex = 0; byteIndex < byteCount; byteIndex++) {
+							address += byteIndex;
+							frame[address] = bytesArry[byteIndex];
+						}
+						sendPacket((address + 1));
 					} else {
 						exceptionResponse(1); // exception 1 ILLEGAL FUNCTION
 					}
@@ -287,7 +298,7 @@ uint8_t modbus_update() {
 					// No response on CRC error !!
 				}
 			}
-		} else if (buffer > 0 && buffer < 8) {
+		} else if (buffer > 0 && buffer < 6) {
 			errorCount++; // corrupted packet
 		}
 		buffer = 0;						// Reset the queue

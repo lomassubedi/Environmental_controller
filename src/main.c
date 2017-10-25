@@ -110,7 +110,7 @@ int main(void) {
 		I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_9, PROFILE_SIZE);
 		
 		// Write profile 10 default data 
-		profile->Ad1_FXP2_Tmr_LC_RptAftr.MM = 100;
+//		profile->Ad1_FXP2_Tmr_LC_RptAftr.MM = 100;
 		I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_10, PROFILE_SIZE);
 		
 		// Write the flag status so as to indicate that default data has been already written to EEPROM
@@ -123,8 +123,10 @@ int main(void) {
 	}
 	
 	I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_10, PROFILE_SIZE);
+	
+	I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_TOOLS, TOOLS_SIZE);
 
-printf("Read Profile values : %d\t %d:%d:%d \t%d:%d:%d\t %d:%d:%d\t %f\t %f\t%d\r\n", \
+	printf("Read Profile values : %d\t %d:%d:%d \t%d:%d:%d\t %d:%d:%d\t %f\t %f\t%d\r\n", \
 					
 					profile->Ad1_Light_Operation_Mode,
 					
@@ -146,12 +148,14 @@ printf("Read Profile values : %d\t %d:%d:%d \t%d:%d:%d\t %d:%d:%d\t %f\t %f\t%d\
 					
 					profile->Ad1_FXP2_Tmr_LC_RptAftr.MM
 					);
+					
+	printf("Tools values : %f\r\n", tools->Ad1_Tools_HiTemp_Warning_StPt);
 
   while (1) {
 		modbus_update();
-		printf("Hello World !!\r\n");
-		printf("var_code_Ad1_Tools_HiHum_Warning_StPt number = %d\r\n", var_code_Ad1_Tools_HiHum_Warning_StPt);
-		Delay(1000);
+//		printf("Hello World !!\r\n");
+//		printf("var_code_Ad1_Tools_HiHum_Warning_StPt number = %d\r\n", var_code_Ad1_Tools_HiHum_Warning_StPt);
+//		Delay(1000);
 //		if(flagLEDIndi) {
 //			flagLEDIndi = 0;
 //			STM_EVAL_LEDToggle(LED3);
