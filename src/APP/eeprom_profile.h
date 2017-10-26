@@ -11,6 +11,6 @@
 // ------ function to manipulate EEPROM data along with profile -----
 void eeprom_get_var(uint8_t profNum, uint8_t varCode, uint8_t * bytesCount, uint8_t * bytesArry);
 
-//void eeprom_set_var();
+void eeprom_set_var(uint8_t profNum, uint8_t varCode, uint8_t bytesCount, uint8_t * bytesArry);
 
 #endif // EEPROM_PROFILE_H_

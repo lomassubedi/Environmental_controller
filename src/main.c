@@ -129,14 +129,8 @@ int main(void) {
 		printf("Default data already available at EEPROM.\r\n");
 	}
 	
-//	I2C_EEPROM_24C0x_WriteStructProfile(profile, 00, PROFILE_SIZE);
-	
-//	I2C_EEPROM_24C0x_ReadStructProfile(profile, 00, PROFILE_SIZE);
-//	sEE_WriteBuffer("Hello world, are you listning me ?", 00, 100);
-//	sEE_ReadBuffer(readBuffr, 00, 100);
-//	I2C_EEPROM_24C0x_ReadStructProfile(profile, 00, PROFILE_SIZE);
-	
-//	I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_TOOLS, TOOLS_SIZE);
+	I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_TOOLS, TOOLS_SIZE);
+	I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_2, PROFILE_SIZE);
 	
 
 	printf("Read Profile values : %d\t %d:%d:%d \t%d:%d:%d\t %d:%d:%d\t %f\t %f\t%d\r\n", \

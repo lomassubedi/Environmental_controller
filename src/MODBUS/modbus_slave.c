@@ -172,7 +172,7 @@ uint8_t modbus_update() {
 	uint8_t profileNo;
 	uint8_t varCode;
 	uint8_t byteCount = 0;
-	uint8_t bytesArry[6];
+	uint8_t bytesArry[4];
 	uint8_t byteIndex = 0;
 	
 
@@ -279,17 +279,60 @@ uint8_t modbus_update() {
 						} else {
 							errorCount++; // corrupted packet
 						}   
-					} else if (function == 0x14) {		// If the function Code is 20 i.e. read EEPRM Registers
+					} else if (function == 0x14) {	// If the function Code is 20 i.e. read EEPRM Registers
+						
 						profileNo = frame[2];					// Get profile Number
 						varCode = frame[3];						// Get variable code 
+						
 						eeprom_get_var(profileNo, varCode, &byteCount, bytesArry);
+						
 						frame[4] = byteCount;
+						
 						address = 5;
+						
 						for(byteIndex = 0; byteIndex < byteCount; byteIndex++) {
 							frame[address++] = bytesArry[byteIndex];
 						}
+						
+						tmpCRC = CRC16(frame, address);
+						frame[address++] = (uint8_t)(tmpCRC & 0x00FF);					// LSB
+						frame[address++] = (uint8_t)((tmpCRC >> 8) & 0x00FF);		// MSB						
+						
 						sendPacket(address);
-					} else {
+						
+					} else if(function == 0x28) {		// function code 40 for writing data to EEPROM
+						
+						profileNo = frame[2];					// Get profile Number
+						varCode = frame[3];						// Get variable code 
+						byteCount = frame[4];					// Get number of bytes to count
+						
+						address = 5;
+						
+						for(byteIndex = 0; byteIndex < byteCount; byteIndex++) {
+							bytesArry[byteIndex] = frame[address++];
+						}
+						
+						// Write data to EEPROM
+						eeprom_set_var(profileNo, varCode, byteCount, bytesArry);
+						
+						// Create an reply packate and send back to master
+						eeprom_get_var(profileNo, varCode, &byteCount, bytesArry);
+						
+						address = 5;
+						
+						for(byteIndex = 0; byteIndex < byteCount; byteIndex++) {
+							frame[address++] = bytesArry[byteIndex];
+						}
+						
+						tmpCRC = CRC16(frame, address);
+						
+						frame[address++] = (uint8_t)(tmpCRC & 0x00FF);					// LSB
+						frame[address++] = (uint8_t)((tmpCRC >> 8) & 0x00FF);		// MSB						
+						
+						sendPacket(address);
+						// --- End of Reply ------
+						
+					}else {
 						exceptionResponse(1); // exception 1 ILLEGAL FUNCTION
 					}
 				} else { // Checksum failed 
