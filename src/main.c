@@ -81,7 +81,7 @@ int main(void) {
 	I2C_EEPROM_24C0x_Init();
 	
 	sEE_ReadBuffer(&flag_EEPROM_status, ADDRESS_EPRM_STATUS_FLAG, BYTES_EEPRM_STATUS_FLAG);
-	flag_EEPROM_status = 0;
+//	flag_EEPROM_status = 0;
 	if(flag_EEPROM_status != 1) { // Data not written
 //			profile = &dummyInitProfile;
 //			tools = &dummyInitTools;
@@ -159,7 +159,7 @@ int main(void) {
 	printf("Tools values : %f\r\n", tools->Ad1_Tools_HiTemp_Warning_StPt);
 
   while (1) {
-		modbus_update();
+//		modbus_update();
 //		printf("Hello World !!\r\n");
 //		printf("var_code_Ad1_Tools_HiHum_Warning_StPt number = %d\r\n", var_code_Ad1_Tools_HiHum_Warning_StPt);
 //		Delay(1000);

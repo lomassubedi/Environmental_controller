@@ -35,6 +35,7 @@ void eeprom_get_var(uint8_t profNum, uint8_t varCode, uint8_t * bytesCount, uint
 
 					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
 					*bytesCount = sizeof(float);
+				
 					break;
 				
 				case var_code_Ad1_Tools_LoHum_Warning_StPt :
@@ -182,6 +183,17 @@ void eeprom_set_var(uint8_t profNum, uint8_t varCode, uint8_t bytesCount, uint8_
 				
 					I2C_EEPROM_24C0x_WriteStructTools(tools, EEPROM_ADDRESS_TOOLS, TOOLS_SIZE);
 					break;
+				
+				case var_code_Ad1_Tools_HiTemp_Warning_StPt:
+					
+					memcpy((void *)floatVal.floatArry, bytesArry, sizeof(float));
+				
+					tools->Ad1_Tools_HiTemp_Warning_StPt = 	floatVal.floatVar;
+				
+					I2C_EEPROM_24C0x_WriteStructTools(tools, EEPROM_ADDRESS_TOOLS, TOOLS_SIZE);
+
+					break;
+								
 				
 				case var_code_Ad1_Tools_LoHum_Warning_StPt :
 					
