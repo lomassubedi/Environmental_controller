@@ -61,58 +61,58 @@ TOOLS dummyInitTools = {
 TOOLS *tools = &dummyInitTools;
 
 PROFILE dummyInitProfile = {
-	NORMAL,				// Ad1_Light_Operation_Mode
-	{0, 0, 0},		// Ad1_Light_OnTime
-	{1, 0, 0},		// Ad1_Light_OffTime
-	{0, 0, 0},		// Ad1_Light_LC_Duration
-	{0, 0, 0},		// Ad1_Light_DC_Duration
-	{0, 0, 0},		// Ad1_Light_LC_TimeRemain
-	{0, 0, 0},		// Ad1_Light_DC_TimeRemain
+	NORMAL,					// Ad1_Light_Operation_Mode
+	{0, 0, 0},			// Ad1_Light_OnTime
+	{1, 0, 0},			// Ad1_Light_OffTime
+	{0, 0, 0},			// Ad1_Light_LC_Duration
+	{0, 0, 0},			// Ad1_Light_DC_Duration
+	{0, 0, 0},			// Ad1_Light_LC_TimeRemain
+	{0, 0, 0},			// Ad1_Light_DC_TimeRemain
 	
-	ON,						// Ad1_HdV_OnOff
-	ON,						// Ad1_HdV_LC_OnOff
+	ON,							// Ad1_HdV_OnOff
+	ON,							// Ad1_HdV_LC_OnOff
 	
-	{0, 0, 0},		// Ad1_HdV_LC_SrtDly
+	{0, 0, 0},			// Ad1_HdV_LC_SrtDly
 	
-	ON,						// Ad1_HdV_DC_OnOff
+	ON,							// Ad1_HdV_DC_OnOff
 	
-	{0, 0, 0},    // Ad1_HdV_DC_SrtDly
+	{0, 0, 0},    	// Ad1_HdV_DC_SrtDly
 	
-	NO,						// Ad1_HdV_FlexFunc_YesNo
-	YES,					// Ad1_HdV_FlexFunc_RptTmr
-	NO,						// Ad1_HdV_FlexFunc_Heat
-	NO,						// Ad1_HdV_FlexFunc_Cool
-	NO,						// Ad1_HdV_FlexFunc_Hum
-	NO,						// Ad1_HdV_FlexFunc_DeHum
-	NO,						// Ad1_HdV_FlexFunc_CO2
-	NO,						// Ad1_HdV_FlexFunc_Follow
+	NO,							// Ad1_HdV_FlexFunc_YesNo
+	YES,						// Ad1_HdV_FlexFunc_RptTmr
+	NO,							// Ad1_HdV_FlexFunc_Heat
+	NO,							// Ad1_HdV_FlexFunc_Cool
+	NO,							// Ad1_HdV_FlexFunc_Hum
+	NO,							// Ad1_HdV_FlexFunc_DeHum
+	NO,							// Ad1_HdV_FlexFunc_CO2
+	NO,							// Ad1_HdV_FlexFunc_Follow
 	
-	NO,						// Ad1_HdV_FlexFunc_Flip
+	NO,							// Ad1_HdV_FlexFunc_Flip
 	
-	NO,						// Ad1_Pr1_HdV_VentLoc_YesNo
+	NO,							// Ad1_HdV_VentLoc_YesNo
 	
-	{0, 5, 0},		// Ad1_Pr1_HdV_Tmr_LC_CclTime
-	{1, 30, 0},		// Ad1_Pr1_HdV_Tmr_LC_RptAftr
-	{0, 5, 0},		// Ad1_Pr1_HdV_Tmr_DC_CclTime
-	{1, 30, 0},		// Ad1_Pr1_HdV_Tmr_DC_RptAftr
+	{0, 5, 0},			// Ad1_HdV_Tmr_LC_CclTime
+	{1, 30, 0},			// Ad1_HdV_Tmr_LC_RptAftr
+	{0, 5, 0},			// Ad1_HdV_Tmr_DC_CclTime
+	{1, 30, 0},			// Ad1_HdV_Tmr_DC_RptAftr
 
-	18.0,  					// Ad1_Pr1_HdV_Htr_LC_OnTemp
-	21.0,						// Ad1_Pr1_HdV_Htr_LC_OffTemp
-	18.0,						// Ad1_Pr1_HdV_Htr_DC_OnTemp
-	21.0,						// Ad1_Pr1_HdV_Htr_DC_OffTemp
-	21.0,						// Ad1_Pr1_HdV_Cool_LC_OnTemp
-	18.0,						// Ad1_Pr1_HdV_Cool_LC_OffTemp
-	21.0,						// Ad1_Pr1_HdV_Cool_DC_OnTemp
-	18.0,						// Ad1_Pr1_HdV_Cool_DC_OffTemp
+	18.0,  					// Ad1_HdV_Htr_LC_OnTemp
+	21.0,						// Ad1_HdV_Htr_LC_OffTemp
+	18.0,						// Ad1_HdV_Htr_DC_OnTemp
+	21.0,						// Ad1_HdV_Htr_DC_OffTemp
+	21.0,						// Ad1_HdV_Cool_LC_OnTemp
+	18.0,						// Ad1_HdV_Cool_LC_OffTemp
+	21.0,						// Ad1_HdV_Cool_DC_OnTemp
+	18.0,						// Ad1_HdV_Cool_DC_OffTemp
 	
-	50.0,						// Ad1_Pr1_HdV_Hum_LC_OnHum
-	60.0,						// Ad1_Pr1_HdV_Hum_LC_OffHum
-	50.0,						// Ad1_Pr1_HdV_Hum_DC_OnHum
-	60.0,						// Ad1_Pr1_HdV_Hum_DC_OffHum
-	60.0,						// Ad1_Pr1_HdV_DeH_LC_OnHum
-	50.0,						// Ad1_Pr1_HdV_DeH_LC_OffHum
-	60.0,						// Ad1_Pr1_HdV_DeH_DC_OnHum
-	50.0,						// Ad1_Pr1_HdV_DeH_DC_OffHum
+	50.0,						// Ad1_HdV_Hum_LC_OnHum
+	60.0,						// Ad1_HdV_Hum_LC_OffHum
+	50.0,						// Ad1_HdV_Hum_DC_OnHum
+	60.0,						// Ad1_HdV_Hum_DC_OffHum
+	60.0,						// Ad1_HdV_DeH_LC_OnHum
+	50.0,						// Ad1_HdV_DeH_LC_OffHum
+	60.0,						// Ad1_HdV_DeH_DC_OnHum
+	50.0,						// Ad1_HdV_DeH_DC_OffHum
 	
 	{0, 3, 0},			// Ad1_HdV_Co2_Opnlp_InjTime
 	
@@ -202,7 +202,7 @@ PROFILE dummyInitProfile = {
 	
 	{0, 5, 0},			// Ad1_Ven_RptVnt_DC_CclTime;
 	
-	{1, 30, 0}, 			// Ad1_Ven_RptVnt_DC_RptAftr;
+	{1, 30, 0}, 		// Ad1_Ven_RptVnt_DC_RptAftr;
 	
 	// ------------ Repeated Varible -----------
 	//	BOOL Ad1_Ven_TempVnt_OnOff;

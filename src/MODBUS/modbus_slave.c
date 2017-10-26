@@ -160,7 +160,7 @@ uint8_t modbus_update() {
 	uint16_t no_of_registers;
 	uint16_t maxData;
 	uint16_t index;
-	uint16_t address;
+	volatile uint16_t address;
 	uint16_t crc16;
 	uint16_t noOfBytes;
 	uint16_t responseFrameSize;
@@ -286,10 +286,9 @@ uint8_t modbus_update() {
 						frame[4] = byteCount;
 						address = 5;
 						for(byteIndex = 0; byteIndex < byteCount; byteIndex++) {
-							address += byteIndex;
-							frame[address] = bytesArry[byteIndex];
+							frame[address++] = bytesArry[byteIndex];
 						}
-						sendPacket((address + 1));
+						sendPacket(address);
 					} else {
 						exceptionResponse(1); // exception 1 ILLEGAL FUNCTION
 					}

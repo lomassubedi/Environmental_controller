@@ -52,10 +52,19 @@ void eeprom_get_var(uint8_t profNum, uint8_t varCode, uint8_t * bytesCount, uint
 			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_1, PROFILE_SIZE);
 			
 			switch(varCode) {
+				
 				case var_code_Ad1_Light_OnTime:
 					bytesArry[0] = profile->Ad1_Light_OnTime.HH;
 					bytesArry[1] = profile->Ad1_Light_OnTime.MM;
 					bytesArry[2] = profile->Ad1_Light_OnTime.SS;
+					*bytesCount = 3;
+					return;
+					break;
+				
+				case var_code_Ad1_HdV_Tmr_LC_CclTime:
+					bytesArry[0] = profile->Ad1_HdV_Tmr_LC_CclTime.HH;
+					bytesArry[1] = profile->Ad1_HdV_Tmr_LC_CclTime.MM;
+					bytesArry[2] = profile->Ad1_HdV_Tmr_LC_CclTime.SS;
 					*bytesCount = 3;
 					return;
 					break;

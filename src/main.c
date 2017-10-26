@@ -55,6 +55,11 @@ int main(void) {
 	int ctr = 0;
 	uint8_t flag_EEPROM_status;
 	
+	extern PROFILE dummyInitProfile;
+	extern TOOLS dummyInitTools;
+	
+//	uint8_t readBuffr[PROFILE_SIZE];
+	
 //	RTC_TimeTypeDef myRTCTime;
 //	RTC_DateTypeDef myRTCDate;
 	
@@ -76,18 +81,21 @@ int main(void) {
 	I2C_EEPROM_24C0x_Init();
 	
 	sEE_ReadBuffer(&flag_EEPROM_status, ADDRESS_EPRM_STATUS_FLAG, BYTES_EEPRM_STATUS_FLAG);
-//	flag_EEPROM_status = 0;
+	flag_EEPROM_status = 0;
 	if(flag_EEPROM_status != 1) { // Data not written
-		
+//			profile = &dummyInitProfile;
+//			tools = &dummyInitTools;
 		// Write Tools Default value
 		I2C_EEPROM_24C0x_WriteStructTools(tools, EEPROM_ADDRESS_TOOLS, TOOLS_SIZE);
 		
 		// Write profile 1 default data
 		I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_1, PROFILE_SIZE);
 		
+		
 		// Write profile 2 default data
 		I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_2, PROFILE_SIZE);
 		
+		/*
 		// Write profile 3 default data 
 		I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_3, PROFILE_SIZE);
 		
@@ -110,9 +118,8 @@ int main(void) {
 		I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_9, PROFILE_SIZE);
 		
 		// Write profile 10 default data 
-//		profile->Ad1_FXP2_Tmr_LC_RptAftr.MM = 100;
 		I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_10, PROFILE_SIZE);
-		
+		*/
 		// Write the flag status so as to indicate that default data has been already written to EEPROM
 		flag_EEPROM_status = 1;
 		sEE_WriteBuffer(&flag_EEPROM_status, ADDRESS_EPRM_STATUS_FLAG, BYTES_EEPRM_STATUS_FLAG);
@@ -122,9 +129,15 @@ int main(void) {
 		printf("Default data already available at EEPROM.\r\n");
 	}
 	
-	I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_10, PROFILE_SIZE);
+//	I2C_EEPROM_24C0x_WriteStructProfile(profile, 00, PROFILE_SIZE);
 	
-	I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_TOOLS, TOOLS_SIZE);
+//	I2C_EEPROM_24C0x_ReadStructProfile(profile, 00, PROFILE_SIZE);
+//	sEE_WriteBuffer("Hello world, are you listning me ?", 00, 100);
+//	sEE_ReadBuffer(readBuffr, 00, 100);
+//	I2C_EEPROM_24C0x_ReadStructProfile(profile, 00, PROFILE_SIZE);
+	
+//	I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_TOOLS, TOOLS_SIZE);
+	
 
 	printf("Read Profile values : %d\t %d:%d:%d \t%d:%d:%d\t %d:%d:%d\t %f\t %f\t%d\r\n", \
 					
