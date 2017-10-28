@@ -19,3 +19,6 @@ src/APP/*.TMP
 
 # pycharm project xml files
 host_app/cli_scripts/.idea/*.*
+
+#visual studio IDE files
+/host_app/CLI_env_master/.vs

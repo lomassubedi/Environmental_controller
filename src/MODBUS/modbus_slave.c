@@ -279,7 +279,7 @@ uint8_t modbus_update() {
 						} else {
 							errorCount++; // corrupted packet
 						}   
-					} else if (function == 0x14) {	// If the function Code is 20 i.e. read EEPRM Registers
+					} else if (function == 20) {	// If the function Code is 20 i.e. read EEPRM Registers
 						
 						profileNo = frame[2];					// Get profile Number
 						varCode = frame[3];						// Get variable code 
@@ -300,7 +300,7 @@ uint8_t modbus_update() {
 						
 						sendPacket(address);
 						
-					} else if(function == 0x28) {		// function code 40 for writing data to EEPROM
+					} else if(function == 40) {		// function code 40 for writing data to EEPROM
 						
 						profileNo = frame[2];					// Get profile Number
 						varCode = frame[3];						// Get variable code 
@@ -315,7 +315,7 @@ uint8_t modbus_update() {
 						// Write data to EEPROM
 						eeprom_set_var(profileNo, varCode, byteCount, bytesArry);
 						
-						// Create an reply packate and send back to master
+						// Create a reply packate and send back to master
 						eeprom_get_var(profileNo, varCode, &byteCount, bytesArry);
 						
 						address = 5;
@@ -330,7 +330,7 @@ uint8_t modbus_update() {
 						frame[address++] = (uint8_t)((tmpCRC >> 8) & 0x00FF);		// MSB						
 						
 						sendPacket(address);
-						// --- End of Reply ------
+						// ------------------- End of Reply -------------------------
 						
 					}else {
 						exceptionResponse(1); // exception 1 ILLEGAL FUNCTION
