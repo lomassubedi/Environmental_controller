@@ -44,7 +44,7 @@ TOOLS dummyInitTools = {
 	YES,					// Ad1_Tools_ReStrike_Message_YesNo
 	YES,					// Ad1_Tools_LoBat_Fault_Message_YesNo
 	0.0,					// Ad1_Tools_Batt_Current_Volt
-	0,						// Ad1_Tools_Light_Relay_Cycle_Counter
+	1400,						// Ad1_Tools_Light_Relay_Cycle_Counter
 	0,						// Ad1_Tools_HdVent_Relay_Cycle_Counter
 	0,						// Ad1_Tools_Circ_Relay_Cycle_Counter
 	0,						// Ad1_Tools_Vent_Relay_Cycle_Counter

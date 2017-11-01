@@ -22,3 +22,9 @@ host_app/cli_scripts/.idea/*.*
 
 #visual studio IDE files
 /host_app/CLI_env_master/.vs
+
+
+# Mingw files generated with CodeBlocks
+
+host_app/CLI_env_master/Debug/*.*
+host_app/CLI_env_master/CLI_env_master/Debug/*.*

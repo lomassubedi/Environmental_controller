@@ -1,0 +1,22 @@
+# depslib dependency file v1.0
+1509092581 source:d:\study\projects\pulse spectrum\env_ctrl_f051\host_app\mingw_cli\crc16\mbcrc.cpp
+	"mbcrc.h"
+
+1509092556 d:\study\projects\pulse spectrum\env_ctrl_f051\host_app\mingw_cli\crc16\mbcrc.h
+	<stdint.h>
+
+1509336288 source:d:\study\projects\pulse spectrum\env_ctrl_f051\host_app\mingw_cli\main.cpp
+	<stdio.h>
+	"serial.h"
+
+1509334597 d:\study\projects\pulse spectrum\env_ctrl_f051\host_app\mingw_cli\serial\serial.h
+	<windows.h>
+	<stdio.h>
+	<stdlib.h>
+	<stdio.h>
+	<unistd.h>
+	<fcntl.h>
+	<termios.h>
+	<string.h>
+	<sys/ioctl.h>
+

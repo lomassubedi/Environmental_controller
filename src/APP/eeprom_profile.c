@@ -14,39 +14,201 @@ void eeprom_get_var(uint8_t profNum, uint8_t varCode, uint8_t * bytesCount, uint
     uint8_t floatArry[sizeof(float)];
   } floatVal;
 	
+	volatile union {
+		uint16_t intVar;
+		uint8_t intArry[sizeof(uint16_t)];
+	} intVal;
+	
 	switch(profNum) {
 		
 		// Read Tools value
 		case TOOLS_NUMBER:
 			
 			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_TOOLS, TOOLS_SIZE);
+		
 			switch(varCode) {
 				
+				// Read var_code_Ad1_DeviceType
 				case var_code_Ad1_DeviceType :
-					
 					bytesArry[0] = tools->Ad1_DeviceType;
 					*bytesCount = 1;
-				
 					break;
 				
-				case var_code_Ad1_Tools_HiTemp_Warning_StPt:
-					
-					floatVal.floatVar = tools->Ad1_Tools_HiTemp_Warning_StPt;
+				// Read Ad1_Tools_Units_EnglishMetric 
+				case var_code_Ad1_Tools_Units_EnglishMetric :
+					bytesArry[0] = tools->Ad1_Tools_Units_EnglishMetric;
+					*bytesCount = sizeof(UNIT_S);
+					break;
+				
+				case var_code_Ad1_Tools_Sensor_Fault :
+					bytesArry[0] = tools->Ad1_Tools_Sensor_Fault;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Tools_ACFault_Message_YesNo :
+					bytesArry[0] = tools->Ad1_Tools_ACFault_Message_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Tools_LoTemp_Warning_YesNo :
+					bytesArry[0] = tools->Ad1_Tools_LoTemp_Warning_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
 
+				case var_code_Ad1_Tools_LoTemp_Warning_StPt :
+					floatVal.floatVar = tools->Ad1_Tools_LoTemp_Warning_StPt;
 					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
 					*bytesCount = sizeof(float);
-				
 					break;
 				
+				case var_code_Ad1_Tools_HiTemp_Warning_YesNo : 
+					bytesArry[0] = tools->Ad1_Tools_HiTemp_Warning_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				// Read Ad1_Tools_HiTemp_Warning_StPt
+				case var_code_Ad1_Tools_HiTemp_Warning_StPt :
+					floatVal.floatVar = tools->Ad1_Tools_HiTemp_Warning_StPt;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Tools_LoHum_Warning_YesNo :
+					bytesArry[0] = tools->Ad1_Tools_LoHum_Warning_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				// Read Ad1_Tools_LoHum_Warning_StPt
 				case var_code_Ad1_Tools_LoHum_Warning_StPt :
-					
 					floatVal.floatVar = tools->Ad1_Tools_LoHum_Warning_StPt;
-				
 					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
-				
 					*bytesCount = sizeof(float);
-				
 					break;
+				
+				case var_code_Ad1_Tools_HiHum_Warning_YesNo :
+					bytesArry[0] = tools->Ad1_Tools_HiHum_Warning_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Tools_HiHum_Warning_StPt :
+					floatVal.floatVar = tools->Ad1_Tools_HiHum_Warning_StPt;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Tools_Critical_OverTemp_Fault_YesNo :
+					bytesArry[0] = tools->Ad1_Tools_Critical_OverTemp_Fault_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+
+				case var_code_Ad1_Tools_Critical_OverTemp_Fault_Flag :
+					bytesArry[0] = tools->Ad1_Tools_Critical_OverTemp_Fault_Flag;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Tools_Critical_OverTemp_StPt :
+					floatVal.floatVar = tools->Ad1_Tools_Critical_OverTemp_StPt;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Tools_Critical_OverTemp_Response :
+					bytesArry[0] = tools->Ad1_Tools_Critical_OverTemp_Response;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Tools_Critical_OverTemp_Message_YesNo :
+					bytesArry[0] = tools->Ad1_Tools_Critical_OverTemp_Message_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Tools_ReStrike_Fault_YesNo :
+					bytesArry[0] = tools->Ad1_Tools_ReStrike_Fault_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Cir_Co2_CylGen :
+					bytesArry[0] = tools->Ad1_Tools_ReStrike_Delay_Time.HH;
+					bytesArry[1] = tools->Ad1_Tools_ReStrike_Delay_Time.MM;
+					bytesArry[2] = tools->Ad1_Tools_ReStrike_Delay_Time.SS;
+				 *bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Tools_ReStrike_Message_YesNo :
+					bytesArry[0] = tools->Ad1_Tools_ReStrike_Message_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Tools_LoBat_Fault_Message_YesNo :
+					bytesArry[0] = tools->Ad1_Tools_LoBat_Fault_Message_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+
+				case var_code_Ad1_Tools_Batt_Current_Volt :
+					floatVal.floatVar = tools->Ad1_Tools_Batt_Current_Volt;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;	
+				
+				case var_code_Ad1_Tools_Light_Relay_Cycle_Counter :
+					intVal.intVar = tools->Ad1_Tools_Light_Relay_Cycle_Counter;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;	
+				
+				case var_code_Ad1_Tools_HdVent_Relay_Cycle_Counter :
+					intVal.intVar = tools->Ad1_Tools_HdVent_Relay_Cycle_Counter;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;	
+								
+				case var_code_Ad1_Tools_Circ_Relay_Cycle_Counter :
+					intVal.intVar = tools->Ad1_Tools_Circ_Relay_Cycle_Counter;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;	
+
+				case var_code_Ad1_Tools_Vent_Relay_Cycle_Counter :
+					intVal.intVar = tools->Ad1_Tools_Vent_Relay_Cycle_Counter;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;	
+
+				case var_code_Ad1_Tools_FXP1_Relay_Cycle_Counter :
+					intVal.intVar = tools->Ad1_Tools_FXP1_Relay_Cycle_Counter;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;	
+
+				case var_code_Ad1_Tools_FXP2_Relay_Cycle_Counter :
+					intVal.intVar = tools->Ad1_Tools_FXP2_Relay_Cycle_Counter;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;			
+				
+				case var_code_Ad1_Tools_Switch_YesNo : 
+					bytesArry[0] = tools->Ad1_Tools_Switch_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Tools_HdVent_DC_DeAct_FactSet_Delay :
+					bytesArry[0] = tools->Ad1_Tools_HdVent_DC_DeAct_FactSet_Delay.HH;
+					bytesArry[1] = tools->Ad1_Tools_HdVent_DC_DeAct_FactSet_Delay.MM;
+					bytesArry[2] = tools->Ad1_Tools_HdVent_DC_DeAct_FactSet_Delay.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Tools_CO2_PVA_PostVent_FactSet_Delay :
+					bytesArry[0] = tools->Ad1_Tools_CO2_PVA_PostVent_FactSet_Delay.HH;
+					bytesArry[1] = tools->Ad1_Tools_CO2_PVA_PostVent_FactSet_Delay.MM;
+					bytesArry[2] = tools->Ad1_Tools_CO2_PVA_PostVent_FactSet_Delay.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Tools_LED_OnOff : 
+					bytesArry[0] = tools->Ad1_Tools_LED_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;				
 			}
 			break;
 		

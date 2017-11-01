@@ -156,7 +156,7 @@ int main(void) {
 					profile->Ad1_FXP2_Tmr_LC_RptAftr.MM
 					);
 					
-	printf("Tools values : %f\r\n", tools->Ad1_Tools_HiTemp_Warning_StPt);
+		printf("Tools values : %f\r\n", tools->Ad1_Tools_HiTemp_Warning_StPt);
 
   while (1) {
 		modbus_update();
