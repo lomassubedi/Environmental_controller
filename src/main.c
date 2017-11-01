@@ -95,10 +95,12 @@ int main(void) {
 		// Write profile 2 default data
 		I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_2, PROFILE_SIZE);
 		
-		/*
+		
 		// Write profile 3 default data 
+		profile->Ad1_HdV_DeH_DC_OffHum = 70.3458;
 		I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_3, PROFILE_SIZE);
 		
+		/*
 		// Write profile 4 default data
 		I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_4, PROFILE_SIZE);
 		
@@ -157,6 +159,10 @@ int main(void) {
 					);
 					
 		printf("Tools values : %f\r\n", tools->Ad1_Tools_HiTemp_Warning_StPt);
+		
+		profile->Ad1_HdV_DeH_DC_OffHum = 20.3458;
+		I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_2, PROFILE_SIZE);
+		
 
   while (1) {
 		modbus_update();
