@@ -217,19 +217,1114 @@ void eeprom_get_var(uint8_t profNum, uint8_t varCode, uint8_t * bytesCount, uint
 			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_1, PROFILE_SIZE);
 			
 			switch(varCode) {
-				
+
+				case var_code_Ad1_Light_Operation_Mode :
+					bytesArry[0] = profile->Ad1_Light_Operation_Mode;
+					*bytesCount = sizeof(TRISTATE_OPERATION_MODE);
+					break;
+	
 				case var_code_Ad1_Light_OnTime:
 					bytesArry[0] = profile->Ad1_Light_OnTime.HH;
 					bytesArry[1] = profile->Ad1_Light_OnTime.MM;
 					bytesArry[2] = profile->Ad1_Light_OnTime.SS;
-					*bytesCount = 3;
+					*bytesCount = sizeof(TIME_M);
+					break;
+									
+				case var_code_Ad1_Light_OffTime : 
+					bytesArry[0] = profile->Ad1_Light_OffTime.HH;
+					bytesArry[1] = profile->Ad1_Light_OffTime.MM;
+					bytesArry[2] = profile->Ad1_Light_OffTime.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+
+				case var_code_Ad1_Light_LC_Duration : 
+					bytesArry[0] = profile->Ad1_Light_LC_Duration.HH;
+					bytesArry[1] = profile->Ad1_Light_LC_Duration.MM;
+					bytesArry[2] = profile->Ad1_Light_LC_Duration.SS;
+					*bytesCount = sizeof(TIME_M);
 					break;
 				
+				case var_code_Ad1_Light_DC_Duration :
+					bytesArry[0] = profile->Ad1_Light_DC_Duration.HH;
+					bytesArry[1] = profile->Ad1_Light_DC_Duration.MM;
+					bytesArry[2] = profile->Ad1_Light_DC_Duration.SS;
+					*bytesCount = sizeof(TIME_M);						
+					break;
+				
+				case var_code_Ad1_Light_LC_TimeRemain : 
+					bytesArry[0] = profile->Ad1_Light_LC_TimeRemain.HH;
+					bytesArry[1] = profile->Ad1_Light_LC_TimeRemain.MM;
+					bytesArry[2] = profile->Ad1_Light_LC_TimeRemain.SS;
+					*bytesCount = sizeof(TIME_M);							
+					break;
+				
+				case var_code_Ad1_Light_DC_TimeRemain : 
+					bytesArry[0] = profile->Ad1_Light_DC_TimeRemain.HH;
+					bytesArry[1] = profile->Ad1_Light_DC_TimeRemain.MM;
+					bytesArry[2] = profile->Ad1_Light_DC_TimeRemain.SS;
+					*bytesCount = sizeof(TIME_M);	
+					break;
+				
+				case var_code_Ad1_HdV_OnOff : 
+					bytesArry[0] = profile->Ad1_HdV_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_HdV_LC_OnOff : 
+					bytesArry[0] = profile->Ad1_HdV_LC_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_HdV_LC_SrtDly : 
+					bytesArry[0] = profile->Ad1_HdV_LC_SrtDly.HH;
+					bytesArry[1] = profile->Ad1_HdV_LC_SrtDly.MM;
+					bytesArry[2] = profile->Ad1_HdV_LC_SrtDly.SS;
+					*bytesCount = sizeof(TIME_M);	
+					break;
+				
+				case var_code_Ad1_HdV_DC_OnOff : 
+					bytesArry[0] = profile->Ad1_HdV_DC_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break; 
+				
+				case var_code_Ad1_HdV_DC_SrtDly : 
+					bytesArry[0] = profile->Ad1_HdV_DC_SrtDly.HH;
+					bytesArry[1] = profile->Ad1_HdV_DC_SrtDly.MM;
+					bytesArry[2] = profile->Ad1_HdV_DC_SrtDly.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;   
+				
+				case var_code_Ad1_HdV_FlexFunc_YesNo : 
+					bytesArry[0] = profile->Ad1_HdV_FlexFunc_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_HdV_FlexFunc_RptTmr : 
+					bytesArry[0] = profile->Ad1_HdV_FlexFunc_RptTmr;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_HdV_FlexFunc_Heat : 
+					bytesArry[0] = profile->Ad1_HdV_FlexFunc_Heat;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_HdV_FlexFunc_Cool : 
+					bytesArry[0] = profile->Ad1_HdV_FlexFunc_Cool;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_HdV_FlexFunc_Hum : 
+					bytesArry[0] = profile->Ad1_HdV_FlexFunc_Hum;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_HdV_FlexFunc_DeHum : 
+					bytesArry[0] = profile->Ad1_HdV_FlexFunc_DeHum;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_HdV_FlexFunc_CO2 : 
+					bytesArry[0] = profile->Ad1_HdV_FlexFunc_CO2;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_HdV_FlexFunc_Follow :
+					bytesArry[0] = profile->Ad1_HdV_FlexFunc_Follow;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_HdV_FlexFunc_Flip :
+					bytesArry[0] = profile->Ad1_HdV_FlexFunc_Flip;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_HdV_VentLoc_YesNo : 
+					bytesArry[0] = profile->Ad1_HdV_VentLoc_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+					
 				case var_code_Ad1_HdV_Tmr_LC_CclTime:
 					bytesArry[0] = profile->Ad1_HdV_Tmr_LC_CclTime.HH;
 					bytesArry[1] = profile->Ad1_HdV_Tmr_LC_CclTime.MM;
 					bytesArry[2] = profile->Ad1_HdV_Tmr_LC_CclTime.SS;
-					*bytesCount = 3;
+					*bytesCount = sizeof(TIME_M);
+					break;
+									
+				case var_code_Ad1_HdV_Tmr_LC_RptAftr : 
+					bytesArry[0] = profile->Ad1_HdV_Tmr_LC_RptAftr.HH;
+					bytesArry[1] = profile->Ad1_HdV_Tmr_LC_RptAftr.MM;
+					bytesArry[2] = profile->Ad1_HdV_Tmr_LC_RptAftr.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_HdV_Tmr_DC_CclTime : 
+					bytesArry[0] = profile->Ad1_HdV_Tmr_DC_CclTime.HH;
+					bytesArry[1] = profile->Ad1_HdV_Tmr_DC_CclTime.MM;
+					bytesArry[2] = profile->Ad1_HdV_Tmr_DC_CclTime.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_HdV_Tmr_DC_RptAftr : 
+					bytesArry[0] = profile->Ad1_HdV_Tmr_DC_RptAftr.HH;
+					bytesArry[1] = profile->Ad1_HdV_Tmr_DC_RptAftr.MM;
+					bytesArry[2] = profile->Ad1_HdV_Tmr_DC_RptAftr.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_HdV_Htr_LC_OnTemp :
+					floatVal.floatVar = profile->Ad1_HdV_Htr_LC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_Htr_LC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_HdV_Htr_LC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_Htr_DC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_HdV_Htr_DC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_Htr_DC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_HdV_Htr_DC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_Cool_LC_OnTemp :
+					floatVal.floatVar = profile->Ad1_HdV_Cool_LC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);					
+					break;
+				
+				case var_code_Ad1_HdV_Cool_LC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_HdV_Cool_LC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_Cool_DC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_HdV_Cool_DC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_Cool_DC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_HdV_Cool_DC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_Hum_LC_OnHum : 
+					floatVal.floatVar = profile->Ad1_HdV_Hum_LC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_Hum_LC_OffHum : 
+					floatVal.floatVar = profile->Ad1_HdV_Hum_LC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_Hum_DC_OnHum : 
+					floatVal.floatVar = profile->Ad1_HdV_Hum_DC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_Hum_DC_OffHum : 
+					floatVal.floatVar = profile->Ad1_HdV_Hum_DC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_DeH_LC_OnHum : 
+					floatVal.floatVar = profile->Ad1_HdV_DeH_LC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_DeH_LC_OffHum : 
+					floatVal.floatVar = profile->Ad1_HdV_DeH_LC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_DeH_DC_OnHum : 
+					floatVal.floatVar = profile->Ad1_HdV_DeH_DC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_DeH_DC_OffHum : 
+					floatVal.floatVar = profile->Ad1_HdV_DeH_DC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_HdV_Co2_Opnlp_InjTime : 
+					bytesArry[0] = profile->Ad1_HdV_Co2_Opnlp_InjTime.HH;
+					bytesArry[1] = profile->Ad1_HdV_Co2_Opnlp_InjTime.MM;
+					bytesArry[2] = profile->Ad1_HdV_Co2_Opnlp_InjTime.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_HdV_Co2_CylGen : 
+					bytesArry[0] = profile->Ad1_HdV_Co2_CylGen;
+					*bytesCount = sizeof(CYL_GEN);
+					break;
+				
+				case var_code_Ad1_HdV_Co2_Cyl_StPtPPM : 
+					intVal.intVar = profile->Ad1_HdV_Co2_Cyl_StPtPPM;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;
+				
+				case var_code_Ad1_HdV_Co2_Gen_OnPPM : 
+					intVal.intVar = profile->Ad1_HdV_Co2_Gen_OnPPM;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;
+				
+				case var_code_Ad1_HdV_Co2_Gen_OffPPM : 
+					intVal.intVar = profile->Ad1_HdV_Co2_Gen_OffPPM;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;
+				
+				case var_code_Ad1_Cir_OnOff :
+					bytesArry[0] = profile->Ad1_Cir_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Cir_LC_OnOff : 
+					bytesArry[0] = profile->Ad1_Cir_LC_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Cir_LC_SrtDly :
+					bytesArry[0] = profile->Ad1_Cir_LC_SrtDly.HH;
+					bytesArry[1] = profile->Ad1_Cir_LC_SrtDly.MM;
+					bytesArry[2] = profile->Ad1_Cir_LC_SrtDly.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Cir_DC_OnOff :
+					bytesArry[0] = profile->Ad1_Cir_DC_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Cir_DC_SrtDly : 
+					bytesArry[0] = profile->Ad1_Cir_DC_SrtDly.HH;
+					bytesArry[1] = profile->Ad1_Cir_DC_SrtDly.MM;
+					bytesArry[2] = profile->Ad1_Cir_DC_SrtDly.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Cir_FlexFunc_YesNo :
+					bytesArry[0] = profile->Ad1_Cir_FlexFunc_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Cir_FlexFunc_RptTmr : 
+					bytesArry[0] = profile->Ad1_Cir_FlexFunc_RptTmr;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Cir_FlexFunc_Heat : 
+					bytesArry[0] = profile->Ad1_Cir_FlexFunc_Heat;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Cir_FlexFunc_Cool : 
+					bytesArry[0] = profile->Ad1_Cir_FlexFunc_Cool;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Cir_FlexFunc_Hum : 
+					bytesArry[0] = profile->Ad1_Cir_FlexFunc_Hum;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Cir_FlexFunc_DeHum : 
+					bytesArry[0] = profile->Ad1_Cir_FlexFunc_DeHum;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Cir_FlexFunc_CO2 : 
+					bytesArry[0] = profile->Ad1_Cir_FlexFunc_CO2;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Cir_FlexFunc_Follow : 
+					bytesArry[0] = profile->Ad1_Cir_FlexFunc_Follow;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Cir_FlexFunc_Flip : 
+					bytesArry[0] = profile->Ad1_Cir_FlexFunc_Flip;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Cir_VentLoc_YesNo : 
+					bytesArry[0] = profile->Ad1_Cir_VentLoc_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Cir_Tmr_LC_CclTime : 
+					bytesArry[0] = profile->Ad1_Cir_Tmr_LC_CclTime.HH;
+					bytesArry[1] = profile->Ad1_Cir_Tmr_LC_CclTime.MM;
+					bytesArry[2] = profile->Ad1_Cir_Tmr_LC_CclTime.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Cir_Tmr_LC_RptAftr : 
+					bytesArry[0] = profile->Ad1_Cir_Tmr_LC_RptAftr.HH;
+					bytesArry[1] = profile->Ad1_Cir_Tmr_LC_RptAftr.MM;
+					bytesArry[2] = profile->Ad1_Cir_Tmr_LC_RptAftr.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Cir_Tmr_DC_CclTime : 
+					bytesArry[0] = profile->Ad1_Cir_Tmr_DC_CclTime.HH;
+					bytesArry[1] = profile->Ad1_Cir_Tmr_DC_CclTime.MM;
+					bytesArry[2] = profile->Ad1_Cir_Tmr_DC_CclTime.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Cir_Tmr_DC_RptAftr : 
+					bytesArry[0] = profile->Ad1_Cir_Tmr_DC_RptAftr.HH;
+					bytesArry[1] = profile->Ad1_Cir_Tmr_DC_RptAftr.MM;
+					bytesArry[2] = profile->Ad1_Cir_Tmr_DC_RptAftr.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Cir_Htr_LC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_Cir_Htr_LC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_Htr_LC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_Cir_Htr_LC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_Htr_DC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_Cir_Htr_DC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_Htr_DC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_Cir_Htr_DC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_Cool_LC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_Cir_Cool_LC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_Cool_LC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_Cir_Cool_LC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_Cool_DC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_Cir_Cool_DC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_Cool_DC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_Cir_Cool_DC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_Hum_LC_OnHum : 
+					floatVal.floatVar = profile->Ad1_Cir_Hum_LC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_Hum_LC_OffHum : 
+					floatVal.floatVar = profile->Ad1_Cir_Hum_LC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_Hum_DC_OnHum : 
+					floatVal.floatVar = profile->Ad1_Cir_Hum_DC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_Hum_DC_OffHum : 
+					floatVal.floatVar = profile->Ad1_Cir_Hum_DC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_DeH_LC_OnHum : 
+					floatVal.floatVar = profile->Ad1_Cir_DeH_LC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_DeH_LC_OffHum : 
+					floatVal.floatVar = profile->Ad1_Cir_DeH_LC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_DeH_DC_OnHum : 
+					floatVal.floatVar = profile->Ad1_Cir_DeH_DC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_DeH_DC_OffHum : 
+					floatVal.floatVar = profile->Ad1_Cir_DeH_DC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Cir_Co2_Opnlp_InjTime : 
+					bytesArry[0] = profile->Ad1_Cir_Co2_Opnlp_InjTime.HH;
+					bytesArry[1] = profile->Ad1_Cir_Co2_Opnlp_InjTime.MM;
+					bytesArry[2] = profile->Ad1_Cir_Co2_Opnlp_InjTime.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Cir_Co2_CylGen : 
+					bytesArry[0] = profile->Ad1_Cir_Co2_CylGen;
+					*bytesCount = sizeof(CYL_GEN);
+					break;
+				
+				case var_code_Ad1_Cir_Co2_Cyl_StPtPPM : 
+					intVal.intVar = profile->Ad1_Cir_Co2_Cyl_StPtPPM;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;
+				
+				case var_code_Ad1_Cir_Co2_Gen_OnPPM : 
+					intVal.intVar = profile->Ad1_Cir_Co2_Gen_OnPPM;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;
+				
+				case var_code_Ad1_Cir_Co2_Gen_OffPPM : 
+					intVal.intVar = profile->Ad1_Cir_Co2_Gen_OffPPM;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;
+				
+				case var_code_Ad1_Ven_OnOff : 
+					bytesArry[0] = profile->Ad1_Ven_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Ven_LC_OnOff : 
+					bytesArry[0] = profile->Ad1_Ven_LC_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Ven_LC_SrtDly : 
+					bytesArry[0] = profile->Ad1_Ven_LC_SrtDly.HH;
+					bytesArry[1] = profile->Ad1_Ven_LC_SrtDly.MM;
+					bytesArry[2] = profile->Ad1_Ven_LC_SrtDly.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Ven_RptVnt_LC_OnOff : 
+					bytesArry[0] = profile->Ad1_Ven_RptVnt_LC_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Ven_RptVnt_LC_CclTime : 
+					bytesArry[0] = profile->Ad1_Ven_RptVnt_LC_CclTime.HH;
+					bytesArry[1] = profile->Ad1_Ven_RptVnt_LC_CclTime.MM;
+					bytesArry[2] = profile->Ad1_Ven_RptVnt_LC_CclTime.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Ven_RptVnt_LC_RptAftr : 
+					bytesArry[0] = profile->Ad1_Ven_RptVnt_LC_RptAftr.HH;
+					bytesArry[1] = profile->Ad1_Ven_RptVnt_LC_RptAftr.MM;
+					bytesArry[2] = profile->Ad1_Ven_RptVnt_LC_RptAftr.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Ven_TempVnt_OnOff : 
+					bytesArry[0] = profile->Ad1_Ven_TempVnt_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Ven_TempVnt_LC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_Ven_TempVnt_LC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Ven_TempVnt_LC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_Ven_TempVnt_LC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Ven_HumVnt_OnOff : 
+					bytesArry[0] = profile->Ad1_Ven_HumVnt_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Ven_LC_HumVnt_OnHum : 
+					floatVal.floatVar = profile->Ad1_Ven_LC_HumVnt_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Ven_LC_HumVnt_OffHum : 
+					floatVal.floatVar = profile->Ad1_Ven_LC_HumVnt_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Ven_DC_OnOff : 
+					bytesArry[0] = profile->Ad1_Ven_DC_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Ven_DC_SrtDly : 
+					bytesArry[0] = profile->Ad1_Ven_DC_SrtDly.HH;
+					bytesArry[1] = profile->Ad1_Ven_DC_SrtDly.MM;
+					bytesArry[2] = profile->Ad1_Ven_DC_SrtDly.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Ven_RptVnt_DC_OnOff : 
+					bytesArry[0] = profile->Ad1_Ven_RptVnt_DC_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_Ven_RptVnt_DC_CclTime : 
+					bytesArry[0] = profile->Ad1_Ven_RptVnt_DC_CclTime.HH;
+					bytesArry[1] = profile->Ad1_Ven_RptVnt_DC_CclTime.MM;
+					bytesArry[2] = profile->Ad1_Ven_RptVnt_DC_CclTime.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_Ven_RptVnt_DC_RptAftr : 
+					bytesArry[0] = profile->Ad1_Ven_RptVnt_DC_RptAftr.HH;
+					bytesArry[1] = profile->Ad1_Ven_RptVnt_DC_RptAftr.MM;
+					bytesArry[2] = profile->Ad1_Ven_RptVnt_DC_RptAftr.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+			//	var_code_Ad1_Ven_TempVnt_OnOff,
+				
+				case var_code_Ad1_Ven_TempVnt_DC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_Ven_TempVnt_DC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Ven_TempVnt_DC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_Ven_TempVnt_DC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+			//	var_code_Ad1_Ven_HumVnt_OnOff,
+				
+				case var_code_Ad1_Ven_HumVnt_DC_OnHum : 
+					floatVal.floatVar = profile->Ad1_Ven_HumVnt_DC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_Ven_HumVnt_DC_OffHum : 
+					floatVal.floatVar = profile->Ad1_Ven_HumVnt_DC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_OnOff : 
+					bytesArry[0] = profile->Ad1_FXP1_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP1_LC_OnOff : 
+					bytesArry[0] = profile->Ad1_FXP1_LC_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP1_LC_SrtDly : 
+					bytesArry[0] = profile->Ad1_FXP1_LC_SrtDly.HH;
+					bytesArry[1] = profile->Ad1_FXP1_LC_SrtDly.MM;
+					bytesArry[2] = profile->Ad1_FXP1_LC_SrtDly.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_FXP1_DC_OnOff : 
+					bytesArry[0] = profile->Ad1_FXP1_DC_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP1_DC_SrtDly : 
+					bytesArry[0] = profile->Ad1_FXP1_DC_SrtDly.HH;
+					bytesArry[1] = profile->Ad1_FXP1_DC_SrtDly.MM;
+					bytesArry[2] = profile->Ad1_FXP1_DC_SrtDly.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;     
+				
+				case var_code_Ad1_FXP1_FlexFunc_YesNo : 
+					bytesArry[0] = profile->Ad1_FXP1_FlexFunc_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP1_FlexFunc_RptTmr : 
+					bytesArry[0] = profile->Ad1_FXP1_FlexFunc_RptTmr;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP1_FlexFunc_Heat : 
+					bytesArry[0] = profile->Ad1_FXP1_FlexFunc_Heat;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP1_FlexFunc_Cool : 
+					bytesArry[0] = profile->Ad1_FXP1_FlexFunc_Cool;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP1_FlexFunc_Hum : 
+					bytesArry[0] = profile->Ad1_FXP1_FlexFunc_Hum;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP1_FlexFunc_DeHum : 
+					bytesArry[0] = profile->Ad1_FXP1_FlexFunc_DeHum;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP1_FlexFunc_CO2 : 
+					bytesArry[0] = profile->Ad1_FXP1_FlexFunc_CO2;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP1_FlexFunc_Follow : 
+					bytesArry[0] = profile->Ad1_FXP1_FlexFunc_Follow;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP1_FlexFunc_Flip : 
+					bytesArry[0] = profile->Ad1_FXP1_FlexFunc_Flip;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP1_VentLoc_YesNo : 
+					bytesArry[0] = profile->Ad1_FXP1_VentLoc_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP1_Tmr_LC_CclTime : 
+					bytesArry[0] = profile->Ad1_FXP1_Tmr_LC_CclTime.HH;
+					bytesArry[1] = profile->Ad1_FXP1_Tmr_LC_CclTime.MM;
+					bytesArry[2] = profile->Ad1_FXP1_Tmr_LC_CclTime.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_FXP1_Tmr_LC_RptAftr : 
+					bytesArry[0] = profile->Ad1_FXP1_Tmr_LC_RptAftr.HH;
+					bytesArry[1] = profile->Ad1_FXP1_Tmr_LC_RptAftr.MM;
+					bytesArry[2] = profile->Ad1_FXP1_Tmr_LC_RptAftr.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_FXP1_Tmr_DC_CclTime : 
+					bytesArry[0] = profile->Ad1_FXP1_Tmr_DC_CclTime.HH;
+					bytesArry[1] = profile->Ad1_FXP1_Tmr_DC_CclTime.MM;
+					bytesArry[2] = profile->Ad1_FXP1_Tmr_DC_CclTime.SS;
+					*bytesCount = sizeof(TIME_M);
+
+					break;
+				
+				case var_code_Ad1_FXP1_Tmr_DC_RptAftr : 
+					bytesArry[0] = profile->Ad1_FXP1_Tmr_DC_RptAftr.HH;
+					bytesArry[1] = profile->Ad1_FXP1_Tmr_DC_RptAftr.MM;
+					bytesArry[2] = profile->Ad1_FXP1_Tmr_DC_RptAftr.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_FXP1_Htr_LC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_FXP1_Htr_LC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_Htr_LC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_FXP1_Htr_LC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_Htr_DC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_FXP1_Htr_DC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_Htr_DC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_FXP1_Htr_DC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_Cool_LC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_FXP1_Cool_LC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_Cool_LC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_FXP1_Cool_LC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_Cool_DC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_FXP1_Cool_DC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_Cool_DC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_FXP1_Cool_DC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_Hum_LC_OnHum : 
+					floatVal.floatVar = profile->Ad1_FXP1_Hum_LC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_Hum_LC_OffHum : 
+					floatVal.floatVar = profile->Ad1_FXP1_Hum_LC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_Hum_DC_OnHum : 
+					floatVal.floatVar = profile->Ad1_FXP1_Hum_DC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_Hum_DC_OffHum : 
+					floatVal.floatVar = profile->Ad1_FXP1_Hum_DC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_DeH_LC_OnHum : 
+					floatVal.floatVar = profile->Ad1_FXP1_DeH_LC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_DeH_LC_OffHum : 
+					floatVal.floatVar = profile->Ad1_FXP1_DeH_LC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_DeH_DC_OnHum : 
+					floatVal.floatVar = profile->Ad1_FXP1_DeH_DC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_DeH_DC_OffHum : 
+					floatVal.floatVar = profile->Ad1_FXP1_DeH_DC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP1_Co2_Opnlp_InjTime : 
+					bytesArry[0] = profile->Ad1_FXP1_Co2_Opnlp_InjTime.HH;
+					bytesArry[1] = profile->Ad1_FXP1_Co2_Opnlp_InjTime.MM;
+					bytesArry[2] = profile->Ad1_FXP1_Co2_Opnlp_InjTime.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_FXP1_Co2_CylGen : 
+					bytesArry[0] = profile->Ad1_FXP1_Co2_CylGen;
+					*bytesCount = sizeof(CYL_GEN);
+					break;
+				
+				case var_code_Ad1_FXP1_Co2_Cyl_StPtPPM : 
+					intVal.intVar = profile->Ad1_FXP1_Co2_Cyl_StPtPPM;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;
+				
+				case var_code_Ad1_FXP1_Co2_Gen_OnPPM : 
+					intVal.intVar = profile->Ad1_FXP1_Co2_Gen_OnPPM;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;
+				
+				case var_code_Ad1_FXP1_Co2_Gen_OffPPM : 
+					intVal.intVar = profile->Ad1_FXP1_Co2_Gen_OffPPM;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;
+				
+				case var_code_Ad1_FXP2_OnOff : 
+					bytesArry[0] = profile->Ad1_FXP2_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP2_LC_OnOff : 
+					bytesArry[0] = profile->Ad1_FXP2_LC_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP2_LC_SrtDly : 
+					bytesArry[0] = profile->Ad1_FXP2_LC_SrtDly.HH;
+					bytesArry[1] = profile->Ad1_FXP2_LC_SrtDly.MM;
+					bytesArry[2] = profile->Ad1_FXP2_LC_SrtDly.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_FXP2_DC_OnOff : 
+					bytesArry[0] = profile->Ad1_FXP2_DC_OnOff;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP2_DC_SrtDly : 
+					bytesArry[0] = profile->Ad1_FXP2_DC_SrtDly.HH;
+					bytesArry[1] = profile->Ad1_FXP2_DC_SrtDly.MM;
+					bytesArry[2] = profile->Ad1_FXP2_DC_SrtDly.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;      
+				
+				case var_code_Ad1_FXP2_FlexFunc_YesNo : 
+					bytesArry[0] = profile->Ad1_FXP2_FlexFunc_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP2_FlexFunc_RptTmr : 
+					bytesArry[0] = profile->Ad1_FXP2_FlexFunc_RptTmr;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP2_FlexFunc_Heat : 
+					bytesArry[0] = profile->Ad1_FXP2_FlexFunc_Heat;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP2_FlexFunc_Cool : 
+					bytesArry[0] = profile->Ad1_FXP2_FlexFunc_Cool;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP2_FlexFunc_Hum : 
+					bytesArry[0] = profile->Ad1_FXP2_FlexFunc_Hum;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP2_FlexFunc_DeHum : 
+					bytesArry[0] = profile->Ad1_FXP2_FlexFunc_DeHum;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP2_FlexFunc_CO2 : 
+					bytesArry[0] = profile->Ad1_FXP2_FlexFunc_CO2;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP2_FlexFunc_Follow : 
+					bytesArry[0] = profile->Ad1_FXP2_FlexFunc_Follow;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP2_FlexFunc_Flip : 
+					bytesArry[0] = profile->Ad1_FXP2_FlexFunc_Flip;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP2_VentLoc_YesNo : 
+					bytesArry[0] = profile->Ad1_FXP2_VentLoc_YesNo;
+					*bytesCount = sizeof(BOOL);
+					break;
+				
+				case var_code_Ad1_FXP2_Tmr_LC_CclTime : 
+					bytesArry[0] = profile->Ad1_FXP2_Tmr_LC_CclTime.HH;
+					bytesArry[1] = profile->Ad1_FXP2_Tmr_LC_CclTime.MM;
+					bytesArry[2] = profile->Ad1_FXP2_Tmr_LC_CclTime.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_FXP2_Tmr_LC_RptAftr : 
+					bytesArry[0] = profile->Ad1_FXP2_Tmr_LC_RptAftr.HH;
+					bytesArry[1] = profile->Ad1_FXP2_Tmr_LC_RptAftr.MM;
+					bytesArry[2] = profile->Ad1_FXP2_Tmr_LC_RptAftr.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_FXP2_Tmr_DC_CclTime : 
+					bytesArry[0] = profile->Ad1_FXP2_Tmr_DC_CclTime.HH;
+					bytesArry[1] = profile->Ad1_FXP2_Tmr_DC_CclTime.MM;
+					bytesArry[2] = profile->Ad1_FXP2_Tmr_DC_CclTime.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_FXP2_Tmr_DC_RptAftr : 
+					bytesArry[0] = profile->Ad1_FXP2_Tmr_DC_RptAftr.HH;
+					bytesArry[1] = profile->Ad1_FXP2_Tmr_DC_RptAftr.MM;
+					bytesArry[2] = profile->Ad1_FXP2_Tmr_DC_RptAftr.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_FXP2_Htr_LC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_FXP2_Htr_LC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_Htr_LC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_FXP2_Htr_LC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_Htr_DC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_FXP2_Htr_DC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_Htr_DC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_FXP2_Htr_DC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_Cool_LC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_FXP2_Cool_LC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_Cool_LC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_FXP2_Cool_LC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_Cool_DC_OnTemp : 
+					floatVal.floatVar = profile->Ad1_FXP2_Cool_DC_OnTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_Cool_DC_OffTemp : 
+					floatVal.floatVar = profile->Ad1_FXP2_Cool_DC_OffTemp;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_Hum_LC_OnHum : 
+					floatVal.floatVar = profile->Ad1_FXP2_Hum_LC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_Hum_LC_OffHum : 
+					floatVal.floatVar = profile->Ad1_FXP2_Hum_LC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_Hum_DC_OnHum : 
+					floatVal.floatVar = profile->Ad1_FXP2_Hum_DC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_Hum_DC_OffHum : 
+					floatVal.floatVar = profile->Ad1_FXP2_Hum_DC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_DeH_LC_OnHum : 
+					floatVal.floatVar = profile->Ad1_FXP2_DeH_LC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_DeH_LC_OffHum : 
+					floatVal.floatVar = profile->Ad1_FXP2_DeH_LC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_DeH_DC_OnHum : 
+					floatVal.floatVar = profile->Ad1_FXP2_DeH_DC_OnHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_DeH_DC_OffHum : 
+					floatVal.floatVar = profile->Ad1_FXP2_DeH_DC_OffHum;
+					memcpy(bytesArry, (void *)floatVal.floatArry, sizeof(float));
+					*bytesCount = sizeof(float);
+					break;
+				
+				case var_code_Ad1_FXP2_Co2_Opnlp_InjTime : 
+					bytesArry[0] = profile->Ad1_FXP2_Co2_Opnlp_InjTime.HH;
+					bytesArry[1] = profile->Ad1_FXP2_Co2_Opnlp_InjTime.MM;
+					bytesArry[2] = profile->Ad1_FXP2_Co2_Opnlp_InjTime.SS;
+					*bytesCount = sizeof(TIME_M);
+					break;
+				
+				case var_code_Ad1_FXP2_Co2_CylGen : 
+					bytesArry[0] = profile->Ad1_FXP2_Co2_CylGen;
+					*bytesCount = sizeof(CYL_GEN);
+					break;
+				
+				case var_code_Ad1_FXP2_Co2_Cyl_StPtPPM : 
+					intVal.intVar = profile->Ad1_FXP2_Co2_Cyl_StPtPPM;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;
+				
+				case var_code_Ad1_FXP2_Co2_Gen_OnPPM : 
+					intVal.intVar = profile->Ad1_FXP2_Co2_Gen_OnPPM;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
+					break;
+					
+				case var_code_Ad1_FXP2_Co2_Gen_OffPPM : 
+					intVal.intVar = profile->Ad1_FXP2_Co2_Gen_OffPPM;
+					memcpy(bytesArry, (void *)intVal.intArry, sizeof(uint16_t));
+					*bytesCount = sizeof(uint16_t);
 					break;
 			}
 			break;
