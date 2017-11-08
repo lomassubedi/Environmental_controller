@@ -13,4 +13,8 @@ void eeprom_get_var(uint8_t profNum, uint8_t varCode, uint8_t * bytesCount, uint
 
 void eeprom_set_var(uint8_t profNum, uint8_t varCode, uint8_t bytesCount, uint8_t * bytesArry);
 
+// ------------ Function to modify profile before writing to EEPROM -------------------
+void set_profile_vals(PROFILE * profile, uint8_t varCode, uint8_t * bytesArry);
+
 #endif // EEPROM_PROFILE_H_
+

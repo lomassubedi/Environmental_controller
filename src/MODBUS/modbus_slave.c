@@ -155,18 +155,18 @@ void exceptionResponse(unsigned char exception) {
 uint8_t modbus_update() {
 	
 	uint8_t id;
-	volatile uint16_t crc = 0;
-	volatile uint16_t startingAddress;
+	uint16_t crc = 0;
+	uint16_t startingAddress;
 	uint16_t no_of_registers;
 	uint16_t maxData;
 	uint16_t index;
-	volatile uint16_t address;
+	uint16_t address;
 	uint16_t crc16;
 	uint16_t noOfBytes;
 	uint16_t responseFrameSize;
 	
 	uint16_t temp;
-	volatile uint16_t tmpCRC = 0;
+	uint16_t tmpCRC = 0;
 	
 	// EEPROM management Vars
 	uint8_t profileNo;
@@ -300,11 +300,12 @@ uint8_t modbus_update() {
 						
 						sendPacket(address);
 						
-					} else if(function == 40) {		// function code 40 for writing data to EEPROM
+					} 
+					/*else if(function == 40) {		// function code 40 for writing data to EEPROM
 						
 						profileNo = frame[2];					// Get profile Number
 						varCode = frame[3];						// Get variable code 
-						byteCount = frame[4];					// Get number of bytes to count
+						byteCount = frame[4];
 						
 						address = 5;
 						
@@ -331,8 +332,8 @@ uint8_t modbus_update() {
 						
 						sendPacket(address);
 						// ------------------- End of Reply -------------------------
-						
-					}else {
+						*/
+					else {
 						exceptionResponse(1); // exception 1 ILLEGAL FUNCTION
 					}
 				} else { // Checksum failed 
@@ -355,3 +356,4 @@ void init_modbus() {
 	initUsartModbus();	
 	InitializeTimerRxTimeout();
 }
+

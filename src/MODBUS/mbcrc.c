@@ -68,3 +68,4 @@ uint16_t CRC16 (uint8_t *puchMsg, uint16_t usDataLen)
 		// TODO need to figure this out
 //		return (uchCRCLo << 8 | uchCRCHi);
 }
+		
