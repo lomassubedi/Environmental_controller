@@ -301,7 +301,7 @@ uint8_t modbus_update() {
 						sendPacket(address);
 						
 					} 
-					/*else if(function == 40) {		// function code 40 for writing data to EEPROM
+					else if(function == 40) {				// function code 40 for writing data to EEPROM
 						
 						profileNo = frame[2];					// Get profile Number
 						varCode = frame[3];						// Get variable code 
@@ -332,8 +332,8 @@ uint8_t modbus_update() {
 						
 						sendPacket(address);
 						// ------------------- End of Reply -------------------------
-						*/
-					else {
+					
+					} else {
 						exceptionResponse(1); // exception 1 ILLEGAL FUNCTION
 					}
 				} else { // Checksum failed 

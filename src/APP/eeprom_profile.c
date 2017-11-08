@@ -1604,144 +1604,144 @@ void eeprom_set_var(uint8_t profNum, uint8_t varCode, uint8_t bytesCount, uint8_
 		
 		// Write profile 1 data
 		case PROFILE_NUMBER_1:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_1, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_1, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
-			I2C_EEPROM_24C0x_WriteStructTools(tools, EEPROM_ADDRESS_PROFILE_1, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_1, PROFILE_SIZE);
 			break;
 		
 		// Write profile 2 data
 		case PROFILE_NUMBER_2:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_2, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_2, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_2, PROFILE_SIZE);
 			break;
 		
 		// Write profile 3 data 
 		case PROFILE_NUMBER_3:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_3, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_3, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_3, PROFILE_SIZE);
 			break;
 		
 		// Write profile 4 data
 		case PROFILE_NUMBER_4:
-				I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_4, PROFILE_SIZE);
+				I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_4, PROFILE_SIZE);
 				set_profile_vals(profile, varCode, bytesArry);
 				I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_4, PROFILE_SIZE);
 			break;
 		
 		// Write profile 5 data
 		case PROFILE_NUMBER_5:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_5, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_5, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_5, PROFILE_SIZE);
 			break;
 		
 		// Write profile 6 data
 		case PROFILE_NUMBER_6:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_5, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_5, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_6, PROFILE_SIZE);
 			break;
 		
 		// Write profile 7 data
 		case PROFILE_NUMBER_7:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_7, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_7, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_7, PROFILE_SIZE);
 			break;
 		
 		// Write profile 8 data
 		case PROFILE_NUMBER_8:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_8, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_8, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_8, PROFILE_SIZE);
 			break;
 		
 		// Write profile 9 data
 		case PROFILE_NUMBER_9:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_9, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_9, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_9, PROFILE_SIZE);
 			break;
 		
 		// Write profile 10 data
 		case PROFILE_NUMBER_10:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_10, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_10, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_10, PROFILE_SIZE);
 			break;		
 		
 		// Write profile 11 data
 		case PROFILE_NUMBER_11:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_11, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_11, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_11, PROFILE_SIZE);
 			break;
 		
 		// Write profile 12 data
 		case PROFILE_NUMBER_12:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_12, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_12, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_12, PROFILE_SIZE);
 			break;
 		
 		// Write profile 13 data
 		case PROFILE_NUMBER_13:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_13, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_13, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_13, PROFILE_SIZE);
 			break;
 		
 		// Write profile 14 data
 		case PROFILE_NUMBER_14:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_14, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_14, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_14, PROFILE_SIZE);
 			break;
 		
 		// Write profile 15 data
 		case PROFILE_NUMBER_15:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_15, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_15, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_15, PROFILE_SIZE);
 			break;
 		
 		// Write profile 16 data
 		case PROFILE_NUMBER_16:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_16, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_16, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_16, PROFILE_SIZE);
 			break;
 		
 		// Write profile 17 data
 		case PROFILE_NUMBER_17:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_17, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_17, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_17, PROFILE_SIZE);
 			break;
 		
 		// Write profile 18 data
 		case PROFILE_NUMBER_18:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_18, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_18, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_18, PROFILE_SIZE);
 			break;		
 		
 		// Write profile 19 data
 		case PROFILE_NUMBER_19:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_19, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_19, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_19, PROFILE_SIZE);
 			break;
 		
 		// Write profile 20 data
 		case PROFILE_NUMBER_20:
-			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_PROFILE_20, PROFILE_SIZE);
+			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_20, PROFILE_SIZE);
 			set_profile_vals(profile, varCode, bytesArry);
 			I2C_EEPROM_24C0x_WriteStructProfile(profile, EEPROM_ADDRESS_PROFILE_20, PROFILE_SIZE);
 			break;
-		
+
 		default:
 			break;
 	}
