@@ -78,6 +78,7 @@ signed char FAT_get_BS_data(void)
       usart2_putchar(sd_buf[0x52+resp]);
 
     F32_getParameters(sd_buf,firstSec);
+		printf("\r\n");
   }
   else
   {
@@ -139,7 +140,7 @@ signed char FAT_read_file(char *filename,unsigned long curCluster,unsigned int o
 
 /*****************************************************************/
 
-signed char FAT_write_file(char *filename,unsigned long curCluster,unsigned long int fileSize,unsigned char *data,unsigned char flags)
+signed char FAT_write_file(char *filename,unsigned long curCluster,unsigned long int fileSize,unsigned char *data, unsigned char flags)
 {
   if(FATType==FAT32)
     return F32_writeFile(filename,curCluster,fileSize,data,flags);

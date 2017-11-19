@@ -301,7 +301,7 @@ signed char F32_writeFAT(unsigned long int clusterNum,unsigned long int data)
 #define MONTH 12
 #define DOM 28
 
-signed char F32_writeFile(char *filename,unsigned long curCluster,unsigned long int fileSize,unsigned char *data,unsigned char flags)
+signed char F32_writeFile(char *filename, unsigned long curCluster,unsigned long int fileSize,unsigned char *data,unsigned char flags)
 {
   unsigned long int rootDir,clusterNumber,uliTemp,sectorNumber,orgFileSize;
   unsigned char ucTemp,ucFlag1=0,ucFlag2=0,fIndex=0,*pTemp;

@@ -70,7 +70,7 @@ uint8_t test_sd_card(void)
 
 int main(void) {
 	
-	uint8_t buffer[128];
+	uint8_t buffer[] = "Hello There SD card !!\r\n";
   uint32_t drive_size;
 	
 //	uint8_t flag_EEPROM_status;
@@ -99,6 +99,11 @@ int main(void) {
 	printf("\r\nCard Size: ");
   FAT_size_to_str(drive_size, (char *)buffer, sizeof(buffer));
 	Delay(2000);
+	
+	  if(FAT_get_BS_data()) {
+			printf("Err in BS data\r\n");
+			while(1);
+		}
 	printf("-------- Init SPI Card done ------- !!!\r\n");
 	
 	/*
@@ -127,9 +132,12 @@ int main(void) {
 	}	
 	
 	spi2_send(buffrSPI, sizeof(buffrSPI));
-	
-  while (1) {
-		modbus_update();
-	}
 	*/
+  while (1) {
+//		modbus_update();
+		printf("FAT write result : %d \r\n", FAT_write_file("LOG1.TXT", 4, strlen(buffer), (unsigned char *)buffer, 1));
+		printf("Writing to SD card each 2 sec !!\r\n");
+		Delay(2000);
+	}
+	
 }
