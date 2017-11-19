@@ -334,9 +334,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER, STM32F051, STM32F0_DISCOVERY, TMP_FAHRENHEIT</Define>
+              <Define>USE_STDPERIPH_DRIVER, STM32F051, STM32F0_DISCOVERY, TMP_FAHRENHEIT, UART_DBG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\src;..\src\APP;..\src\MODBUS;..\src\RTC;..\src\USART;..\src\EEPROM;..\src\STM32F0-Discovery;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\inc;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\CMSIS\Device\ST\STM32F0xx\Include</IncludePath>
+              <IncludePath>..\src;..\src\APP;..\src\MODBUS;..\src\RTC;..\src\USART;..\src\EEPROM;..\src\SD;..\src\STM32F0-Discovery;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\inc;..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\CMSIS\Device\ST\STM32F0xx\Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -443,6 +443,31 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>SD</GroupName>
+          <Files>
+            <File>
+              <FileName>ssp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\SD\ssp.c</FilePath>
+            </File>
+            <File>
+              <FileName>FAT.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\SD\FAT.c</FilePath>
+            </File>
+            <File>
+              <FileName>FAT32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\SD\FAT32.c</FilePath>
+            </File>
+            <File>
+              <FileName>sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\SD\sd.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>USART</GroupName>
           <Files>
             <File>
@@ -539,6 +564,11 @@
               <FileName>stm32f0xx_i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f0xx_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\STM32F0xx_StdPeriph_Lib_V1.5.0\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_spi.c</FilePath>
             </File>
           </Files>
         </Group>
