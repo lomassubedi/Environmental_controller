@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+
 #include "stm32f0xx.h"
 #include "stm32f0xx_it.h"
 
@@ -10,7 +12,7 @@
 #include "stm32f0xx_rcc.h"
 //#include "stm32f0xx_rtc.h"
 //#include "stm32f0xx_pwr.h"
-//#include "stm32f0xx_spi.h"
+#include "stm32f0xx_spi.h"
 
 #include "flags_timers.h"
 #include "reg_list.h"
@@ -22,9 +24,10 @@
 #include "util_usart.h"
 #include "iso_i2c_ee.h"
 
-#include "ssp.h"
-#include "sd.h"
-#include "FAT.h"
+#include "ff.h"
+
+FATFS FatFs;
+FIL logfile;
 
 GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -47,33 +50,14 @@ extern void TimingDelay_Decrement(void) {
   }
 }
 
-uint8_t test_sd_card(void)
-{
-  if(sd_init())
-  {
-   	printf("SD Error\r\n");
-    return 0;
-  }
-  else
-  {   
-    if(sd_is_sdhc())
-    {
-      printf("Card Type:SDHC!\r\n");
-    }
-    else
-    {
-      printf("Card Type:SD!\r\n");
-    }
-    return 1;		
-  }
-}
-
 int main(void) {
 	
 	uint8_t buffer[] = "Hello There SD card !!\r\n";
   uint32_t drive_size;
 	
 //	uint8_t flag_EEPROM_status;
+	
+	FRESULT rc;
 	
 	SysTick_Config(SystemCoreClock / 1000);
 	STM_EVAL_LEDInit(LED3);
@@ -84,27 +68,8 @@ int main(void) {
 	RTC_Config_LSI();
 	I2C_EEPROM_24C0x_Init();
 	
-	spi1_init();
-	
 	printf("STM32F051 SD CARD TEST !!! \r\n");
 	
-	Delay(2000);
-	
-	if(!test_sd_card()) {
-		while(1);
-	}
-	
-	drive_size = sd_getDriveSize();
-  printf("\r\nSize: %d\r\n", drive_size);
-	printf("\r\nCard Size: ");
-  FAT_size_to_str(drive_size, (char *)buffer, sizeof(buffer));
-	Delay(2000);
-	
-	  if(FAT_get_BS_data()) {
-			printf("Err in BS data\r\n");
-			while(1);
-		}
-	printf("-------- Init SPI Card done ------- !!!\r\n");
 	
 	/*
 	sEE_ReadBuffer(&flag_EEPROM_status, ADDRESS_EPRM_STATUS_FLAG, BYTES_EEPRM_STATUS_FLAG);
@@ -133,11 +98,16 @@ int main(void) {
 	
 	spi2_send(buffrSPI, sizeof(buffrSPI));
 	*/
+    rc = f_mount(&FatFs, "", 1);
+    if(rc == FR_OK) {
+        rc = f_open(&logfile, "log2.txt", FA_WRITE | FA_CREATE_ALWAYS);
+        if(rc == FR_OK){
+            f_printf(&logfile, "Hello there STM what you doing. I am keil??!!\r\n");
+            f_close(&logfile);
+        }
+    }
+		
   while (1) {
 //		modbus_update();
-		printf("FAT write result : %d \r\n", FAT_write_file("LOG1.TXT", 4, strlen(buffer), (unsigned char *)buffer, 1));
-		printf("Writing to SD card each 2 sec !!\r\n");
-		Delay(2000);
-	}
-	
+	}	
 }

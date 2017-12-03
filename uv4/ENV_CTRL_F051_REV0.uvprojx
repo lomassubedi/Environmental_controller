@@ -446,24 +446,19 @@
           <GroupName>SD</GroupName>
           <Files>
             <File>
-              <FileName>ssp.c</FileName>
+              <FileName>ccsbcs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\SD\ssp.c</FilePath>
+              <FilePath>..\src\SD\ccsbcs.c</FilePath>
             </File>
             <File>
-              <FileName>FAT.c</FileName>
+              <FileName>ff.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\SD\FAT.c</FilePath>
+              <FilePath>..\src\SD\ff.c</FilePath>
             </File>
             <File>
-              <FileName>FAT32.c</FileName>
+              <FileName>mmc_32f0.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\SD\FAT32.c</FilePath>
-            </File>
-            <File>
-              <FileName>sd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\SD\sd.c</FilePath>
+              <FilePath>..\src\SD\mmc_32f0.c</FilePath>
             </File>
           </Files>
         </Group>
