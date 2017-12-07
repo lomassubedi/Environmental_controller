@@ -98,7 +98,7 @@ void SysTick_Handler(void){
 	disk_timerproc();
 	TimingDelay_Decrement();
 	tmrTmpVal++;
-	if(!(tmrTmpVal % 100))
+	if(!(tmrTmpVal % 1000))
 		flagLEDIndi = 1;
 }
 

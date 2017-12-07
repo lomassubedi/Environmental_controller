@@ -81,7 +81,7 @@ void RTC_Config_LSI(void)
   
 	
   /* Set the time to code compiled time*/
-  RTC_TimeStructure.RTC_H12     = RTC_H12_AM;
+//  RTC_TimeStructure.RTC_H12     = RTC_H12_AM;
   RTC_TimeStructure.RTC_Hours   = CMPL_HOUR;
   RTC_TimeStructure.RTC_Minutes = CMPL_MIN;
   RTC_TimeStructure.RTC_Seconds = CMPL_SEC;  

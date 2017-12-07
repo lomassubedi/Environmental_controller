@@ -5,6 +5,7 @@
 
 #include "stm32f0xx.h"
 #include "stm32f0xx_it.h"
+#include "stm32f0_discovery.h"
 
 #include "stm32f0xx_tim.h"
 #include "stm32f0xx_gpio.h"
@@ -16,7 +17,6 @@
 
 #include "flags_timers.h"
 #include "reg_list.h"
-#include "stm32f0_discovery.h"
 
 #include "modbus_slave.h"
 #include "RTC_STM.h"
@@ -52,6 +52,9 @@ extern void TimingDelay_Decrement(void) {
 
 int main(void) {
 	
+	RTC_TimeTypeDef myRTCTime;
+	RTC_DateTypeDef myRTCDate;
+	
 	uint8_t buffer[] = "Hello There SD card !!\r\n";
   uint32_t drive_size;
 	
@@ -60,16 +63,18 @@ int main(void) {
 	FRESULT rc;
 	
 	SysTick_Config(SystemCoreClock / 1000);
+	
 	STM_EVAL_LEDInit(LED3);
 	STM_EVAL_LEDInit(LED4);
 	
 	init_usart2();
 	init_modbus();
+	
 	RTC_Config_LSI();
+	
 	I2C_EEPROM_24C0x_Init();
 	
-	printf("STM32F051 SD CARD TEST !!! \r\n");
-	
+	printf("STM32F051 SD CARD TEST !!! \r\n");	
 	
 	/*
 	sEE_ReadBuffer(&flag_EEPROM_status, ADDRESS_EPRM_STATUS_FLAG, BYTES_EEPRM_STATUS_FLAG);
@@ -94,20 +99,33 @@ int main(void) {
 		printf("Written default tools and profile values to EEPROM.\r\n");
 	} else {
 		printf("Default data already available at EEPROM.\r\n");
-	}	
-	
-	spi2_send(buffrSPI, sizeof(buffrSPI));
+	}		
 	*/
+	
     rc = f_mount(&FatFs, "", 1);
     if(rc == FR_OK) {
-        rc = f_open(&logfile, "log2.txt", FA_WRITE | FA_CREATE_ALWAYS);
+        rc = f_open(&logfile, "log_momo.csv", FA_WRITE | FA_CREATE_ALWAYS);
         if(rc == FR_OK){
-            f_printf(&logfile, "Hello there STM what you doing. I am keil??!!\r\n");
+            f_printf(&logfile,
+							"SD card example\n"
+							"Temerature, Humidity, Hour, Minute, Sec\n"
+							"%d,%d,%d,%d,%d\n", 20, 30, 11, 42, 10);
             f_close(&logfile);
         }
     }
 		
   while (1) {
-//		modbus_update();
+		
+		modbus_update();
+		if(flagLEDIndi) {
+			
+			flagLEDIndi = 0;
+			STM_EVAL_LEDToggle(LED3);
+			RTC_GetTime(RTC_Format_BIN, &myRTCTime);
+			printf("Hour: %d\tMinute: %d\tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);	
+			
+		}
+		modbus_update();
+
 	}	
 }
