@@ -11,13 +11,11 @@
 #include "stm32f0xx_gpio.h"
 #include "stm32f0xx_usart.h"
 #include "stm32f0xx_rcc.h"
-//#include "stm32f0xx_rtc.h"
-//#include "stm32f0xx_pwr.h"
 #include "stm32f0xx_spi.h"
+#include "stm32f0xx_misc.h"
 
 #include "flags_timers.h"
-#include "reg_list.h"
-
+//#include "reg_list.h"
 #include "modbus_slave.h"
 #include "RTC_STM.h"
 #include "eeprom_data.h"
@@ -50,8 +48,6 @@ extern void TimingDelay_Decrement(void) {
   }
 }
 
-//#if !FF_FS_NORTC && !FF_FS_READONLY
-
 DWORD get_fattime (void)
 {	
 	RTC_TimeTypeDef FATRTCTime;
@@ -70,7 +66,37 @@ DWORD get_fattime (void)
 			| ((DWORD)FATRTCTime.RTC_Minutes << 5)
 			| ((DWORD)FATRTCTime.RTC_Seconds>> 1);
 }
-//#endif
+
+void init_TIM3(void) {
+	TIM_TimeBaseInitTypeDef TIM_TimeBaseStruct;
+	NVIC_InitTypeDef NVIC_InitStruct;
+
+	/* TIM3 clock enable */
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+
+	/* Enable the TIM3 gloabal Interrupt */
+	NVIC_InitStruct.NVIC_IRQChannel = TIM3_IRQn;
+	NVIC_InitStruct.NVIC_IRQChannelPriority = 0;
+	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStruct);
+	NVIC_EnableIRQ(TIM3_IRQn);
+
+	TIM_TimeBaseStruct.TIM_Prescaler = 1000;		// Colck division in milli second
+	TIM_TimeBaseStruct.TIM_ClockDivision = 0;
+	TIM_TimeBaseStruct.TIM_Period = 48000;			// Clock Source in KHz
+	TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_CenterAligned1; //TIM_CounterMode_Up;
+	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStruct);
+
+	TIM_ITConfig(TIM3, TIM_IT_Update, ENABLE);
+
+	TIM_Cmd(TIM3, ENABLE);
+}
+
+void TIM3_IRQHandler() {
+	STM_EVAL_LEDToggle(LED4);
+	TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
+}
+
 
 int main(void) {
 	
@@ -87,6 +113,8 @@ int main(void) {
 	
 	init_usart2();
 	init_modbus();
+	
+	init_TIM3();
 	
 	RTC_Config_LSI();
 //	RTC_Config_LSE();
@@ -120,7 +148,6 @@ int main(void) {
 		printf("Default data already available at EEPROM.\r\n");
 	}		
 	*/
-
 	
     rc = f_mount(&FatFs, "", 1);
     if(rc == FR_OK) {
@@ -146,6 +173,7 @@ int main(void) {
 			RTC_GetTime(RTC_Format_BIN, &myRTCTime);
 			RTC_GetDate(RTC_Format_BIN, &myRTCDate);
 			printf("Year: %d, \tMonth: %d, \tDay: %d, \t", (myRTCDate.RTC_Year + 2000), myRTCDate.RTC_Month, myRTCDate.RTC_Date);
+			printf("Week Day is %d\t", myRTCDate.RTC_WeekDay);
 			printf("Hour: %d, \tMinute: %d, \tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);				
 		}		
 	}	
