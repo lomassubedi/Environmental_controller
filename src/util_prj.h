@@ -1,15 +1,15 @@
 #ifndef UTIL_PRJ_H_
-
 #define UTIL_PRJ_H_
 
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
+#include <time.h>
 
 
 #define CMPL_YEAR ((__DATE__[7] - '0') * 1000 +  (__DATE__[8] - '0') * 100 + (__DATE__[9] - '0') * 10 + __DATE__[10] - '0')
 
 #define CMPL_DATE ((__DATE__[4] - '0') * 10 + __DATE__[5] - '0')
-
 
 #if 0
 #if (__DATE__[0] == 'J' && __DATE__[1] == 'a' && __DATE__[2] == 'n')
@@ -44,5 +44,17 @@
 #define CMPL_HOUR ((__TIME__[0] - '0') * 10 + __TIME__[1] - '0')
 #define CMPL_MIN ((__TIME__[3] - '0') * 10 + __TIME__[4] - '0')
 #define CMPL_SEC ((__TIME__[6] - '0') * 10 + __TIME__[7] - '0')
+
+typedef struct {
+	uint16_t	year;	/* 1970..2106 */
+	uint8_t		month;	/* 1..12 */
+	uint8_t		mday;	/* 1..31 */
+	uint8_t		hour;	/* 0..23 */
+	uint8_t		min;	/* 0..59 */
+	uint8_t		sec;	/* 0..59 */
+	uint8_t		wday;	/* 0..6 (Sun..Sat) */
+} date_time;
+
+void get_ct_date_time(date_time *);
 
 #endif // UTIL_PRJ_H_

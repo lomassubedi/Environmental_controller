@@ -43,10 +43,12 @@ void RTC_Config_LSE(void) {
 	RTC_TimeStructInit(&RTC_TimeStruct); 
 }
 
+
 void RTC_Config_LSI(void)
 {
   RTC_TimeTypeDef RTC_TimeStructure;
 	RTC_DateTypeDef RTC_DateStructure;
+	date_time my_date_time;
 	
   /* Enable the PWR clock */
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
@@ -74,17 +76,29 @@ void RTC_Config_LSI(void)
   RTC_WaitForSynchro();
 
   /* Calendar Configuration */
-  RTC_InitStructure.RTC_AsynchPrediv = 99;
-  RTC_InitStructure.RTC_SynchPrediv	=  399; /* (40KHz / 100) - 1 = 399*/
+//  RTC_InitStructure.RTC_AsynchPrediv = 0xFF;
+//  RTC_InitStructure.RTC_SynchPrediv	=  0x7F; /* (40KHz / 100) - 1 = 399*/
+	
+	RTC_InitStructure.RTC_AsynchPrediv = 99;
+	RTC_InitStructure.RTC_SynchPrediv	=  399; /* (40KHz / 100) - 1 = 399*/
   RTC_InitStructure.RTC_HourFormat = RTC_HourFormat_24;
   RTC_Init(&RTC_InitStructure);  
   
+	get_ct_date_time(&my_date_time);
 	
   /* Set the time to code compiled time*/
-//  RTC_TimeStructure.RTC_H12     = RTC_H12_AM;
-  RTC_TimeStructure.RTC_Hours   = CMPL_HOUR;
-  RTC_TimeStructure.RTC_Minutes = CMPL_MIN;
-  RTC_TimeStructure.RTC_Seconds = CMPL_SEC;  
+  RTC_TimeStructure.RTC_H12     = RTC_H12_AM;
+  RTC_TimeStructure.RTC_Hours   = my_date_time.hour;
+  RTC_TimeStructure.RTC_Minutes = my_date_time.min;
+  RTC_TimeStructure.RTC_Seconds = my_date_time.sec;
 	
   RTC_SetTime(RTC_Format_BIN, &RTC_TimeStructure);
+	
+	// Set the RTC date. compile time Date.
+	RTC_DateStructure.RTC_Year = my_date_time.year - 2000;
+	RTC_DateStructure.RTC_Month = my_date_time.month;
+	RTC_DateStructure.RTC_Date = my_date_time.mday;
+	RTC_DateStructure.RTC_WeekDay = my_date_time.wday;
+	
+	RTC_SetDate(RTC_Format_BIN, &RTC_DateStructure);
 }

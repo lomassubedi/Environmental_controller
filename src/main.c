@@ -50,18 +50,36 @@ extern void TimingDelay_Decrement(void) {
   }
 }
 
+//#if !FF_FS_NORTC && !FF_FS_READONLY
+
+DWORD get_fattime (void)
+{	
+	RTC_TimeTypeDef FATRTCTime;
+	RTC_DateTypeDef FATRTCDate;
+	
+	/* Get local date and time */
+	RTC_GetTime(RTC_Format_BIN, &FATRTCTime);
+	RTC_GetDate(RTC_Format_BIN, &FATRTCDate);
+	
+
+	/* Pack date and time into a DWORD variable */
+	return ((DWORD)((FATRTCDate.RTC_Year) + 20) << 25)
+			| ((DWORD)FATRTCDate.RTC_Month << 21)
+			| ((DWORD)FATRTCDate.RTC_Date << 16)
+			| ((DWORD)FATRTCTime.RTC_Hours<< 11)
+			| ((DWORD)FATRTCTime.RTC_Minutes << 5)
+			| ((DWORD)FATRTCTime.RTC_Seconds>> 1);
+}
+//#endif
+
 int main(void) {
 	
 	RTC_TimeTypeDef myRTCTime;
-	RTC_DateTypeDef myRTCDate;
-	
-	uint8_t buffer[] = "Hello There SD card !!\r\n";
-  uint32_t drive_size;
-	
+	RTC_DateTypeDef myRTCDate;	
 //	uint8_t flag_EEPROM_status;
-	
 	FRESULT rc;
 	
+	SystemInit();
 	SysTick_Config(SystemCoreClock / 1000);
 	
 	STM_EVAL_LEDInit(LED3);
@@ -71,6 +89,7 @@ int main(void) {
 	init_modbus();
 	
 	RTC_Config_LSI();
+//	RTC_Config_LSE();
 	
 	I2C_EEPROM_24C0x_Init();
 	
@@ -101,10 +120,11 @@ int main(void) {
 		printf("Default data already available at EEPROM.\r\n");
 	}		
 	*/
+
 	
     rc = f_mount(&FatFs, "", 1);
     if(rc == FR_OK) {
-        rc = f_open(&logfile, "log_momo.csv", FA_WRITE | FA_CREATE_ALWAYS);
+        rc = f_open(&logfile, "log_file.csv", FA_WRITE | FA_CREATE_ALWAYS);
         if(rc == FR_OK){
             f_printf(&logfile,
 							"SD card example\n"
@@ -113,19 +133,20 @@ int main(void) {
             f_close(&logfile);
         }
     }
-		
+
+	
   while (1) {
 		
-		modbus_update();
+//		modbus_update();
+		
 		if(flagLEDIndi) {
 			
 			flagLEDIndi = 0;
 			STM_EVAL_LEDToggle(LED3);
 			RTC_GetTime(RTC_Format_BIN, &myRTCTime);
-			printf("Hour: %d\tMinute: %d\tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);	
-			
-		}
-		modbus_update();
-
+			RTC_GetDate(RTC_Format_BIN, &myRTCDate);
+			printf("Year: %d, \tMonth: %d, \tDay: %d, \t", (myRTCDate.RTC_Year + 2000), myRTCDate.RTC_Month, myRTCDate.RTC_Date);
+			printf("Hour: %d, \tMinute: %d, \tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);				
+		}		
 	}	
 }
