@@ -1,0 +1,40 @@
+// File Name: diskrw.h
+// Author: Lomas
+// Date 24 Sept 2017
+
+
+#ifndef SDLOG_H_
+#define SDLOG_H_
+
+#include "config.h"
+#include "ff.h"
+#include "util_prj.h"
+#include "RTC_STM.h"
+
+// Define log file name size in bytes
+#define 		LOG_MAX_FILE_NAME_SIZE					50
+#define			LOG_MAX_FILE_PATH_SIZE					200
+#define			RTC_YOFFSET											2000
+
+#define			LOG_INTERVAL										500		// Define data log interval of 100ms
+
+extern volatile uint8_t file_current_year;
+extern volatile uint8_t file_current_month;
+extern volatile uint8_t file_current_day;
+
+extern uint8_t flag_disk_mount;
+
+//volatile uint8_t flag_file_open;
+
+//char file_name[LOG_MAX_FN_SIZE];
+void init_TIM3(void);
+void ADC_Config(void);
+void init_pushbtn(void);
+
+void init_sd(void);
+//void get_path(char * path);
+void start_logging(void);
+void stop_logging(void);
+
+
+#endif // SDLOG_H_

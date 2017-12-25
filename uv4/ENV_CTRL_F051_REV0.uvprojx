@@ -465,6 +465,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\SD\mmc_32f0.c</FilePath>
             </File>
+            <File>
+              <FileName>sdlog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\SD\sdlog.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

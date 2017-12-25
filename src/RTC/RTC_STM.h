@@ -9,10 +9,7 @@
 #ifndef RTC_STM_H_
 #define RTC_STM_H_
 
-#include "stm32f0xx_rtc.h"
-#include "stm32f0xx_pwr.h"
-#include "stm32f0xx_rcc.h"
-
+#include "config.h"
 #include "util_prj.h"
 
 // Use external 32.768KHz low frequency crystal

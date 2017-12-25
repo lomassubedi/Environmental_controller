@@ -47,6 +47,5 @@ void get_ct_date_time(date_time * date_time_struct) {
 	
 	date_time_struct->hour = CMPL_HOUR;
 	date_time_struct->min = CMPL_MIN;
-	date_time_struct->sec = CMPL_SEC;
-		
+	date_time_struct->sec = CMPL_SEC;		
 }

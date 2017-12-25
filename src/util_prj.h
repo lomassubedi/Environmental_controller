@@ -1,11 +1,7 @@
 #ifndef UTIL_PRJ_H_
 #define UTIL_PRJ_H_
 
-#include <stdio.h>
-#include <string.h>
-#include <stdint.h>
-#include <time.h>
-
+#include "config.h"
 
 #define CMPL_YEAR ((__DATE__[7] - '0') * 1000 +  (__DATE__[8] - '0') * 100 + (__DATE__[9] - '0') * 10 + __DATE__[10] - '0')
 
@@ -44,6 +40,12 @@
 #define CMPL_HOUR ((__TIME__[0] - '0') * 10 + __TIME__[1] - '0')
 #define CMPL_MIN ((__TIME__[3] - '0') * 10 + __TIME__[4] - '0')
 #define CMPL_SEC ((__TIME__[6] - '0') * 10 + __TIME__[7] - '0')
+
+//Define Push button
+#define PushButton_Pin GPIO_Pin_0
+#define PushButton_GPIO GPIOA
+
+//GPIO_InitTypeDef GPIO_InitStructure;
 
 typedef struct {
 	uint16_t	year;	/* 1970..2106 */
