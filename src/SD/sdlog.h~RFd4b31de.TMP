@@ -1,6 +1,7 @@
-// File Name: sdlog.h
+// File Name: diskrw.h
 // Author: Lomas
 // Date 24 Sept 2017
+
 
 #ifndef SDLOG_H_
 #define SDLOG_H_
@@ -15,7 +16,7 @@
 #define			LOG_MAX_FILE_PATH_SIZE					200
 #define			RTC_YOFFSET											2000
 
-#define			LOG_INTERVAL										100		// Define data log interval of 100ms
+#define			LOG_INTERVAL										500		// Define data log interval of 100ms
 
 extern volatile uint8_t file_current_year;
 extern volatile uint8_t file_current_month;

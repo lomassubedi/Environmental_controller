@@ -1,40 +1,62 @@
-//#include <iostream>
-//
-//using namespace std;
-//
-//int main()
-//{
-//    cout << "Hello world!" << endl;
-//    return 0;
-//}
-
+#include <iostream>
 #include<stdio.h>
-#include "serial.h"
+#include "SerialPort.h"
 
 using namespace std;
 
-int main()
+char* portName = "\\\\.\\COM9";
+
+#define MAX_DATA_LENGTH 255
+
+char incomingData[MAX_DATA_LENGTH];
+
+//Control signals for turning on and turning off the led
+//Check arduino code
+char ledON[] = "ON\n";
+char ledOFF[] = "OFF\n";
+
+//Blinking Delay
+const unsigned int BLINKING_DELAY = 1000;
+
+//Arduino SerialPort object
+SerialPort *arduino;
+
+//If you want to send data then define "SEND" else comment it out
+#define SEND
+
+void exampleReceiveData(void)
 {
- Serial com(9,9600);
+    int readResult = arduino->readSerialPort(incomingData, MAX_DATA_LENGTH);
+    if(readResult) {
+        printf("%s", incomingData);
+        memset(incomingData, 0, sizeof incomingData);
+        }
+//    Sleep(10);
+}
+
+void exampleWriteData(unsigned int delayTime)
+{
+    arduino->writeSerialPort(ledON, MAX_DATA_LENGTH);
+    Sleep(delayTime);
+    arduino->writeSerialPort(ledOFF, MAX_DATA_LENGTH);
+    Sleep(delayTime);
+}
 
 
- printf("Opening port %ld.\n",com.GetPortNumber());
- long r = com.Open();//return 0 if success
+int main() {
 
- bool successFlag;
- printf("Writing.\n");
- char s[]="Hello";
- successFlag=com.Write(s);//write string
- successFlag=com.WriteChar('!');//write a character
+    arduino = new SerialPort(portName);
 
- printf("Waiting 3 seconds.\n");
- delay(3000);//delay 5 sec to wait for a character
+    //Checking if arduino is connected or not
+    if (arduino->isConnected()){
+        std::cout << "Connection established at port " << portName << endl;
+    }
 
- printf("Reading.\n");
- char c=com.ReadChar(successFlag);//read a char
- if(successFlag) printf("Rx: %c\n",c);
+    #ifdef SEND
+        while(arduino->isConnected()) exampleWriteData(BLINKING_DELAY);
+    #else // SEND
+        while(arduino->isConnected()) exampleReceiveData();
+    #endif // SEND
 
-printf("Closing port %ld.\n",com.GetPortNumber());
- com.Close();
 return 0;
 }

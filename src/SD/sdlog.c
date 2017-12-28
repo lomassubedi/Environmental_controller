@@ -3,7 +3,7 @@
 
 static uint16_t  ADC1ConvertedValue = 0, ADC1ConvertedVoltage = 0;
 static float ADCAnalogVoltage = 0.0; 
-volatile button_prev = 0;
+volatile uint8_t button_prev = 0;
 
 static char path_buffer[LOG_MAX_FILE_PATH_SIZE];
 
@@ -12,11 +12,6 @@ static FATFS FatFs;
 static FIL logfile;
 static FRESULT rc;
 uint8_t flag_disk_mount = 1;
-
-
-// RTC Global variables
-RTC_TimeTypeDef RTCTimeLog;
-RTC_DateTypeDef RTCDateLog;
 
 static uint8_t logging = 0;
 
@@ -37,7 +32,7 @@ char *months_lookup[12] = {
 	"December"
 };
 
-volatile uint8_t file_current_year = 0, file_prev_year = 0;
+volatile uint8_t file_prev_year = 0;
 volatile uint8_t file_current_month = 0, file_prev_month = 0;
 volatile uint8_t file_current_day = 0, file_prev_day = 0;
 volatile uint8_t file_prev_min = 0;
@@ -150,7 +145,7 @@ void init_pushbtn(void) {
   GPIO_Init(PushButton_GPIO, &Gp); //Assign struct to LED_GPIO 	
 }
 
-void init_sd(void){		
+void init_sd(void){
 	
 	FRESULT err;
 	uint8_t mnth_ctr = 0;
@@ -197,15 +192,6 @@ void init_sd(void){
 	return;
 }
 
-//void get_path(char * path) {
-//	RTC_DateTypeDef R_Date;
-//	RTC_GetDate(RTC_Format_BIN, &R_Date);
-//	sprintf(path, "/%04d/%s/D%02d.csv", \
-//		(R_Date.RTC_Year + RTC_YOFFSET), months_lookup[R_Date.RTC_Month - 1], R_Date.RTC_Date);
-//	printf("Today's file path is: %s\r\n", path);
-//	return;
-//}
-
 void start_logging(void) {
 	
 	// Get the current date 
@@ -231,6 +217,7 @@ void start_logging(void) {
 }
 
 void stop_logging(void) {
+	
 	f_sync(&logfile);				// Clear the catched information 
 	f_close(&logfile);			// Close the file if it is open
 	
@@ -241,14 +228,12 @@ void stop_logging(void) {
 	STM_EVAL_LEDOff(LED4);
 }
 
-void TIM3_IRQHandler() {
+void cont_logging(void) {
 	
-	if(!flag_disk_mount)	{ // Proceed only when the disk is mounted successfully
-		printf("failed mounting SD card. Make sure that proper SD card is inserted.\r\n");
-		return;
-	}
-	
-	STM_EVAL_LEDOn(LED4);
+	char tmp_bfr[20];
+	// RTC variables
+	RTC_TimeTypeDef RTCTimeLog;
+	RTC_DateTypeDef RTCDateLog;
 	
 	/* Test EOC flag */
 	while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
@@ -268,19 +253,34 @@ void TIM3_IRQHandler() {
 	if(!flag_file_open) {		// If file name has changed or its initial start
 		start_logging();
 	}
-		
-	f_printf(&logfile, "%02d-%02d-%02d, %06d, %.5f\r\n", 
+	
+//	if(file_prev_year != RTCDateLog.RTC_Year) {
+//		
+//	}
+	
+	// Data log task
+	sprintf(tmp_bfr, "%.5f", ADCAnalogVoltage);
+	f_printf(&logfile, "%02d:%02d:%02d, %06d, %s\r\n", 
 		RTCTimeLog.RTC_Hours, RTCTimeLog.RTC_Minutes, RTCTimeLog.RTC_Seconds, 
-		ADC1ConvertedVoltage, ADCAnalogVoltage);	
+		ADC1ConvertedVoltage, tmp_bfr);	
 
 	printf("Logged line on file : %02d-%02d-%02d, %06d, %.5f\r\n",\
 		RTCTimeLog.RTC_Hours, RTCTimeLog.RTC_Minutes, RTCTimeLog.RTC_Seconds, 
 		ADC1ConvertedVoltage, ADCAnalogVoltage);
 
 	f_sync(&logfile);
-		
+}
+
+void TIM3_IRQHandler() {
+	
+	if(!flag_disk_mount)	{ // Proceed only when the disk is mounted successfully
+		printf("failed mounting SD card. Make sure that proper SD card is inserted.\r\n");
+		return;
+	}
+	
+	STM_EVAL_LEDOn(LED4);
+	cont_logging();	
 	STM_EVAL_LEDOff(LED4);
-//	file_prev_sec = RTCTimeLog.RTC_Seconds;
 	TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
 	return;
 	
