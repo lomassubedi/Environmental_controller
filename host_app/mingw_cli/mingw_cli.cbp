@@ -36,8 +36,8 @@
 		</Compiler>
 		<Unit filename="CRC16/mbcrc.cpp" />
 		<Unit filename="CRC16/mbcrc.h" />
-		<Unit filename="Serial/serial.cpp" />
-		<Unit filename="Serial/serial.h" />
+		<Unit filename="Serial/SerialPort.cpp" />
+		<Unit filename="Serial/SerialPort.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion>

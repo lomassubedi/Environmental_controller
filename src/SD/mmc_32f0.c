@@ -9,11 +9,11 @@
 /   personal, non-profit or commercial products UNDER YOUR RESPONSIBILITY.
 / * Redistributions of source code must retain the above copyright notice.
 / 
-/ Modified 2016 by fruchti for STM32F030
+/ Modified on 2017 by Lomas for STM32F051
 /
 /-------------------------------------------------------------------------*/
 
-//#define SD_PIN_CP           1   // PB1 - SD present switch
+#define SD_PIN_CP         	12  // PA12 - SD present switch
 
 #define SD_PIN_CS           4   // PA4 - SD chip select
 #define SD_PIN_SCK          5   // PA5 - SD SCK
@@ -23,12 +23,10 @@
 #define FCLK_SLOW() do { SPI1->CR1 = (SPI1->CR1 & ~SPI_CR1_BR) | SPI_CR1_BR_2 | SPI_CR1_BR_1 | SPI_CR1_BR_0; } while(0)	/* Set SCLK = PCLK / 64 */
 #define FCLK_FAST() do { SPI1->CR1 = (SPI1->CR1 & ~SPI_CR1_BR) | 0x00; } while(0)	/* Set SCLK = PCLK / 2 */
 
-//#define CS_HIGH()	GPIOA->BSRR = (1 << SD_PIN_CS)
-//#define CS_LOW()	GPIOA->BSRR = (1 << (SD_PIN_CS + 16))
 #define CS_HIGH()	do { SPI1->CR1 |= SPI_CR1_SSI; } while(0)
 #define CS_LOW()	do { SPI1->CR1 &= ~SPI_CR1_SSI; } while(0)
 
-//#define	MMC_CD		!(GPIOB->IDR & (1 << SD_PIN_CP))	/* Card detect (yes:true, no:false, default:true) */
+#define	MMC_CD		!(GPIOA->IDR & (1 << SD_PIN_CP))	/* Card detect (yes:true, no:false, default:true) */
 
 #define	MMC_WP		0 /* Write protected (yes:true, no:false, default:false) */
 
@@ -76,7 +74,6 @@ static
 BYTE CardType;			/* Card type flags */
 
 
-
 /*-----------------------------------------------------------------------*/
 /* SPI controls (Platform dependent)                                     */
 /*-----------------------------------------------------------------------*/
@@ -92,7 +89,6 @@ static
 void init_spi (void)
 {
     RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
-    RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
     RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
     
     // Systick every millisecond
@@ -109,8 +105,8 @@ void init_spi (void)
                     (0xf << (SD_PIN_MISO << 2)) |\
                     (0xf << (SD_PIN_MOSI << 2)) | (0xf << (SD_PIN_CS << 2)));
 
-    // SD present switch
-//    GPIOB->PUPDR |= (1 << (SD_PIN_CP << 1));
+    // SD present switch initially input pull up
+    GPIOA->PUPDR |= (1 << (SD_PIN_CP << 1));
 
     // SPI
 	SPI1->CR1 = 0;
@@ -206,7 +202,6 @@ int wait_ready (	/* 1:Ready, 0:Timeout */
 {
 	BYTE d;
 
-
 	Timer2 = wt;
 	do {
 		d = xchg_spi(0xFF);
@@ -230,8 +225,6 @@ void deselect (void)
 
 }
 
-
-
 /*-----------------------------------------------------------------------*/
 /* Select card and wait for ready                                        */
 /*-----------------------------------------------------------------------*/
@@ -246,7 +239,6 @@ int select (void)	/* 1:OK, 0:Timeout */
 	deselect();
 	return 0;	/* Timeout */
 }
-
 
 
 /*-----------------------------------------------------------------------*/
@@ -609,7 +601,6 @@ void disk_timerproc (void)
 	WORD n;
 	BYTE s;
 
-
 	n = Timer1;						/* 1kHz decrement timer stopped at 0 */
 	if (n) Timer1 = --n;
 	n = Timer2;
@@ -620,10 +611,10 @@ void disk_timerproc (void)
 		s |= STA_PROTECT;
 	else		/* Write enabled */
 		s &= ~STA_PROTECT;
-//	if (MMC_CD)	/* Card is in socket */
-//		s &= ~STA_NODISK;
-//	else		/* Socket empty */
-//		s |= (STA_NODISK | STA_NOINIT);
+	if (MMC_CD)	/* Card is in socket */
+		s &= ~STA_NODISK;
+	else		/* Socket empty */
+		s |= (STA_NODISK | STA_NOINIT);
 	Stat = s;
 }
 

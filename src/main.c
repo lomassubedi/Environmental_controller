@@ -6,6 +6,7 @@
 #include "util_usart.h"
 #include "iso_i2c_ee.h"
 #include "sdlog.h"
+#include "diskio.h"
 
 static __IO uint32_t TimingDelay;	
 
@@ -45,9 +46,17 @@ int main(void) {
 	
 	init_sd();
 	
+//	init_spi();
+//	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+//	GPIOA->PUPDR |= (1 << (1 << 12));
   while (1) {
 				
-		modbus_update();						
+//		modbus_update();		
+//			if((GPIOA->IDR & (1 << 12))) {
+//				STM_EVAL_LEDOn(LED3);
+//			} else {
+//				STM_EVAL_LEDOff(LED3);
+//			}
 	
 	}	
 }

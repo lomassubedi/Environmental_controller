@@ -9,9 +9,13 @@ static char path_buffer[LOG_MAX_FILE_PATH_SIZE];
 
 // Fat FS global variables for ISR
 static FATFS FatFs;
-static FIL logfile;
-static FRESULT rc;
+static FIL logfile, getfile;
+static FRESULT rc, rd;
 uint8_t flag_disk_mount = 1;
+
+char fileReadBuffr[500];
+UINT readBytes = 0;
+uint16_t ctr = 0;
 
 static uint8_t logging = 0;
 
@@ -153,11 +157,14 @@ void init_sd(void){
 	RTC_DateTypeDef RTCDate;
 		
 	err = f_mount(&FatFs, "", 1); /* Mount the default drive */
+	
+	
 	if (err != FR_OK) {
 		printf("FS: f_mount() failed. Is the SD card inserted?\r\n");
 		flag_disk_mount = 0;
 		return;
 	}
+	
 	
 	printf("FS: f_mount() succeeded\r\n");
 	flag_disk_mount = 1;
@@ -254,10 +261,6 @@ void cont_logging(void) {
 		start_logging();
 	}
 	
-//	if(file_prev_year != RTCDateLog.RTC_Year) {
-//		
-//	}
-	
 	// Data log task
 	sprintf(tmp_bfr, "%.5f", ADCAnalogVoltage);
 	f_printf(&logfile, "%02d:%02d:%02d, %06d, %s\r\n", 
@@ -289,6 +292,25 @@ void TIM3_IRQHandler() {
 // Push button IRQ Handler
 void EXTI0_1_IRQHandler(void) {
 	if(EXTI_GetITStatus(USER_BUTTON_EXTI_LINE) != RESET) {
+		/*
+		// Just read a file from the SD card 
+		if(flag_disk_mount) { 	// If the disk was successfully mounted
+			rd = f_open(&getfile, "BOOTEX.LOG", FA_OPEN_EXISTING | FA_READ);
+			if(rd == FR_OK) {
+				
+				f_read(&getfile, fileReadBuffr, 500, &readBytes);
+				f_sync(&getfile);
+				f_close(&getfile);
+			
+				while(ctr < readBytes) {
+					usart2_putchar(fileReadBuffr[ctr]);
+					ctr++;
+				}
+			}
+		}
+		ctr = 0;
+		*/
+		
 		if(button_prev) {
 			stop_logging();
 			button_prev = 0;
@@ -297,7 +319,7 @@ void EXTI0_1_IRQHandler(void) {
 			init_TIM3(); 		// Start logging 
 			printf("Logging Started!\r\n");
 			button_prev = 1;
-		}
+		} 
 		EXTI_ClearITPendingBit(USER_BUTTON_EXTI_LINE);
 	}
 }

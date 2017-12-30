@@ -17,15 +17,8 @@
 
 #define			LOG_INTERVAL										100		// Define data log interval of 100ms
 
-extern volatile uint8_t file_current_year;
-extern volatile uint8_t file_current_month;
-extern volatile uint8_t file_current_day;
-
 extern uint8_t flag_disk_mount;
 
-//volatile uint8_t flag_file_open;
-
-//char file_name[LOG_MAX_FN_SIZE];
 void init_TIM3(void);
 void ADC_Config(void);
 void init_pushbtn(void);
