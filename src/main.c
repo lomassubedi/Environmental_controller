@@ -45,7 +45,7 @@ int main(void) {
 	RTC_Config_LSI();		
 	
 	init_sd();
-	
+//	read_file();
 //	init_spi();
 //	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
 //	GPIOA->PUPDR |= (1 << (1 << 12));
@@ -56,7 +56,7 @@ int main(void) {
 //				STM_EVAL_LEDOn(LED3);
 //			} else {
 //				STM_EVAL_LEDOff(LED3);
-//			}
+//			}		
 	
 	}	
 }

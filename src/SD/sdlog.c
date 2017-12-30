@@ -13,7 +13,7 @@ static FIL logfile, getfile;
 static FRESULT rc, rd;
 uint8_t flag_disk_mount = 1;
 
-char fileReadBuffr[500];
+char fileReadBuffr[100];
 UINT readBytes = 0;
 uint16_t ctr = 0;
 
@@ -157,7 +157,7 @@ void init_sd(void){
 	RTC_DateTypeDef RTCDate;
 		
 	err = f_mount(&FatFs, "", 1); /* Mount the default drive */
-	
+
 	
 	if (err != FR_OK) {
 		printf("FS: f_mount() failed. Is the SD card inserted?\r\n");
@@ -208,8 +208,8 @@ void start_logging(void) {
 	RTC_GetDate(RTC_Format_BIN, &R_Date);
 
 	// Create file path
-	sprintf(path_buffer, "/%04d/%s/D%02dT%02d-%02d-%02d.csv", \
-	(R_Date.RTC_Year + RTC_YOFFSET), months_lookup[R_Date.RTC_Month - 1], R_Date.RTC_Date, R_Time.RTC_Hours, R_Time.RTC_Minutes, R_Time.RTC_Seconds);
+	sprintf(path_buffer, "/%04d/%s/D%02d.csv", \
+	(R_Date.RTC_Year + RTC_YOFFSET), months_lookup[R_Date.RTC_Month - 1], R_Date.RTC_Date);
 
 	// Open a file in create/append and write mode
 	rc = f_open(&logfile, path_buffer, FA_WRITE | FA_CREATE_ALWAYS) || f_lseek(&logfile, f_size(&logfile));
@@ -255,7 +255,7 @@ void cont_logging(void) {
 	RTC_GetTime(RTC_Format_BIN, &RTCTimeLog);
 	RTC_GetDate(RTC_Format_BIN, &RTCDateLog);
 	
-	if((RTCTimeLog.RTC_Seconds % 20) == 0)		flag_file_open = 0;
+//	if((RTCTimeLog.RTC_Seconds % 20) == 0)		flag_file_open = 0;
 		
 	if(!flag_file_open) {		// If file name has changed or its initial start
 		start_logging();
@@ -291,30 +291,28 @@ void TIM3_IRQHandler() {
 
 // Push button IRQ Handler
 void EXTI0_1_IRQHandler(void) {
+	
 	if(EXTI_GetITStatus(USER_BUTTON_EXTI_LINE) != RESET) {
-		/*
-		// Just read a file from the SD card 
-		if(flag_disk_mount) { 	// If the disk was successfully mounted
-			rd = f_open(&getfile, "BOOTEX.LOG", FA_OPEN_EXISTING | FA_READ);
-			if(rd == FR_OK) {
 				
-				f_read(&getfile, fileReadBuffr, 500, &readBytes);
-				f_sync(&getfile);
-				f_close(&getfile);
-			
-				while(ctr < readBytes) {
-					usart2_putchar(fileReadBuffr[ctr]);
-					ctr++;
-				}
-			}
-		}
-		ctr = 0;
-		*/
-		
 		if(button_prev) {
 			stop_logging();
 			button_prev = 0;
 			printf("Logging stopped!\r\n");
+			
+			// ----- Read the file logged and display the content ----- //			
+			rd = f_open(&getfile, path_buffer, FA_OPEN_EXISTING | FA_READ);
+			
+			if(rd == FR_OK) {				
+				printf("file content are : \r\n");	
+				memset(fileReadBuffr, 0x00, sizeof(fileReadBuffr));
+				do {								
+					f_gets (fileReadBuffr, sizeof(fileReadBuffr), &getfile);
+					printf(fileReadBuffr);
+					f_lseek(&getfile, strlen(fileReadBuffr));
+				} while (f_eof(&getfile));
+			}
+			f_close(&getfile);
+			
 		} else {
 			init_TIM3(); 		// Start logging 
 			printf("Logging Started!\r\n");
@@ -322,5 +320,25 @@ void EXTI0_1_IRQHandler(void) {
 		} 
 		EXTI_ClearITPendingBit(USER_BUTTON_EXTI_LINE);
 	}
+}
+
+void read_file(void) {
+	
+	if(flag_disk_mount) { 	// If the disk was successfully mounted
+			rd = f_open(&getfile, "BOOTEX.LOG", FA_OPEN_EXISTING | FA_READ);
+			if(rd == FR_OK) {
+				memset(fileReadBuffr, 0x00, sizeof(fileReadBuffr));
+				
+//				while(f_read(&getfile, fileReadBuffr, sizeof(fileReadBuffr), &readBytes));
+				
+//				do {
+//					f_gets (fileReadBuffr, sizeof(fileReadBuffr), &getfile);
+//				} while (!f_eof(&getfile));
+//				while (f_gets(fileReadBuffr,sizeof fileReadBuffr, &getfile))
+//					printf(fileReadBuffr);
+				f_gets (fileReadBuffr, sizeof(fileReadBuffr), &getfile);
+				printf(fileReadBuffr);
+			}
+		}
 }
 

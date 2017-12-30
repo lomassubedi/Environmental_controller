@@ -29,5 +29,7 @@ void start_logging(void);
 void stop_logging(void);
 void cont_logging(void);
 
+void read_file(void);
+
 
 #endif // SDLOG_H_
