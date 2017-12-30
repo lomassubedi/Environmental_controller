@@ -15,7 +15,7 @@
 #define			LOG_MAX_FILE_PATH_SIZE					200
 #define			RTC_YOFFSET											2000
 
-#define			LOG_INTERVAL										100		// Define data log interval of 100ms
+#define			LOG_INTERVAL										300		// Define data log interval of 100ms
 
 extern uint8_t flag_disk_mount;
 
@@ -28,8 +28,6 @@ void init_sd(void);
 void start_logging(void);
 void stop_logging(void);
 void cont_logging(void);
-
-void read_file(void);
 
 
 #endif // SDLOG_H_

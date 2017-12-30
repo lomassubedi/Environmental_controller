@@ -16,8 +16,9 @@ uint8_t flag_disk_mount = 1;
 char fileReadBuffr[100];
 UINT readBytes = 0;
 uint16_t ctr = 0;
+uint16_t line_no = 0;
 
-static uint8_t logging = 0;
+//static uint8_t logging = 0;
 
 volatile uint8_t flag_file_open = 0;
 
@@ -36,11 +37,11 @@ char *months_lookup[12] = {
 	"December"
 };
 
-volatile uint8_t file_prev_year = 0;
-volatile uint8_t file_current_month = 0, file_prev_month = 0;
-volatile uint8_t file_current_day = 0, file_prev_day = 0;
-volatile uint8_t file_prev_min = 0;
-volatile uint8_t file_prev_sec = 0;
+//volatile uint8_t file_prev_year = 0;
+//volatile uint8_t file_current_month = 0, file_prev_month = 0;
+//volatile uint8_t file_current_day = 0, file_prev_day = 0;
+//volatile uint8_t file_prev_min = 0;
+//volatile uint8_t file_prev_sec = 0;
 
 
 /* Fat FS Utility funtion to setup RTC time */
@@ -169,7 +170,7 @@ void init_sd(void){
 	printf("FS: f_mount() succeeded\r\n");
 	flag_disk_mount = 1;
 	
-	
+	/*
 	// Get local date and time
 	RTC_GetTime(RTC_Format_BIN, &RTCTime);
 	RTC_GetDate(RTC_Format_BIN, &RTCDate);
@@ -196,6 +197,7 @@ void init_sd(void){
 		printf("RTC not configured !!\r\n");
 	}	
 	// f_mount(0, "", 1);                     // Unmount the SD drive 
+	*/
 	return;
 }
 
@@ -208,15 +210,19 @@ void start_logging(void) {
 	RTC_GetDate(RTC_Format_BIN, &R_Date);
 
 	// Create file path
-	sprintf(path_buffer, "/%04d/%s/D%02d.csv", \
+	sprintf(path_buffer, "%04d_%s_D%02d.csv", \
 	(R_Date.RTC_Year + RTC_YOFFSET), months_lookup[R_Date.RTC_Month - 1], R_Date.RTC_Date);
 
 	// Open a file in create/append and write mode
-	rc = f_open(&logfile, path_buffer, FA_WRITE | FA_CREATE_ALWAYS) || f_lseek(&logfile, f_size(&logfile));
-
+	rc = f_open(&logfile, path_buffer, FA_WRITE | FA_OPEN_ALWAYS) || f_lseek(&logfile, f_size(&logfile));
+	
 	// If opeaning file is successfull
 	if(rc == FR_OK) {
 		printf("Opeaned file %s!\r\n", path_buffer);
+		
+		f_printf(&logfile, "S.N., Timestamp, analog val (mv), analog val(v)\r\n");
+		f_sync(&logfile);
+			
 		flag_file_open = 1;
 	} else {
 		printf("Failed opening file %s!\r\n", path_buffer);
@@ -231,6 +237,7 @@ void stop_logging(void) {
 	flag_file_open = 0;			// Clear the flag
 	
 	printf("Closed file %s!\r\n", path_buffer);
+	
 	TIM_Cmd(TIM3, DISABLE);	// Disable the interval generator
 	STM_EVAL_LEDOff(LED4);
 }
@@ -263,15 +270,17 @@ void cont_logging(void) {
 	
 	// Data log task
 	sprintf(tmp_bfr, "%.5f", ADCAnalogVoltage);
-	f_printf(&logfile, "%02d:%02d:%02d, %06d, %s\r\n", 
-		RTCTimeLog.RTC_Hours, RTCTimeLog.RTC_Minutes, RTCTimeLog.RTC_Seconds, 
-		ADC1ConvertedVoltage, tmp_bfr);	
+	if(f_printf(&logfile, "%d, %02d:%02d:%02d, %06d, %s\r\n", 
+		++line_no, RTCTimeLog.RTC_Hours, RTCTimeLog.RTC_Minutes, RTCTimeLog.RTC_Seconds, 
+		ADC1ConvertedVoltage, tmp_bfr)) {
 
-	printf("Logged line on file : %02d-%02d-%02d, %06d, %.5f\r\n",\
-		RTCTimeLog.RTC_Hours, RTCTimeLog.RTC_Minutes, RTCTimeLog.RTC_Seconds, 
-		ADC1ConvertedVoltage, ADCAnalogVoltage);
+		printf("Logged line on file : %d,%02d-%02d-%02d, %06d, %.5f\r\n",\
+			line_no, RTCTimeLog.RTC_Hours, RTCTimeLog.RTC_Minutes, RTCTimeLog.RTC_Seconds, 
+			ADC1ConvertedVoltage, ADCAnalogVoltage);
+		}
 
 	f_sync(&logfile);
+	f_close(&logfile);
 }
 
 void TIM3_IRQHandler() {
@@ -281,9 +290,12 @@ void TIM3_IRQHandler() {
 		return;
 	}
 	
-	STM_EVAL_LEDOn(LED4);
-	cont_logging();	
-	STM_EVAL_LEDOff(LED4);
+//	if(flag_file_open) {
+		STM_EVAL_LEDOn(LED4);
+		cont_logging();	
+		STM_EVAL_LEDOff(LED4);
+//	}
+	
 	TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
 	return;
 	
@@ -302,14 +314,18 @@ void EXTI0_1_IRQHandler(void) {
 			// ----- Read the file logged and display the content ----- //			
 			rd = f_open(&getfile, path_buffer, FA_OPEN_EXISTING | FA_READ);
 			
-			if(rd == FR_OK) {				
-				printf("file content are : \r\n");	
+			if(rd == FR_OK) {
+				printf("file content  the file \'%s\' are : \r\n", path_buffer);	
 				memset(fileReadBuffr, 0x00, sizeof(fileReadBuffr));
-				do {								
-					f_gets (fileReadBuffr, sizeof(fileReadBuffr), &getfile);
-					printf(fileReadBuffr);
-					f_lseek(&getfile, strlen(fileReadBuffr));
-				} while (f_eof(&getfile));
+//				for(ctr = 0; ctr < 100; ctr++) {
+//				do {
+					while(!f_eof(&getfile)) {
+						f_gets (fileReadBuffr, sizeof(fileReadBuffr), &getfile);
+						printf(fileReadBuffr);
+					}
+//					if(f_eof(&getfile))	break;
+//					f_lseek(&getfile, strlen(fileReadBuffr));
+//				} while (f_eof(&getfile));
 			}
 			f_close(&getfile);
 			
@@ -320,25 +336,5 @@ void EXTI0_1_IRQHandler(void) {
 		} 
 		EXTI_ClearITPendingBit(USER_BUTTON_EXTI_LINE);
 	}
-}
-
-void read_file(void) {
-	
-	if(flag_disk_mount) { 	// If the disk was successfully mounted
-			rd = f_open(&getfile, "BOOTEX.LOG", FA_OPEN_EXISTING | FA_READ);
-			if(rd == FR_OK) {
-				memset(fileReadBuffr, 0x00, sizeof(fileReadBuffr));
-				
-//				while(f_read(&getfile, fileReadBuffr, sizeof(fileReadBuffr), &readBytes));
-				
-//				do {
-//					f_gets (fileReadBuffr, sizeof(fileReadBuffr), &getfile);
-//				} while (!f_eof(&getfile));
-//				while (f_gets(fileReadBuffr,sizeof fileReadBuffr, &getfile))
-//					printf(fileReadBuffr);
-				f_gets (fileReadBuffr, sizeof(fileReadBuffr), &getfile);
-				printf(fileReadBuffr);
-			}
-		}
 }
 
