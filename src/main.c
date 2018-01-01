@@ -8,24 +8,11 @@
 #include "sdlog.h"
 #include "diskio.h"
 
-static __IO uint32_t TimingDelay;	
-
 struct __FILE {
     int dummy;
 };
 
 FILE __stdout;
-
-extern void Delay(__IO uint32_t nTime) {
-  TimingDelay = nTime;
-  while(TimingDelay != 0);
-}
-
-extern void TimingDelay_Decrement(void) {
-  if (TimingDelay != 0x00) {
-    TimingDelay--;
-  }
-}
 
 int main(void) {
 		
@@ -44,19 +31,11 @@ int main(void) {
 	
 	RTC_Config_LSI();		
 	
-	init_sd();
-//	read_file();
-//	init_spi();
-//	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
-//	GPIOA->PUPDR |= (1 << (1 << 12));
+	init_sd();	
+		
   while (1) {
 				
-//		modbus_update();		
-//			if((GPIOA->IDR & (1 << 12))) {
-//				STM_EVAL_LEDOn(LED3);
-//			} else {
-//				STM_EVAL_LEDOff(LED3);
-//			}		
+		modbus_update();	
 	
 	}	
 }

@@ -617,9 +617,3 @@ void disk_timerproc (void)
 		s |= (STA_NODISK | STA_NOINIT);
 	Stat = s;
 }
-
-//void SysTick_Handler(void)
-//{
-//    disk_timerproc();
-//    TimingDelay_Decrement();
-//}

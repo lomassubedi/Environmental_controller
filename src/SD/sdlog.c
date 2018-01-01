@@ -10,39 +10,16 @@ static char path_buffer[LOG_MAX_FILE_PATH_SIZE];
 // Fat FS global variables for ISR
 static FATFS FatFs;
 static FIL logfile, getfile;
-static FRESULT rc, rd;
-uint8_t flag_disk_mount = 1;
 
-char fileReadBuffr[100];
-UINT readBytes = 0;
-uint16_t ctr = 0;
+// FRESULT for writing into the file, initialize with not okay result
+static FRESULT res_disk_mount = ~FR_OK, res_check_file = ~FR_OK, res_open_file = ~FR_OK;
+
+// FRESULT for reading from the file, initialize with not okay result
+static FRESULT res_open_file_read = ~FR_OK;
+
+static FILINFO fno;
+char fileReadBuffr[LOG_RD_FILE_SIZE];
 uint16_t line_no = 0;
-
-//static uint8_t logging = 0;
-
-volatile uint8_t flag_file_open = 0;
-
-char *months_lookup[12] = {
-	"January",	// months_lookup[0] == January
-	"February",
-	"March",
-	"April",
-	"May",
-	"June",
-	"July",
-	"August",
-	"September",
-	"October",
-	"November",
-	"December"
-};
-
-//volatile uint8_t file_prev_year = 0;
-//volatile uint8_t file_current_month = 0, file_prev_month = 0;
-//volatile uint8_t file_current_day = 0, file_prev_day = 0;
-//volatile uint8_t file_prev_min = 0;
-//volatile uint8_t file_prev_sec = 0;
-
 
 /* Fat FS Utility funtion to setup RTC time */
 DWORD get_fattime (void) {
@@ -135,7 +112,7 @@ void ADC_Config(void) {
   while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_ADRDY));
   
   /* ADC1 regular Software Start Conv */ 
-  ADC_StartOfConversion(ADC1); 
+  ADC_StartOfConversion(ADC1);
 }
 
 void init_pushbtn(void) {
@@ -151,53 +128,14 @@ void init_pushbtn(void) {
 }
 
 void init_sd(void){
+			
+	res_disk_mount = f_mount(&FatFs, "", 1); /* Mount the default drive */
 	
-	FRESULT err;
-	uint8_t mnth_ctr = 0;
-	RTC_TimeTypeDef RTCTime;
-	RTC_DateTypeDef RTCDate;
-		
-	err = f_mount(&FatFs, "", 1); /* Mount the default drive */
-
-	
-	if (err != FR_OK) {
-		printf("FS: f_mount() failed. Is the SD card inserted?\r\n");
-		flag_disk_mount = 0;
-		return;
-	}
-	
-	
-	printf("FS: f_mount() succeeded\r\n");
-	flag_disk_mount = 1;
-	
-	/*
-	// Get local date and time
-	RTC_GetTime(RTC_Format_BIN, &RTCTime);
-	RTC_GetDate(RTC_Format_BIN, &RTCDate);
-	
-	if(RTCDate.RTC_Year > 0) {
-		sprintf(path_buffer, "%d",(RTCDate.RTC_Year + RTC_YOFFSET));
-		
-		// Create necessary directories		
-		f_mkdir(path_buffer);						// Create a directories for year
-		printf("Created directoriy %s.\r\n",path_buffer); 
-		
-		f_chdir(path_buffer);						// Enter into the year directory
-		// Make directories for each months
-		for(mnth_ctr = 0; mnth_ctr < 12; mnth_ctr++) {
-			sprintf(path_buffer, "%s", months_lookup[mnth_ctr]);
-			f_mkdir(path_buffer);			
-			STM_EVAL_LEDToggle(LED3);
-			printf("Created directoriy %s.\r\n",path_buffer); 
-			Delay(100);
-		}
-		f_chdir("..");						// Exit from the year directory
-		// Now control is withing the main directory
+	if (res_disk_mount == FR_OK) {
+		printf("SD card mounted successfully !!\r\n");		
 	} else {
-		printf("RTC not configured !!\r\n");
+		printf("SD card mounting failed !! Make sure a SD card is inserted.\r\n");
 	}	
-	// f_mount(0, "", 1);                     // Unmount the SD drive 
-	*/
 	return;
 }
 
@@ -210,33 +148,53 @@ void start_logging(void) {
 	RTC_GetDate(RTC_Format_BIN, &R_Date);
 
 	// Create file path
-	sprintf(path_buffer, "%04d_%s_D%02d.csv", \
-	(R_Date.RTC_Year + RTC_YOFFSET), months_lookup[R_Date.RTC_Month - 1], R_Date.RTC_Date);
-
-	// Open a file in create/append and write mode
-	rc = f_open(&logfile, path_buffer, FA_WRITE | FA_OPEN_ALWAYS) || f_lseek(&logfile, f_size(&logfile));
-	
-	// If opeaning file is successfull
-	if(rc == FR_OK) {
-		printf("Opeaned file %s!\r\n", path_buffer);
-		
-		f_printf(&logfile, "S.N., Timestamp, analog val (mv), analog val(v)\r\n");
-		f_sync(&logfile);
+	memset(path_buffer, 0x00, sizeof path_buffer); // Empty the file path buffer
+	sprintf(path_buffer, "%04d_%02d_D%02d.csv", \
+	(R_Date.RTC_Year + RTC_YOFFSET), R_Date.RTC_Month, R_Date.RTC_Date);
+	printf("Current file : %s.\r\n", path_buffer);
 			
-		flag_file_open = 1;
+	res_check_file = f_stat(path_buffer, &fno); // Get the status where file is present or not
+	
+		
+	if(res_check_file != FR_OK) {	// If file doesnot exists
+		
+		// Open a file in create and write mode
+		res_open_file = f_open(&logfile, path_buffer, FA_WRITE | FA_CREATE_NEW) || f_lseek(&logfile, f_size(&logfile));		
+		
+		// If opeaning file is successfull
+		if(res_open_file == FR_OK) {
+			printf("Opeaned file %s!\r\n", path_buffer);
+			f_printf(&logfile, "S.N., Timestamp, analog val (mv), analog val(v)\r\n");
+			f_sync(&logfile);
+			
+			printf("Placed header : S.N., Timestamp, analog val (mv), analog val(v).\r\n");
+		} else {
+			printf("Failed opening file \'%s\'!\r\n", path_buffer);
+		}
+				
 	} else {
-		printf("Failed opening file %s!\r\n", path_buffer);
+		// Open a file in create/append and write mode 
+		// and move file pointer to the end of file for appending
+		res_open_file = f_open(&logfile, path_buffer, FA_WRITE | FA_OPEN_APPEND);			
+		
+		// If opeaning file is successfull
+		if(res_open_file == FR_OK) {
+			printf("Opeaned file \'%s\'!\r\n", path_buffer);
+		} else {
+			printf("Failed opening file \'%s\'!\r\n", path_buffer);
+		}		
 	}
 }
 
 void stop_logging(void) {
+	// Clear the catched information 
+	f_sync(&logfile);				
 	
-	f_sync(&logfile);				// Clear the catched information 
-	f_close(&logfile);			// Close the file if it is open
-	
-	flag_file_open = 0;			// Clear the flag
-	
-	printf("Closed file %s!\r\n", path_buffer);
+	// Close the file if it is open
+	f_close(&logfile);	
+	res_open_file	= ~FR_OK;
+		
+	printf("Closed file \'%s\'!\r\n", path_buffer);
 	
 	TIM_Cmd(TIM3, DISABLE);	// Disable the interval generator
 	STM_EVAL_LEDOff(LED4);
@@ -261,44 +219,42 @@ void cont_logging(void) {
 	/* Aquire RTC Time */
 	RTC_GetTime(RTC_Format_BIN, &RTCTimeLog);
 	RTC_GetDate(RTC_Format_BIN, &RTCDateLog);
-	
-//	if((RTCTimeLog.RTC_Seconds % 20) == 0)		flag_file_open = 0;
 		
-	if(!flag_file_open) {		// If file name has changed or its initial start
-		start_logging();
-	}
 	
-	// Data log task
-	sprintf(tmp_bfr, "%.5f", ADCAnalogVoltage);
-	if(f_printf(&logfile, "%d, %02d:%02d:%02d, %06d, %s\r\n", 
-		++line_no, RTCTimeLog.RTC_Hours, RTCTimeLog.RTC_Minutes, RTCTimeLog.RTC_Seconds, 
-		ADC1ConvertedVoltage, tmp_bfr)) {
+	if(res_open_file == FR_OK) {
+		
+		// Data log task
+		sprintf(tmp_bfr, "%.5f", ADCAnalogVoltage);
+		if(f_printf(&logfile, "%d, %02d:%02d:%02d, %06d, %s\r\n", 
+			++line_no, RTCTimeLog.RTC_Hours, RTCTimeLog.RTC_Minutes, RTCTimeLog.RTC_Seconds, 
+			ADC1ConvertedVoltage, tmp_bfr)) {
 
-		printf("Logged line on file : %d,%02d-%02d-%02d, %06d, %.5f\r\n",\
-			line_no, RTCTimeLog.RTC_Hours, RTCTimeLog.RTC_Minutes, RTCTimeLog.RTC_Seconds, 
-			ADC1ConvertedVoltage, ADCAnalogVoltage);
-		}
-
-	f_sync(&logfile);
-	f_close(&logfile);
+			printf("Logged line on file : %d,%02d-%02d-%02d, %06d, %.5f\r\n",\
+				line_no, RTCTimeLog.RTC_Hours, RTCTimeLog.RTC_Minutes, RTCTimeLog.RTC_Seconds, 
+				ADC1ConvertedVoltage, ADCAnalogVoltage);
+			}
+		f_sync(&logfile);		
+	} else {
+		printf("Error: Failed opeaning file \'%s\'!!\r\n", path_buffer);
+	}
 }
 
 void TIM3_IRQHandler() {
-	
-	if(!flag_disk_mount)	{ // Proceed only when the disk is mounted successfully
-		printf("failed mounting SD card. Make sure that proper SD card is inserted.\r\n");
-		return;
+		
+	if(res_disk_mount == FR_OK) {		// if disk is mounted proceed to check the file
+		if(res_open_file == FR_OK) {	// if file is open proceed writing into it
+			STM_EVAL_LEDOn(LED4);
+			cont_logging();	
+			STM_EVAL_LEDOff(LED4);
+		} else {
+			printf("ERROR: Failed opeaning file: \'%s\' .\r\n", path_buffer);
+		}
+	} else {
+		printf("ERROR: SD card not mounted. Make sure that SD card is inserted properly!\r\n");
 	}
-	
-//	if(flag_file_open) {
-		STM_EVAL_LEDOn(LED4);
-		cont_logging();	
-		STM_EVAL_LEDOff(LED4);
-//	}
-	
+		
 	TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
-	return;
-	
+	return;	
 }
 
 // Push button IRQ Handler
@@ -312,26 +268,28 @@ void EXTI0_1_IRQHandler(void) {
 			printf("Logging stopped!\r\n");
 			
 			// ----- Read the file logged and display the content ----- //			
-			rd = f_open(&getfile, path_buffer, FA_OPEN_EXISTING | FA_READ);
+			res_open_file_read = f_open(&getfile, path_buffer, FA_OPEN_EXISTING | FA_READ);
 			
-			if(rd == FR_OK) {
-				printf("file content  the file \'%s\' are : \r\n", path_buffer);	
+			if(res_open_file_read == FR_OK) {
+				printf("File content  the file \'%s\' are : \r\n", path_buffer);	
 				memset(fileReadBuffr, 0x00, sizeof(fileReadBuffr));
-//				for(ctr = 0; ctr < 100; ctr++) {
-//				do {
-					while(!f_eof(&getfile)) {
-						f_gets (fileReadBuffr, sizeof(fileReadBuffr), &getfile);
-						printf(fileReadBuffr);
-					}
-//					if(f_eof(&getfile))	break;
-//					f_lseek(&getfile, strlen(fileReadBuffr));
-//				} while (f_eof(&getfile));
+				
+				// Read line by line till the end of file
+				while(!f_eof(&getfile)) {
+					STM_EVAL_LEDToggle(LED4);
+					f_gets (fileReadBuffr, sizeof(fileReadBuffr), &getfile);
+					printf(fileReadBuffr);
+				}
+				STM_EVAL_LEDOff(LED4);
 			}
 			f_close(&getfile);
+			res_open_file_read = ~FR_OK;
 			
-		} else {
-			init_TIM3(); 		// Start logging 
-			printf("Logging Started!\r\n");
+		} else {	
+			// Enable the interval generator
+			printf("Trigger data logging!\r\n");			
+			start_logging();
+			init_TIM3(); 		// Start Interval generator 		
 			button_prev = 1;
 		} 
 		EXTI_ClearITPendingBit(USER_BUTTON_EXTI_LINE);

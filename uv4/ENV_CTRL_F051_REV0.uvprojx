@@ -390,6 +390,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\util_prj.c</FilePath>
             </File>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\delay.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

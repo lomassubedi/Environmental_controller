@@ -9,11 +9,14 @@
 #include "ff.h"
 #include "util_prj.h"
 #include "RTC_STM.h"
+#include "delay.h"
 
 // Define log file name size in bytes
 #define 		LOG_MAX_FILE_NAME_SIZE					50
-#define			LOG_MAX_FILE_PATH_SIZE					200
+#define			LOG_MAX_FILE_PATH_SIZE					100
+#define			LOG_RD_FILE_SIZE								200
 #define			RTC_YOFFSET											2000
+
 
 #define			LOG_INTERVAL										300		// Define data log interval of 100ms
 
