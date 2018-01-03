@@ -15,7 +15,9 @@ struct __FILE {
 FILE __stdout;
 
 int main(void) {
-		
+	RTC_TimeTypeDef myRTCTime;
+	RTC_DateTypeDef myRTCDate;
+	
 	SysTick_Config(SystemCoreClock / 1000);	
 	
 	STM_EVAL_LEDInit(LED3);
@@ -36,6 +38,17 @@ int main(void) {
   while (1) {
 				
 		modbus_update();	
-	
+		
+		if(flagLEDIndi) {
+			
+			flagLEDIndi = 0;
+			STM_EVAL_LEDToggle(LED3);
+			RTC_GetTime(RTC_Format_BIN, &myRTCTime);
+			RTC_GetDate(RTC_Format_BIN, &myRTCDate);
+			#if 0
+				printf("Year: %d, \tMonth: %d, \tDay: %d, \t", (myRTCDate.RTC_Year + 2000), myRTCDate.RTC_Month, myRTCDate.RTC_Date);
+				printf("Hour: %d, \tMinute: %d, \tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);							
+			#endif
+		}					
 	}	
 }

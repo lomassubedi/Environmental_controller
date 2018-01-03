@@ -288,9 +288,13 @@ void EXTI0_1_IRQHandler(void) {
 		} else {	
 			// Enable the interval generator
 			printf("Trigger data logging!\r\n");			
-			start_logging();
-			init_TIM3(); 		// Start Interval generator 		
-			button_prev = 1;
+			if(res_disk_mount == FR_OK) {		// proceed only if disk is mounted
+				start_logging();
+				init_TIM3(); 		// Start Interval generator 	
+				button_prev = 1;
+			} else {
+					printf("ERROR: SD card not mounted. Make sure that SD card is inserted properly!\r\n");
+			}
 		} 
 		EXTI_ClearITPendingBit(USER_BUTTON_EXTI_LINE);
 	}

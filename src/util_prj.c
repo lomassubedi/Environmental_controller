@@ -1,7 +1,6 @@
 
 #include "util_prj.h"
 
-
 void get_ct_date_time(date_time * date_time_struct) {
 	uint16_t y;
 	uint8_t m;
@@ -35,13 +34,22 @@ void get_ct_date_time(date_time * date_time_struct) {
 			date_time_struct->month = 11;
 	else if(__DATE__[0] == 'D' && __DATE__[1] == 'e' && __DATE__[2] == 'c')
 			date_time_struct->month = 12;
-	else // Do nothing
+	else { /* Do nothing  */ }
 	
 	m = date_time_struct->month;
 	
-	date_time_struct->mday = CMPL_DATE;
-	
-	d = CMPL_DATE;
+	if(__DATE__[5] > '0' && __DATE__[5] <= '9') {
+		
+		if(__DATE__[4] > '0' && __DATE__[4] <= '9') {
+			date_time_struct->mday = (__DATE__[4] - '0') * 10 + (__DATE__[5] - '0');
+		} else {
+			date_time_struct->mday = __DATE__[5] - '0';
+		}
+	} else {
+		date_time_struct->mday = 1;
+	}
+			
+	d = date_time_struct->mday;
 		
 	date_time_struct->wday = (d += m < 3 ? y-- : y - 2, 23*m/9 + d + 4 + y/4- y/100 + y/400)%7; 
 	

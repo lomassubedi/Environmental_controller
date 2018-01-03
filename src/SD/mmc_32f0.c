@@ -115,7 +115,9 @@ void init_spi (void)
 
 	CS_HIGH();			/* Set CS# high */
 
+	/*
 	for (Timer1 = 10; Timer1; ) ;	/* 10ms */
+
 }
 
 
@@ -141,7 +143,7 @@ void rcvr_spi_multi (
 	WORD d;
 
 
-    SPI1->CR2 |= SPI_CR2_DS;	/* Set SPI to 16-bit mode */
+  SPI1->CR2 |= SPI_CR2_DS;	/* Set SPI to 16-bit mode */
 
 	SPI1->DR = 0xFFFF;
 	btr -= 2;
