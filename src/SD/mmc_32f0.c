@@ -115,7 +115,6 @@ void init_spi (void)
 
 	CS_HIGH();			/* Set CS# high */
 
-	/*
 	for (Timer1 = 10; Timer1; ) ;	/* 10ms */
 
 }

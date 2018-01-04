@@ -4,18 +4,20 @@ RTC_InitTypeDef RTC_InitStructure;
 
 void RTC_Config_LSE(void) {
 	
+	date_time my_date_time_LSE;
   RTC_InitTypeDef  RTC_InitStructure;
   RTC_TimeTypeDef  RTC_TimeStruct;
+	RTC_DateTypeDef  RTC_DateStruct;
 
   /* Enable the PWR clock */
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
 
   /* Allow access to RTC */
-//  PWR_BackupAccessCmd(ENABLE);
+  PWR_BackupAccessCmd(ENABLE);
 
   /* Reset RTC Domain */
-  RCC_BackupResetCmd(ENABLE);
-  RCC_BackupResetCmd(DISABLE);
+//  RCC_BackupResetCmd(ENABLE);
+//  RCC_BackupResetCmd(DISABLE);
 
   /* Enable the LSE OSC */
   RCC_LSEConfig(RCC_LSE_ON);
@@ -25,7 +27,13 @@ void RTC_Config_LSE(void) {
 
   /* Select the RTC Clock Source */
   RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE);
-
+	
+	/* Enable RTC clock */
+	RCC_RTCCLKCmd(ENABLE);
+	
+	/* Wait for RTC APB registers synchronization */
+	RTC_WaitForSynchro();
+	
   /* Configure the RTC data register and RTC prescaler */
   /* ck_spre(1Hz) = RTCCLK(LSI) /(AsynchPrediv + 1)*(SynchPrediv + 1)*/
   RTC_InitStructure.RTC_AsynchPrediv = 0x7F;
@@ -33,19 +41,41 @@ void RTC_Config_LSE(void) {
   RTC_InitStructure.RTC_HourFormat   = RTC_HourFormat_24;
   RTC_Init(&RTC_InitStructure);
   
-  /* Set the time to 00h 00mn 00s AM */
-  RTC_TimeStruct.RTC_H12     = RTC_H12_AM;
-  RTC_TimeStruct.RTC_Hours   = 0x00;
-  RTC_TimeStruct.RTC_Minutes = 0x00;
-  RTC_TimeStruct.RTC_Seconds = 0x00;  
-  RTC_SetTime(RTC_Format_BCD, &RTC_TimeStruct);
+//  /* Set the time to 00h 00mn 00s AM */
+//  RTC_TimeStruct.RTC_H12     = RTC_H12_AM;
+//  RTC_TimeStruct.RTC_Hours   = 0x00;
+//  RTC_TimeStruct.RTC_Minutes = 0x00;
+//  RTC_TimeStruct.RTC_Seconds = 0x00;  
+//  RTC_SetTime(RTC_Format_BCD, &RTC_TimeStruct);
 	
+	
+	get_ct_date_time(&my_date_time_LSE);
+	
+  /* Set the time to code compiled time*/
+  RTC_TimeStruct.RTC_H12     = RTC_H12_AM;
+  RTC_TimeStruct.RTC_Hours   = my_date_time_LSE.hour;
+  RTC_TimeStruct.RTC_Minutes = my_date_time_LSE.min;
+  RTC_TimeStruct.RTC_Seconds = my_date_time_LSE.sec;
+	
+  RTC_SetTime(RTC_Format_BIN, &RTC_TimeStruct);
+	
+	// Set the RTC date. compile time Date.
+	RTC_DateStruct.RTC_Year = my_date_time_LSE.year - 2000;
+	RTC_DateStruct.RTC_Month = my_date_time_LSE.month;
+	RTC_DateStruct.RTC_Date = my_date_time_LSE.mday;
+	RTC_DateStruct.RTC_WeekDay = my_date_time_LSE.wday;
+	
+	RTC_SetDate(RTC_Format_BIN, &RTC_DateStruct);
+		
 	RTC_TimeStructInit(&RTC_TimeStruct); 
+	
+	PWR_BackupAccessCmd(DISABLE);
+
 }
 
 
-void RTC_Config_LSI(void)
-{
+void RTC_Config_LSI(void) {
+	
   RTC_TimeTypeDef RTC_TimeStructure;
 	RTC_DateTypeDef RTC_DateStructure;
 	date_time my_date_time;

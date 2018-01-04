@@ -31,7 +31,8 @@ int main(void) {
 	init_usart2();
 	init_modbus();	
 	
-	RTC_Config_LSI();		
+//	RTC_Config_LSI();
+		RTC_Config_LSE();
 	
 	init_sd();	
 		
@@ -45,7 +46,7 @@ int main(void) {
 			STM_EVAL_LEDToggle(LED3);
 			RTC_GetTime(RTC_Format_BIN, &myRTCTime);
 			RTC_GetDate(RTC_Format_BIN, &myRTCDate);
-			#if 0
+			#if 1
 				printf("Year: %d, \tMonth: %d, \tDay: %d, \t", (myRTCDate.RTC_Year + 2000), myRTCDate.RTC_Month, myRTCDate.RTC_Date);
 				printf("Hour: %d, \tMinute: %d, \tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);							
 			#endif

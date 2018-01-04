@@ -18,7 +18,7 @@
 #define			RTC_YOFFSET											2000
 
 
-#define			LOG_INTERVAL										300		// Define data log interval of 100ms
+#define			LOG_INTERVAL										300		// Define data log interval in ms
 
 extern uint8_t flag_disk_mount;
 

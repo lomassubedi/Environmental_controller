@@ -39,7 +39,6 @@ DWORD get_fattime (void) {
 			| ((DWORD)FATRTCTime.RTC_Seconds>> 1);
 }
 
-
 void init_TIM3(void) {
 	
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStruct;
