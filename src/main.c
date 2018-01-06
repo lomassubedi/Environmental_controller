@@ -17,7 +17,7 @@ FILE __stdout;
 int main(void) {
 	RTC_TimeTypeDef myRTCTime;
 	RTC_DateTypeDef myRTCDate;
-	
+		
 	SysTick_Config(SystemCoreClock / 1000);	
 	
 	STM_EVAL_LEDInit(LED3);
@@ -31,10 +31,9 @@ int main(void) {
 	init_usart2();
 	init_modbus();	
 	
-//	RTC_Config_LSI();
-		RTC_Config_LSE();
+	RTC_Config_LSE();
 	
-	init_sd();	
+	init_sd();
 		
   while (1) {
 				
@@ -49,6 +48,7 @@ int main(void) {
 			#if 1
 				printf("Year: %d, \tMonth: %d, \tDay: %d, \t", (myRTCDate.RTC_Year + 2000), myRTCDate.RTC_Month, myRTCDate.RTC_Date);
 				printf("Hour: %d, \tMinute: %d, \tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);							
+				printf("Backup register value: 0x%x\r\n", RTC_BKP_DR0);
 			#endif
 		}					
 	}	

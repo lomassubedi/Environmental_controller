@@ -12,12 +12,13 @@
 #include "config.h"
 #include "util_prj.h"
 
+// Random Magic Value
+#define 	BKP_VALUE		0x32F0
+
 // Use external 32.768KHz low frequency crystal
 extern void RTC_Config_LSE(void);
 
 // Use internal low frequency clock
 extern void RTC_Config_LSI(void);
-
-extern RTC_InitTypeDef RTC_InitStructure;
 
 #endif // RTC_STM_H_
