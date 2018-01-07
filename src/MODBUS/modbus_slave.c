@@ -128,11 +128,15 @@ void sendPacket(uint8_t bufferSize) {
 		usartPutc(frame[i]);
 		
 		// TODO
+		// Implement DE/RE for RS485
+		
+		// TODO
 		// Put space of about 1.5 characters while sending each bytes from a frame
 	} 
 		// TODO
 		// Put space of about 3.5 characters as the end of the transmission
 		// Or utilize the timer 2
+		
 }
 
 void exceptionResponse(unsigned char exception) {

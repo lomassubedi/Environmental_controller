@@ -9,16 +9,18 @@ void RTC_Config_LSE(void) {
   RTC_TimeTypeDef  RTC_TimeStruct;
 	RTC_DateTypeDef  RTC_DateStruct;
 	
-	if (RTC_ReadBackupRegister(RTC_BKP_DR0) != BKP_VALUE) {
+	volatile uint32_t BackUpVal = RTC_ReadBackupRegister(RTC_BKP_DR0);
+	
+	if (BackUpVal != BKP_VALUE) {
 		/* Enable the PWR clock */
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
 
 		/* Allow access to RTC */
-		PWR_BackupAccessCmd(ENABLE);
+		PWR_BackupAccessCmd(ENABLE);		
 
 		/* Reset RTC Domain */
-	//  RCC_BackupResetCmd(ENABLE);
-	//  RCC_BackupResetCmd(DISABLE);
+//		RCC_BackupResetCmd(ENABLE);
+//		RCC_BackupResetCmd(DISABLE);
 
 		/* Enable the LSE OSC */
 		RCC_LSEConfig(RCC_LSE_ON);
@@ -77,7 +79,6 @@ void RTC_Config_LSE(void) {
 		}
 	}	
 }
-
 
 void RTC_Config_LSI(void) {
 	
