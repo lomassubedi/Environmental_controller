@@ -21,9 +21,14 @@
 #define			VALUE_EEPRM_WRITE_DONE			1
 #define			BYTES_EEPRM_STATUS_FLAG			1
 
+#define 		ADDRESS_EEPRM_CURRENT_PRF		1
+
 
 #define 		TOOLS_SIZE			100		// TOOLS size (60 Bytes in actual)
 #define			PROFILE_SIZE		600		// Profile size 600 Bytes (In actual its 496 Bytes)
+
+// Variable to point current/active profile
+extern uint8_t active_profile;
 
 enum EEPROM_ADDRESS {
 	// Address 0-99 is reserved for now !!

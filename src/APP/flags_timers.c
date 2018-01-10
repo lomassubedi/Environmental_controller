@@ -1,6 +1,6 @@
 #include "flags_timers.h"
 
-uint8_t flagPowerUp = YES;
+uint8_t flagPowerUp = NO;
 uint8_t flagProfileTranstionFunction = NO;
 uint8_t profileNumberPrevious = 1;
 uint8_t flagCycleFlipToLightCycle = NO;

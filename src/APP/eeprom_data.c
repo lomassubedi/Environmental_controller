@@ -4,6 +4,8 @@
 
 #include "eeprom_data.h"
 
+uint8_t active_profile;
+
 TOOLS dummyInitTools = {
 	1,						// Ad1_DeviceType
 	

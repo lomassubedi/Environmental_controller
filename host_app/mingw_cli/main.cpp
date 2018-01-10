@@ -10,53 +10,39 @@ char* portName = "\\\\.\\COM9";
 
 char incomingData[MAX_DATA_LENGTH];
 
-//Control signals for turning on and turning off the led
-//Check arduino code
-char ledON[] = "ON\n";
-char ledOFF[] = "OFF\n";
-
 //Blinking Delay
 const unsigned int BLINKING_DELAY = 1000;
 
 //Arduino SerialPort object
-SerialPort *arduino;
+SerialPort *RS485Port;
 
-//If you want to send data then define "SEND" else comment it out
-#define SEND
+char stringArrya[] = "This is a test string!";
 
-void exampleReceiveData(void)
-{
-    int readResult = arduino->readSerialPort(incomingData, MAX_DATA_LENGTH);
+
+void exampleReceiveData(void) {
+    int readResult = RS485Port->readSerialPort(incomingData, MAX_DATA_LENGTH);
     if(readResult) {
         printf("%s", incomingData);
         memset(incomingData, 0, sizeof incomingData);
-        }
-//    Sleep(10);
+    }
 }
 
-void exampleWriteData(unsigned int delayTime)
-{
-    arduino->writeSerialPort(ledON, MAX_DATA_LENGTH);
+void exampleWriteData(unsigned int delayTime) {
+    RS485Port->writeSerialPort(ledON, MAX_DATA_LENGTH);
     Sleep(delayTime);
-    arduino->writeSerialPort(ledOFF, MAX_DATA_LENGTH);
+    RS485Port->writeSerialPort(ledOFF, MAX_DATA_LENGTH);
     Sleep(delayTime);
 }
 
 
 int main() {
 
-    arduino = new SerialPort(portName);
+    RS485Port = new SerialPort(portName);
 
-    //Checking if arduino is connected or not
-    if (arduino->isConnected()){
+    //Checking if RS485Port is connected or not
+    if (RS485Port->isConnected()){
         std::cout << "Connection established at port " << portName << endl;
     }
-
-    #ifdef SEND
-        while(arduino->isConnected()) exampleWriteData(BLINKING_DELAY);
-    #else // SEND
-        while(arduino->isConnected()) exampleReceiveData();
-    #endif // SEND
 
 return 0;
 }
