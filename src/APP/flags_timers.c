@@ -3,9 +3,13 @@
 uint8_t flagPowerUp = NO;
 uint8_t flagProfileTranstionFunction = NO;
 uint8_t profileNumberPrevious = 1;
+
+CYCL_STATE flagCurrentCycle = UNKNOWN;
+
 uint8_t flagCycleFlipToLightCycle = NO;
 uint8_t flagCycleFlipToDarkCycle = NO;
-uint8_t flagAd1PreviousCycle = DARK;
+
+CYCL_STATE flagAd1PreviousCycle = DARK;
 
 TIME_M timePreviousLightOn = {6, 0, 0};
 TIME_M timePreviousLightOff = {18, 0, 0};

@@ -40,11 +40,17 @@
 #define 		CLOSE				0
 #define			OPEN				1
 
+// Invalid or unknown
+
+#define			INVALID			-1
+#define			UNKNOWN			-1
+
 // ---- Typedefs --
 typedef 		uint8_t		BOOL;
 typedef			uint8_t 	TRISTATE_OPERATION_MODE;
 typedef			uint8_t		CYL_GEN;
 typedef 		uint8_t 	UNIT_S;
+typedef			uint8_t   CYCL_STATE;
 
 typedef __packed struct mTIME {
 	uint8_t HH;

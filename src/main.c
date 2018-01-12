@@ -8,6 +8,8 @@
 #include "sdlog.h"
 #include "diskio.h"
 
+#include "setup.h"
+
 struct __FILE {
     int dummy;
 };
@@ -151,9 +153,19 @@ int main(void) {
 	// Read the active profile data from an EEPROM
 	get_profile(active_profile);
 	
-//	if(profile->Ad1_Light_Operation_Mode == ALWAYS_ON) {
-//	} else if(profile->Ad1_Light_Operation_Mode == ALWAYS_OFF){
-//	} else if((myRTCDate.RTC_Year > )(myRTCTime.RTC_Hours > ) {
+	initial_setup();
+	
+//	switch(profile->Ad1_Light_Operation_Mode) {
+//		case ALWAYS_ON:
+//			// Set "Current Cycle flag"
+//			flagCurrentCycle = LIGHT;
+//			flagAd1PreviousCycle = LIGHT;
+//			flagCycleFlipToLightCycle = YES;			
+//			break;
+//		
+//		case ALWAYS_OFF:
+//			break;
+//		
 //	}
 	
 	

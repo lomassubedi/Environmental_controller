@@ -7,9 +7,13 @@
 extern uint8_t flagPowerUp;
 extern uint8_t flagProfileTranstionFunction;
 extern uint8_t profileNumberPrevious;
+
+extern CYCL_STATE flagCurrentCycle;
+
 extern uint8_t flagCycleFlipToLightCycle;
 extern uint8_t flagCycleFlipToDarkCycle;
-extern uint8_t flagAd1PreviousCycle;
+
+extern CYCL_STATE flagAd1PreviousCycle;
 
 extern TIME_M timePreviousLightOn;
 extern TIME_M timePreviousLightOff;

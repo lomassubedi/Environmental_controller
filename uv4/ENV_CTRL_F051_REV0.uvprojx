@@ -415,6 +415,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\APP\eeprom_profile.c</FilePath>
             </File>
+            <File>
+              <FileName>setup.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\APP\setup.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
