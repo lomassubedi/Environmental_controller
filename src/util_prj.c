@@ -57,3 +57,44 @@ void get_ct_date_time(date_time * date_time_struct) {
 	date_time_struct->min = CMPL_MIN;
 	date_time_struct->sec = CMPL_SEC;		
 }
+
+uint8_t time_cmpr(TIME_M * time_first, TIME_M * time_second) {
+		
+	if(((time_first->HH * 60 * 60) + (time_first->MM * 60) + time_first->SS) \
+		> \
+	((time_second->HH * 60 * 60) + (time_second->MM * 60) + time_second->SS)) {		
+		return TIME_GREATOR;		// If greator return 1
+	} else if(((time_first->HH * 60 * 60) + (time_first->MM * 60) + time_first->SS) \
+		== \
+	((time_second->HH * 60 * 60) + (time_second->MM * 60) + time_second->SS)){
+		return TIME_EQUAL;		// If Equal return 2
+	} else {
+		return TIME_LESS;		// If Less return 0
+	}
+}
+
+void time_diff(TIME_M * time_first, TIME_M * time_second, TIME_M * time_dest) {
+	
+	uint32_t total_second_first = 0, total_second_second = 0, total_second_diff = 0;
+	int8_t diff_ind;
+	
+	total_second_first = (time_first->HH * 60 * 60) + (time_first->MM * 60) + time_first->SS;
+	total_second_second = (time_second->HH * 60 * 60) + (time_second->MM * 60) + time_second->SS;
+	
+//	if(total_second_first > total_second_second) {		
+//		total_second_diff = total_second_first - total_second_second;
+//		diff_ind = 1;
+//	} else {
+//		total_second_diff = total_second_second - total_second_first;
+//		diff_ind = 0;
+//	}
+	
+	total_second_diff = total_second_first - total_second_second;
+	
+	time_dest->HH = (total_second_diff / 60) / 60;
+	time_dest->MM = (total_second_diff / 60) % 60;
+	time_dest->SS = total_second_diff % 60;
+	
+//	return diff_ind;
+	
+}

@@ -28,6 +28,7 @@
 #define			ALWAYS_ON		1
 #define			NORMAL			2
 
+
 // -- CYCL or GEN Constants ---
 #define 		CYL					1
 #define 		GEN					0

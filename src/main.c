@@ -153,21 +153,19 @@ int main(void) {
 	// Read the active profile data from an EEPROM
 	get_profile(active_profile);
 	
-	initial_setup();
+	profile->Ad1_Light_Operation_Mode = NORMAL;
 	
-//	switch(profile->Ad1_Light_Operation_Mode) {
-//		case ALWAYS_ON:
-//			// Set "Current Cycle flag"
-//			flagCurrentCycle = LIGHT;
-//			flagAd1PreviousCycle = LIGHT;
-//			flagCycleFlipToLightCycle = YES;			
-//			break;
-//		
-//		case ALWAYS_OFF:
-//			break;
-//		
-//	}
+	//Setup Dummy Light Off Time
+	profile->Ad1_Light_OnTime.HH = 23;
+	profile->Ad1_Light_OnTime.MM = 11;
+	profile->Ad1_Light_OnTime.SS = 15;	
 	
+	//Set Dummy Light On Time
+	profile->Ad1_Light_OffTime.HH = 12;
+	profile->Ad1_Light_OffTime.MM = 45;
+	profile->Ad1_Light_OffTime.SS = 23;
+	
+	initial_setup();	
 	
   while (1) {
 				

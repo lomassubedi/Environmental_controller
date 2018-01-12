@@ -2,6 +2,7 @@
 #define UTIL_PRJ_H_
 
 #include "config.h"
+#include "data_types.h"
 
 #define CMPL_YEAR ((__DATE__[7] - '0') * 1000 +  (__DATE__[8] - '0') * 100 + (__DATE__[9] - '0') * 10 + __DATE__[10] - '0')
 
@@ -45,6 +46,10 @@
 #define PushButton_Pin GPIO_Pin_0
 #define PushButton_GPIO GPIOA
 
+#define		TIME_LESS				0
+#define 	TIME_GREATOR		1
+#define		TIME_EQUAL			2
+
 //GPIO_InitTypeDef GPIO_InitStructure;
 
 typedef struct {
@@ -58,5 +63,13 @@ typedef struct {
 } date_time;
 
 void get_ct_date_time(date_time *);
+
+// Compare two TIME_M values and return 1 if the first
+// time argument is greator than second TIME_M argument
+uint8_t time_cmpr(TIME_M * , TIME_M *);
+
+// Get difference between two TIME_M and pass the difference in 
+// the third argument
+void time_diff(TIME_M *, TIME_M *, TIME_M *);
 
 #endif // UTIL_PRJ_H_
