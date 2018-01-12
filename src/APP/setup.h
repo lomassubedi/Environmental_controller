@@ -9,10 +9,4 @@
 
 void initial_setup(void);
 
-void set_flag_light_light_yes(void);
-
-void set_flag_dark_dark_yes(void);
-
-void set_light_dark_duration(void);
-
 #endif // End of _SETUP_H
