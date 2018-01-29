@@ -37,10 +37,12 @@ static void set_light_dark_duration(void) {
 	return;
 }
 
+
 void initial_setup(void) {
 	
 	RTC_TimeTypeDef nowRTCTime;
 	TIME_M rtcTime;
+	
 	flagAd1CO2Inj = NO;
 	
 	RTC_GetTime(RTC_Format_BIN, &nowRTCTime);
@@ -52,12 +54,12 @@ void initial_setup(void) {
 	// if Ad1_Light_Operation_Mode is always ON
 	if(profile->Ad1_Light_Operation_Mode == ALWAYS_ON) {
 		set_flag_light_light_yes();	
-		set_light_dark_duration();
+//		set_light_dark_duration();
 		
 	// If Ad1_Light_Operation_Mode is Always OFF
 	} else if(profile->Ad1_Light_Operation_Mode == ALWAYS_OFF){
 		set_flag_dark_dark_yes();
-		set_light_dark_duration();
+//		set_light_dark_duration();
 		
 	// If current time equals Ad1 Light Normal operation On Time
 	} else if(time_cmpr(&rtcTime, &profile->Ad1_Light_OnTime) == TIME_EQUAL) {	
@@ -92,7 +94,7 @@ void initial_setup(void) {
 				set_light_dark_duration();		
 			}
 		
-	} else if(time_cmpr(&profile->Ad1_Light_OffTime, &profile->Ad1_Light_OnTime) == TIME_EQUAL) {
+	} else if(time_cmpr(&profile->Ad1_Light_OffTime, &profile->Ad1_Light_OnTime) == TIME_GREATOR) {
 		
 			set_flag_dark_dark_yes();
 			set_light_dark_duration();

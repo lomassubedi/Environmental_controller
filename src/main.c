@@ -123,7 +123,7 @@ int main(void) {
 	
 	init_usart2();
 	
-	init_modbus();	
+	init_modbus();
 	
 	I2C_EEPROM_24C0x_Init();
 	
@@ -153,17 +153,17 @@ int main(void) {
 	// Read the active profile data from an EEPROM
 	get_profile(active_profile);
 	
-	profile->Ad1_Light_Operation_Mode = NORMAL;
+	profile->Ad1_Light_Operation_Mode = ALWAYS_OFF;
 	
 	//Setup Dummy Light Off Time
-	profile->Ad1_Light_OnTime.HH = 23;
-	profile->Ad1_Light_OnTime.MM = 11;
-	profile->Ad1_Light_OnTime.SS = 15;	
+	profile->Ad1_Light_OffTime.HH = 5;
+	profile->Ad1_Light_OffTime.MM = 01;
+	profile->Ad1_Light_OffTime.SS = 22;	
 	
 	//Set Dummy Light On Time
-	profile->Ad1_Light_OffTime.HH = 12;
-	profile->Ad1_Light_OffTime.MM = 45;
-	profile->Ad1_Light_OffTime.SS = 23;
+	profile->Ad1_Light_OnTime.HH = 6;
+	profile->Ad1_Light_OnTime.MM = 57;
+	profile->Ad1_Light_OnTime.SS = 33;
 	
 	initial_setup();	
 	

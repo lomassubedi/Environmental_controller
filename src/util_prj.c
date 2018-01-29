@@ -81,20 +81,10 @@ void time_diff(TIME_M * time_first, TIME_M * time_second, TIME_M * time_dest) {
 	total_second_first = (time_first->HH * 60 * 60) + (time_first->MM * 60) + time_first->SS;
 	total_second_second = (time_second->HH * 60 * 60) + (time_second->MM * 60) + time_second->SS;
 	
-//	if(total_second_first > total_second_second) {		
-//		total_second_diff = total_second_first - total_second_second;
-//		diff_ind = 1;
-//	} else {
-//		total_second_diff = total_second_second - total_second_first;
-//		diff_ind = 0;
-//	}
-	
 	total_second_diff = total_second_first - total_second_second;
 	
 	time_dest->HH = (total_second_diff / 60) / 60;
 	time_dest->MM = (total_second_diff / 60) % 60;
 	time_dest->SS = total_second_diff % 60;
-	
-//	return diff_ind;
 	
 }
