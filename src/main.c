@@ -105,7 +105,9 @@ void get_profile(uint8_t prof_num) {
 
 int main(void) {
 	RTC_TimeTypeDef myRTCTime;
-	RTC_DateTypeDef myRTCDate;	
+	RTC_DateTypeDef myRTCDate;
+
+	TIME_M timeRTC;
 	
 	/*--------------------------------------
 	 * MCU POWER ON, INITIALIZE MCU,
@@ -170,6 +172,54 @@ int main(void) {
   while (1) {
 				
 		modbus_update();	
+		
+		/* --------------------- 
+		 * Day counter software 
+		 * -----------------------*/
+		RTC_GetTime(RTC_Format_BIN, &myRTCTime);
+		
+		timeRTC.HH = myRTCTime.RTC_Hours; timeRTC.MM = myRTCTime.RTC_Minutes; timeRTC.SS = myRTCTime.RTC_Seconds;
+		
+		// ----- Day Counter Software Implementation -----
+		if(profile->Ad1_Light_Operation_Mode == NORMAL) {
+			
+			if(time_cmpr(&timeRTC, &profile->Ad1_Light_OnTime) == TIME_EQUAL) {				
+				// Get the day count value from EEPROM
+				sEE_ReadBuffer(&day_count, ADDRESS_EEPRM_DAY_COUNT, sizeof(day_count));
+				// Increament day count
+				day_count++;
+				// Write the new day count value at EEPROM
+				sEE_WriteBuffer(&day_count, ADDRESS_EEPRM_DAY_COUNT, sizeof(day_count));
+			}
+			
+		} else {
+			// Is Master Current DT is 00:00:00
+			if((myRTCTime.RTC_Hours == 0) && (myRTCTime.RTC_Minutes == 0) && (myRTCTime.RTC_Seconds == 0)) {				
+				// Get the day count value from EEPROM
+				sEE_ReadBuffer(&day_count, ADDRESS_EEPRM_DAY_COUNT, sizeof(day_count));
+				// Increament day count
+				day_count++;
+				// Write the new day count value at EEPROM
+				sEE_WriteBuffer(&day_count, ADDRESS_EEPRM_DAY_COUNT, sizeof(day_count));
+			}
+		}
+		
+		// Light Cycle dark cycle elapsed time
+		if(time_cmpr(&profile->Ad1_Light_OffTime, &profile->Ad1_Light_OnTime) == TIME_GREATOR) {
+			
+			if(flagCurrentCycle == LIGHT) {
+				
+				time_diff(&timeRTC, &profile->Ad1_Light_OnTime, &profile->Ad1_Light_LC_TimeElapsed);
+
+				time_diff(&profile->Ad1_Light_LC_TimeRemain, &profile->Ad1_Light_OffTime, &timeRTC);				
+				
+			} else {
+				time_diff(&timeRTC, &profile->Ad1_Light_OffTime, &profile->Ad1_Light_LC_TimeElapsed);
+
+				time_diff(&profile->Ad1_Light_LC_TimeRemain, &profile->Ad1_Light_OnTime, &timeRTC);					
+			}
+		}
+		/* --------- End of Day counter software ------------ */
 		
 		if(flagLEDIndi) {
 			

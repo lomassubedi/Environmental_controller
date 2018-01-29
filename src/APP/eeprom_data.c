@@ -6,6 +6,8 @@
 
 uint8_t active_profile;
 
+uint8_t day_count;
+
 TOOLS dummyInitTools = {
 	1,						// Ad1_DeviceType
 	
@@ -68,6 +70,10 @@ PROFILE dummyInitProfile = {
 	{1, 0, 0},			// Ad1_Light_OffTime
 	{0, 0, 0},			// Ad1_Light_LC_Duration
 	{0, 0, 0},			// Ad1_Light_DC_Duration
+	
+	{0, 0, 0},			// Ad1_Light_LC_TimeElapsed
+	{0, 0, 0},			// Ad1_Light_DC_TimeElapsed
+	
 	{0, 0, 0},			// Ad1_Light_LC_TimeRemain
 	{0, 0, 0},			// Ad1_Light_DC_TimeRemain
 	

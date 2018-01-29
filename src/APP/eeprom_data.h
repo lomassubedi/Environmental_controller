@@ -23,12 +23,17 @@
 
 #define 		ADDRESS_EEPRM_CURRENT_PRF		1
 
+#define 		ADDRESS_EEPRM_DAY_COUNT			2
+
 
 #define 		TOOLS_SIZE			100		// TOOLS size (60 Bytes in actual)
 #define			PROFILE_SIZE		600		// Profile size 600 Bytes (In actual its 496 Bytes)
 
 // Variable to point current/active profile
 extern uint8_t active_profile;
+
+// Variable for storing day count value 
+extern uint8_t day_count;
 
 enum EEPROM_ADDRESS {
 	// Address 0-99 is reserved for now !!
@@ -147,6 +152,10 @@ typedef __packed struct profile {
 
 	TIME_M Ad1_Light_LC_Duration;
 	TIME_M Ad1_Light_DC_Duration;
+	
+	TIME_M Ad1_Light_LC_TimeElapsed;
+	TIME_M Ad1_Light_DC_TimeElapsed;
+	
 	TIME_M Ad1_Light_LC_TimeRemain;
 	TIME_M Ad1_Light_DC_TimeRemain;
 	
