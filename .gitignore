@@ -28,3 +28,10 @@ host_app/cli_scripts/.idea/*.*
 
 host_app/CLI_env_master/Debug/*.*
 host_app/CLI_env_master/CLI_env_master/Debug/*.*
+
+
+EspMQTTMaster/.pioenvs
+EspMQTTMaster/.piolibdeps
+EspMQTTMaster/.vscode/.browse.c_cpp.db*
+EspMQTTMaster/.vscode/c_cpp_properties.json
+EspMQTTMaster/.vscode/launch.json
