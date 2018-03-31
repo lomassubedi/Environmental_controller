@@ -1,15 +1,19 @@
 import paho.mqtt.client as mqtt #import the client1
 import time
 
-broker_address="192.168.100.81" 
+# broker_address="192.168.100.81"
 # broker_address="192.168.1.89" 
+broker_address = "m14.cloudmqtt.com"
+username = "icqulyad"
+password = "Fyk1fuYGR_PO"
+port = 18772
 
 #broker_address="iot.eclipse.org" #use external broker
 client = mqtt.Client("P1") #create new instance
+client.username_pw_set(username, password)
+client.connect(broker_address, port) #connect to broker
 
-client.connect(broker_address) #connect to broker
-
-print("Connected to the broker !!!")
+print("Connected to the broker !!!", broker_address)
 
 while True:
 	

@@ -2,15 +2,32 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
+#define   HOME
+// #define   OFFICE
+
+#define   INTERNET
+// #define   LOCALHOST
 // Update these with values suitable for your network.
 
-const char* ssid = "yangobahal";
-const char* password = "43A74C699A";
-const char* mqtt_server = "192.168.100.81";
+#ifdef HOME
+  const char* ssid = "yangobahal";
+  const char* password = "43A74C699A";
+  // const char* mqtt_server = "192.168.100.81";
+#endif
 
-// const char* ssid = "internets";
-// const char* password = "CLFA4ABD38";
-// const char* mqtt_server = "192.168.1.89";
+#ifdef OFFICE
+  const char* ssid = "internets";
+  const char* password = "CLFA4ABD38";
+  const char* mqtt_server = "192.168.1.89";
+#endif
+
+#ifdef INTERNET
+  const char* mqtt_server = "m14.cloudmqtt.com";
+  const char* mqttUser = "icqulyad";
+  const char* mqttPassword = "Fyk1fuYGR_PO";
+  const int mqtt_port = 18772;
+#endif
+
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -61,40 +78,71 @@ void callback(char* topic, byte* payload, unsigned int length) {
 }
 
 void reconnect() {
-  // Loop until we're reconnected
-  while (!client.connected()) {
-    Serial.print("Attempting MQTT connection...");
-    // Create a random client ID
-    String clientId = "ESP8266Client-";
-    clientId += String(random(0xffff), HEX);
-    // Attempt to connect
-    if (client.connect(clientId.c_str())) {
-      Serial.println("connected");
-      // ... and resubscribe
-      client.subscribe("profile/+/+");
-    } else {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
-      // Wait 5 seconds before retrying
-      delay(5000);
+
+  #ifdef LOCALHOST
+    // Loop until we're reconnected
+    while (!client.connected()) {
+      Serial.print("Attempting MQTT connection...");
+      // Create a random client ID
+      String clientId = "ESP8266Client-";
+      clientId += String(random(0xffff), HEX);
+          
+      // Attempt to connect
+      if (client.connect(clientId.c_str())) {
+        Serial.println("connected");
+        // ... and resubscribe
+        client.subscribe("profile/+/+");
+        client.subscribe("tools/+/+");
+      } else {
+        Serial.print("failed, rc=");
+        Serial.print(client.state());
+        Serial.println(" try again in 5 seconds");
+        // Wait 5 seconds before retrying
+        delay(5000);
+      }    
     }
-  }
+  #endif
+
+  #ifdef INTERNET
+    while (!client.connected()) {
+      Serial.println("Connecting to MQTT...");
+
+      if (client.connect("ESP8266Client", mqttUser, mqttPassword )) {
+        Serial.println("connected");  
+        // client.publish("esp/test", "Hello from ESP8266 and its Lomas !!!");
+        client.subscribe("profile/+/+");
+      } else {  
+        Serial.print("failed with state ");
+        Serial.print(client.state());
+        delay(2000);  
+      }
+    }
+  #endif
 }
 
 void setup() {
   pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
   Serial.begin(115200);
   setup_wifi();
-  client.setServer(mqtt_server, 1883);
+  
+  #ifdef LOCALHOST
+    client.setServer(mqtt_server, 1883);
+  #endif
+
+  #ifdef INTERNET
+    client.setServer(mqtt_server, mqtt_port);
+  #endif
   client.setCallback(callback);
 }
 
 void loop() {
 
-  if (!client.connected()) {
-    reconnect();
-  }
+  #if 1
+    if (!client.connected()) {
+      reconnect();
+    }
+  #endif
+
   client.loop();
   /*
   long now = millis();
