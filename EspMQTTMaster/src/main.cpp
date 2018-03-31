@@ -4,13 +4,13 @@
 
 // Update these with values suitable for your network.
 
-// const char* ssid = "yangobahal";
-// const char* password = "43A74C699A";
-// const char* mqtt_server = "192.168.100.81";
+const char* ssid = "yangobahal";
+const char* password = "43A74C699A";
+const char* mqtt_server = "192.168.100.81";
 
-const char* ssid = "internets";
-const char* password = "CLFA4ABD38";
-const char* mqtt_server = "192.168.1.89";
+// const char* ssid = "internets";
+// const char* password = "CLFA4ABD38";
+// const char* mqtt_server = "192.168.1.89";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -70,10 +70,8 @@ void reconnect() {
     // Attempt to connect
     if (client.connect(clientId.c_str())) {
       Serial.println("connected");
-      // Once connected, publish an announcement...
-      client.publish("outTopic", "hello world");
       // ... and resubscribe
-      client.subscribe("profile/light");
+      client.subscribe("profile/+/+");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -98,7 +96,7 @@ void loop() {
     reconnect();
   }
   client.loop();
-
+  /*
   long now = millis();
   if (now - lastMsg > 2000) {
     lastMsg = now;
@@ -108,4 +106,5 @@ void loop() {
     Serial.println(msg);
     client.publish("outTopic", msg);
   }
+  */
 }
