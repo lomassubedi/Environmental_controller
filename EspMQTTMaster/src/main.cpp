@@ -1,18 +1,20 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include "SoftwareSerial.h"
 
-#define   HOME
-// #define   OFFICE
 
-#define   INTERNET
-// #define   LOCALHOST
+//#define   HOME
+#define   OFFICE
+
+//#define   INTERNET
+#define   LOCALHOST
 // Update these with values suitable for your network.
 
 #ifdef HOME
   const char* ssid = "yangobahal";
   const char* password = "43A74C699A";
-  // const char* mqtt_server = "192.168.100.81";
+  const char* mqtt_server = "192.168.100.81";
 #endif
 
 #ifdef OFFICE
@@ -28,9 +30,14 @@
   const int mqtt_port = 18772;
 #endif
 
+// Software Serial port for RS485 application
+#define     RX      12
+#define     TX      14
 
 WiFiClient espClient;
 PubSubClient client(espClient);
+SoftwareSerial RS485Ser(RX, TX, false, 256);
+
 long lastMsg = 0;
 char msg[50];
 int value = 0;
@@ -60,12 +67,17 @@ void setup_wifi() {
 
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
+  RS485Ser.print("Message arrived [");
   Serial.print(topic);
+  RS485Ser.print(topic);
   Serial.print("] ");
+  RS485Ser.print("] ");
   for (int i = 0; i < length; i++) {
     Serial.print((char)payload[i]);
+     RS485Ser.print((char)payload[i]);
   }
   Serial.println();
+  RS485Ser.println();
 
   // Switch on the LED if an 1 was received as first character
   if ((char)payload[0] == '1') {
@@ -123,6 +135,7 @@ void reconnect() {
 void setup() {
   pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
   Serial.begin(115200);
+  RS485Ser.begin(115200);
   setup_wifi();
   
   #ifdef LOCALHOST
