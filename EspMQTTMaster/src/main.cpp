@@ -2,7 +2,7 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include "SoftwareSerial.h"
-
+#include <stdlib.h>
 
 //#define   HOME
 #define   OFFICE
@@ -33,6 +33,10 @@
 // Software Serial port for RS485 application
 #define     RX      12
 #define     TX      14
+#define     RE_DE   2     // RS485 Receive and Data Enable pin
+
+
+#define     TIME_BUS_CAPTURE      5000UL
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -41,6 +45,94 @@ SoftwareSerial RS485Ser(RX, TX, false, 256);
 long lastMsg = 0;
 char msg[50];
 int value = 0;
+
+
+// void parse_mqtt(char * mqttTopic) {
+//     char * token;
+//     char delim = '/';
+
+//     token = strtok(mqttTopic, delim);
+    
+//     // varName = &token;
+//     Serial.println((char *)token);
+    
+//     token = strtok(mqttTopic, delim);
+
+//     // dataTypes = &token;
+//     Serial.println((char *)token);
+  
+// }
+
+
+int split(char * result[], const char * str, unsigned int strSize, char tok) {
+  char buff[strSize]; // it's better to use length of str instead of 1024
+  int idx = 0;
+  int len = 0;
+  int ent_cnt = 0;
+  int st = 0;
+
+  // parse string
+  while (1) {
+    char ch = str[len++]; // need checking len to avoid overflow
+
+    // end of string?
+    if (ch == '\0')
+      break;
+
+    switch (st) {
+    case 0:
+      {
+        if (ch == tok)
+          st++;
+        else
+          buff[idx++] = ch;
+
+        break;
+      }
+
+    case 1:
+      {
+        if (idx) {
+          char * entry = (char * ) malloc(idx + 1);
+          // char entry[idx+1];
+          int i;
+
+          for (i = 0; i < idx; i++)
+            entry[i] = buff[i];
+
+          entry[i] = '\0';
+          result[ent_cnt++] = entry;
+          idx = 0;
+        }
+
+        // normal char?
+        if (ch != tok)
+          buff[idx++] = ch;
+
+        st--;
+        break;
+      }
+
+    default:
+      break;
+    }
+  }
+
+  // process last part if any
+  if (idx) {
+    char * entry = (char * ) malloc(idx + 1);
+
+    int i = 0;
+    for (i = 0; i < idx; i++)
+      entry[i] = buff[i];
+
+    entry[i] = '\0';
+    result[ent_cnt++] = entry;
+  }
+
+  return ent_cnt;
+}
+
 
 void setup_wifi() {
 
@@ -66,18 +158,30 @@ void setup_wifi() {
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
+
   Serial.print("Message arrived [");
-  RS485Ser.print("Message arrived [");
   Serial.print(topic);
-  RS485Ser.print(topic);
-  Serial.print("] ");
-  RS485Ser.print("] ");
+  Serial.println("] ");
+
+    char * results[100];
+    char payLoad[50];
+    int cnt = split(results, topic, sizeof(topic), '/'); 
+
   for (int i = 0; i < length; i++) {
-    Serial.print((char)payload[i]);
-     RS485Ser.print((char)payload[i]);
+    payLoad[i] = (char)payload[i];
   }
-  Serial.println();
-  RS485Ser.println();
+
+  payLoad[length] = '\0';
+
+  Serial.println(payLoad);
+  
+  /*
+  results[cnt] = payLoad;
+
+  for(int i = 0; i < 100; i++)
+    Serial.println(results[i]);   
+
+  */
 
   // Switch on the LED if an 1 was received as first character
   if ((char)payload[0] == '1') {
@@ -104,7 +208,6 @@ void reconnect() {
         Serial.println("connected");
         // ... and resubscribe
         client.subscribe("profile/+/+");
-        client.subscribe("tools/+/+");
       } else {
         Serial.print("failed, rc=");
         Serial.print(client.state());
@@ -148,6 +251,7 @@ void setup() {
   client.setCallback(callback);
 }
 
+
 void loop() {
 
   #if 1
@@ -156,6 +260,10 @@ void loop() {
     }
   #endif
 
+  
+  if(!(millis() % TIME_BUS_CAPTURE)) {
+    RS485Ser.write(56);
+  }
   client.loop();
   /*
   long now = millis();
