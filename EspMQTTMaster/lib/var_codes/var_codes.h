@@ -65,7 +65,7 @@ enum varCodeTools {
 
 // Var Code Profile enum
 enum varCodeProfile {
-	var_code_Ad1_Light_Operation_Mode = 1,
+	var_code_Ad1_Light_Operation_Mode = 0,
 	
 	var_code_Ad1_Light_OnTime,
 	var_code_Ad1_Light_OffTime,

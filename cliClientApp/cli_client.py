@@ -1,5 +1,7 @@
 import paho.mqtt.client as mqtt #import the client1
 import time
+import random
+import profile_vars as prof
 
 # Home
 #broker_address="192.168.100.81"
@@ -22,12 +24,30 @@ client.connect(broker_address)
 
 print("Connected to the broker !!!", broker_address)
 
-while True:
+a = 1
+
+while a:
 	
 	the_input = input('->')
 	profileCommand, profileNoCommand, varCommand, argument = the_input.split()
-	command = profileCommand + "/" + profileNoCommand + "/" + varCommand
+	command = profileCommand + "/" + profileNoCommand + "/" + varCommand	
 	client.publish(command, argument) #publish
 	print("Publishing : " + command + " " + argument)
-	time.sleep(1)
+	#time.sleep(1)
+
 	
+	'''
+	# a = 1
+	a = a - 1
+	b = 0
+	argumentList = ["ON", "OFF"]
+	for i in range(0, 21):
+		for indx in range(0, len(prof.varCodeProfile)):
+			b = b + 1
+			command = "profile" + "/" + str(i) + "/" + prof.varCodeProfile[indx] + "--> " + str(b)
+			argument = argumentList[0]
+			random.shuffle(argumentList)
+			client.publish(command, argument) #publish
+			print("Publishing : " + command + " " + argument)
+			#time.sleep(0.1)	
+	'''
