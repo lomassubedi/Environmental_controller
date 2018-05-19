@@ -18,16 +18,18 @@
 #define   LOCALHOST
 // Update these with values suitable for your network.
 
-#ifdef HOME_
+
+
+#ifdef HOME
   const char* ssid = "yangobahal";
   const char* password = "43A74C699A";
   const char* mqtt_server = "192.168.100.81";
 #endif
 
-#ifdef HOME
+#ifdef HOME_
   const char* ssid = "Bee";
   const char* password = "p@ssw0rd";
-  const char* mqtt_server = "192.168.1.100";
+  const char* mqtt_server = "192.168.1.104";
 #endif
 
 #ifdef OFFICE
@@ -49,7 +51,7 @@
 #define     RE_DE   2     // RS485 Receive and Data Enable pin
 
 #define     TIME_BUS_CAPTURE      5000UL
-#define     SIZE_MQTT_MESSAGE     100
+#define     SIZE_MQTT_MESSAGE     200
 #define     SIZE_MQTT_PAYLOAD     20
 
 WiFiClient espClient;
@@ -60,6 +62,7 @@ SoftwareSerial RS485Ser(RX, TX, false, 256);
  * Variables to store MQTT information
  **/
 long lastMsg = 0;
+uint8_t frame[100];
 char msg[50];
 int value = 0;
 char * mqttMsg[SIZE_MQTT_MESSAGE];
@@ -133,7 +136,7 @@ void reconnect() {
 // ----------------- Custom functions Codes -------------
 void callback(char* topic, byte* payload, unsigned int length) {
 
-  uint8_t cnt = 0;
+  unsigned char cnt = 0;
   char *p = strtok(topic, "/");
 
   while(p != NULL) {
@@ -142,13 +145,15 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
 
   for (int i = 0; i < length; i++) {
-    mqttPayLoad[i] = (char)mqttPayLoad[i];
+    mqttPayLoad[i] = (char)payload[i];
   }
 
-  mqttPayLoad[length] = '\0';
+  mqttPayLoad[length] = '\0';  
   mqttMsg[cnt] = mqttPayLoad;
 
   for(int i = 0; i <= cnt; i++) {
+    Serial.print(i);
+    Serial.print(". ");
     Serial.print(mqttMsg[i]); 
     Serial.write("\t");
   }
@@ -157,12 +162,30 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   cnt = 0;
 
-  char frame[100];
+	// char * profName = mqttMsg[1];
+	// uint8_t i = 0;
+	// int profInt = 0;
 
-  mqttToFrame(mqttMsg[1], mqttMsg[2], mqttPayLoad, frame);
+	// do {
+	// 	uint8_t cVal = (uint8_t)profName[i] - 48;
+	// 	profInt = profInt * 10;
+	// 	profInt = profInt + cVal;	
+	// 	i++;	
+	// }
+	// while(profName[i]);
 
-  Serial.println(frame);
-  // Serial.println(varNameProfile[var_code_Ad1_Light_OnTime]);
+  // Serial.println("Profilenumber value !!");
+  // Serial.println(profName);
+  // Serial.println(profInt);
+  uint16 flen;
+  
+  if(!mqttToFrame(mqttMsg[1], mqttMsg[2], mqttPayLoad, frame, &flen)) {
+    Serial.print("Length of frame: ");
+    Serial.println(flen);
+    for(int j = 0; j < flen; j++)
+      Serial.write(frame[j]);
+  }    
+
   // Switch on the LED if an 1 was received as first character
   if ((char)payload[0] == '1') {
     digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level

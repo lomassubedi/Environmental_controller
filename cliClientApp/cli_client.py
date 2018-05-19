@@ -4,7 +4,8 @@ import random
 import profile_vars as prof
 
 # Home
-#broker_address="192.168.100.81"
+# broker_address="192.168.1.104"
+# broker_address="192.168.100.81"
 
 # Office
 broker_address="192.168.1.89" 

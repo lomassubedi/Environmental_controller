@@ -6,6 +6,8 @@
     "files.associations": {
         "functional": "cpp",
         "type_traits": "cpp",
-        "mqtt_485.h": "c"
-    }
+        "mqtt_485.h": "c",
+        "rs485.h": "c"
+    },
+    "C_Cpp.dimInactiveRegions": true
 }

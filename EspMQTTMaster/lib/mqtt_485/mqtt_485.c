@@ -226,391 +226,443 @@ static const char * varNameProfile [] = {
 	"FXP2_Co2_Gen_OffPPM"
 };
 
-unsigned char mqttToFrame(char * prof_num, char * profile_var_name, char * var_command, char * f) {
+static uint8_t getIntArg(char * arg) {
 
-  if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_Operation_Mode])) {
-    int i = 0;
-    for(i = 0; i < 10; i++) {
-        f[i] = 48+i;
-    }
-    f[i] = '\0';
-    //Serial.println("I am here !!!");
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_OnTime])) {
+	if(
+		 (!strcmp(arg, "YES")) || (!strcmp(arg, "yes")) 	||
+		(!strcmp(arg, "ON")) || (!strcmp(arg, "on"))		||
+		(!strcmp(arg, "DARK")) || (!strcmp(arg, "dark"))	||
+		(!strcmp(arg, "TRUE")) || (!strcmp(arg, "true"))	||
+		(!strcmp(arg, "ALWAYS_ON")) || (!strcmp(arg, "always_on"))	||
+		(!strcmp(arg, "CYL")) || (!strcmp(arg, "cyl"))		||
+		(!strcmp(arg, "METRIC")) || (!strcmp(arg, "metric"))		||
+		(!strcmp(arg, "OPEN")) || (!strcmp(arg, "open"))
+		) {
+		return YES | ON | DARK | TRUE | ALWAYS_ON | CYL | METRIC | OPEN;
+	} else if(
+		(!strcmp(arg, "NO")) || (!strcmp(arg, "no")) 		||
+		(!strcmp(arg, "LIGHT")) || (!strcmp(arg, "light"))	||
+		(!strcmp(arg, "OFF")) || (!strcmp(arg, "off"))		||
+		(!strcmp(arg, "FALSE")) || (!strcmp(arg, "false"))	||
+		(!strcmp(arg, "ALWAYS_OFF")) || (!strcmp(arg, "always_off"))||
+		(!strcmp(arg, "GEN")) || (!strcmp(arg, "gen"))		||
+		(!strcmp(arg, "ENGLISH")) || (!strcmp(arg, "english"))		||
+		(!strcmp(arg, "CLOSE")) || (!strcmp(arg, "close"))
+		) {
+		return NO | LIGHT | OFF | FALSE | ALWAYS_OFF | GEN | ENGLISH | CLOSE;
+	} else if((!strcmp(arg, "NORMAL")) || (!strcmp(arg, "normal"))) {
+		return NORMAL;
+	} else {
+		return INVALID;
+	}
+}
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_OffTime])) {
+unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_command, uint8_t * f, uint16_t * fLen) {
+	
+	uint16_t indx = 0;
+	uint8_t profNum = 0;
+	uint8_t i = 0;
+	int profInt = 0;
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_LC_Duration])) {
+	do {
+		uint8_t cVal = (uint8_t)prof_num[i] - 48;
+		profInt = profInt * 10;
+		profInt = profInt + cVal;	
+		i++;	
+	} while(prof_num[i]);
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_DC_Duration])) {
+	f[indx++] = SLAVE_ID;			// Slave ID 
+	f[indx++] = FUNC_WRITE_VAR;		// Function Code
+	f[indx++] = profInt;			// Profile Number
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_LC_TimeRemain])) {
+	if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_Operation_Mode])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_DC_TimeRemain])) {
+		f[indx++] = 1;						// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);	// data Byte
+		else
+			return INVALID;
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_OnTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_LC_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_OffTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_LC_SrtDly])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_LC_Duration])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DC_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_DC_Duration])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DC_SrtDly])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_LC_TimeRemain])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_YesNo])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_DC_TimeRemain])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_RptTmr])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Heat])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_LC_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Cool])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_LC_SrtDly])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Hum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DC_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_DeHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DC_SrtDly])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_CO2])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_YesNo])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Follow])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_RptTmr])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Flip])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Heat])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_VentLoc_YesNo])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Cool])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Tmr_LC_CclTime])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Hum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Tmr_LC_RptAftr])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_DeHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Tmr_DC_CclTime])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_CO2])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Tmr_DC_RptAftr])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Follow])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Htr_LC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Flip])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Htr_LC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_VentLoc_YesNo])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Htr_DC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Tmr_LC_CclTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Htr_DC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Tmr_LC_RptAftr])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Cool_LC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Tmr_DC_CclTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Cool_LC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Tmr_DC_RptAftr])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Cool_DC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Htr_LC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Cool_DC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Htr_LC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Hum_LC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Htr_DC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Hum_LC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Htr_DC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Hum_DC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Cool_LC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Hum_DC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Cool_LC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DeH_LC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Cool_DC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DeH_LC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Cool_DC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DeH_DC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Hum_LC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DeH_DC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Hum_LC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_Opnlp_InjTime])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Hum_DC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_CylGen])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Hum_DC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_Cyl_StPtPPM])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DeH_LC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_Gen_OnPPM])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DeH_LC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_Gen_OffPPM])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DeH_DC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DeH_DC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_LC_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_Opnlp_InjTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_LC_SrtDly])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_CylGen])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DC_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_Cyl_StPtPPM])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DC_SrtDly])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_Gen_OnPPM])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_YesNo])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_Gen_OffPPM])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_RptTmr])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Heat])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_LC_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Cool])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_LC_SrtDly])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Hum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DC_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_DeHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DC_SrtDly])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_CO2])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_YesNo])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Follow])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_RptTmr])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Flip])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Heat])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_VentLoc_YesNo])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Cool])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Tmr_LC_CclTime])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Hum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Tmr_LC_RptAftr])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_DeHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Tmr_DC_CclTime])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_CO2])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Tmr_DC_RptAftr])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Follow])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Htr_LC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Flip])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Htr_LC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_VentLoc_YesNo])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Htr_DC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Tmr_LC_CclTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Htr_DC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Tmr_LC_RptAftr])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Cool_LC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Tmr_DC_CclTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Cool_LC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Tmr_DC_RptAftr])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Cool_DC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Htr_LC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Cool_DC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Htr_LC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Hum_LC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Htr_DC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Hum_LC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Htr_DC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Hum_DC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Cool_LC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Hum_DC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Cool_LC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DeH_LC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Cool_DC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DeH_LC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Cool_DC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DeH_DC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Hum_LC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DeH_DC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Hum_LC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_Opnlp_InjTime])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Hum_DC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_CylGen])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Hum_DC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_Cyl_StPtPPM])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DeH_LC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_Gen_OnPPM])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DeH_LC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_Gen_OffPPM])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DeH_DC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DeH_DC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_LC_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_Opnlp_InjTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_LC_SrtDly])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_CylGen])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_LC_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_Cyl_StPtPPM])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_LC_CclTime])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_Gen_OnPPM])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_LC_RptAftr])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_Gen_OffPPM])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_LC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_LC_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_LC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_LC_SrtDly])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_HumVnt_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_LC_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_LC_HumVnt_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_LC_CclTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_LC_HumVnt_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_LC_RptAftr])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_DC_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_DC_SrtDly])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_LC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_DC_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_LC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_DC_CclTime])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_HumVnt_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_DC_RptAftr])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_LC_HumVnt_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_DC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_LC_HumVnt_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_DC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_DC_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_HumVnt_DC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_DC_SrtDly])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_HumVnt_DC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_DC_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_DC_CclTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_LC_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_DC_RptAftr])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_LC_SrtDly])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_DC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DC_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_DC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DC_SrtDly])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_HumVnt_DC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_YesNo])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_HumVnt_DC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_RptTmr])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Heat])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_LC_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Cool])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_LC_SrtDly])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Hum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DC_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_DeHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DC_SrtDly])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_CO2])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_YesNo])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Follow])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_RptTmr])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Flip])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Heat])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_VentLoc_YesNo])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Cool])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Tmr_LC_CclTime])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Hum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Tmr_LC_RptAftr])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_DeHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Tmr_DC_CclTime])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_CO2])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Tmr_DC_RptAftr])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Follow])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Htr_LC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Flip])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Htr_LC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_VentLoc_YesNo])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Htr_DC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Tmr_LC_CclTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Htr_DC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Tmr_LC_RptAftr])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Cool_LC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Tmr_DC_CclTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Cool_LC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Tmr_DC_RptAftr])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Cool_DC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Htr_LC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Cool_DC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Htr_LC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Hum_LC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Htr_DC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Hum_LC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Htr_DC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Hum_DC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Cool_LC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Hum_DC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Cool_LC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DeH_LC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Cool_DC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DeH_LC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Cool_DC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DeH_DC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Hum_LC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DeH_DC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Hum_LC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_Opnlp_InjTime])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Hum_DC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_CylGen])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Hum_DC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_Cyl_StPtPPM])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DeH_LC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_Gen_OnPPM])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DeH_LC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_Gen_OffPPM])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DeH_DC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DeH_DC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_LC_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_Opnlp_InjTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_LC_SrtDly])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_CylGen])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DC_OnOff])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_Cyl_StPtPPM])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DC_SrtDly])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_Gen_OnPPM])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_YesNo])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_Gen_OffPPM])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_RptTmr])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Heat])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_LC_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Cool])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_LC_SrtDly])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Hum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DC_OnOff])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_DeHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DC_SrtDly])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_CO2])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_YesNo])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Follow])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_RptTmr])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Flip])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Heat])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_VentLoc_YesNo])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Cool])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Tmr_LC_CclTime])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Hum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Tmr_LC_RptAftr])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_DeHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Tmr_DC_CclTime])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_CO2])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Tmr_DC_RptAftr])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Follow])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Htr_LC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Flip])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Htr_LC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_VentLoc_YesNo])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Htr_DC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Tmr_LC_CclTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Htr_DC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Tmr_LC_RptAftr])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Cool_LC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Tmr_DC_CclTime])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Cool_LC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Tmr_DC_RptAftr])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Cool_DC_OnTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Htr_LC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Cool_DC_OffTemp])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Htr_LC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Hum_LC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Htr_DC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Hum_LC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Htr_DC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Hum_DC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Cool_LC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Hum_DC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Cool_LC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DeH_LC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Cool_DC_OnTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DeH_LC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Cool_DC_OffTemp])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DeH_DC_OnHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Hum_LC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DeH_DC_OffHum])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Hum_LC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_Opnlp_InjTime])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Hum_DC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_CylGen])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Hum_DC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_Cyl_StPtPPM])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DeH_LC_OnHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_Gen_OnPPM])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DeH_LC_OffHum])) {
 
-  } else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_Gen_OffPPM])) {
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DeH_DC_OnHum])) {
 
-  } else {
-      // Do nothing
-  }
-  return 0;
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DeH_DC_OffHum])) {
+
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_Opnlp_InjTime])) {
+
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_CylGen])) {
+
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_Cyl_StPtPPM])) {
+
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_Gen_OnPPM])) {
+
+	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_Gen_OffPPM])) {
+
+	} else {
+		return INVALID;
+	}
+	uint16_t crc16_val = CRC16(f, indx);
+	f[indx++] = (uint8_t)(crc16_val >> 8);
+	f[indx++] = (uint8_t)(crc16_val & 0xFF);
+	*fLen = indx;
+	return 0;
 }

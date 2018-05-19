@@ -24,7 +24,7 @@
 #define 		FALSE		0
 
 // --- Tri state operation constants -- 
-#define			ALWAYS_OFF	0
+#define			ALWAYS_OFF		0
 #define			ALWAYS_ON		1
 #define			NORMAL			2
 
