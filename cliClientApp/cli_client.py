@@ -35,8 +35,7 @@ while a:
 	client.publish(command, argument) #publish
 	print("Publishing : " + command + " " + argument)
 	#time.sleep(1)
-
-	
+		
 	'''
 	# a = 1
 	a = a - 1

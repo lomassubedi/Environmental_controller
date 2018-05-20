@@ -18,8 +18,6 @@
 #define   LOCALHOST
 // Update these with values suitable for your network.
 
-
-
 #ifdef HOME
   const char* ssid = "yangobahal";
   const char* password = "43A74C699A";
@@ -46,11 +44,12 @@
 #endif
 
 // Software Serial port for RS485 application
-#define     RX      12
-#define     TX      14
+#define     RX      12      // D6
+#define     TX      14      // D5
 #define     RE_DE   2     // RS485 Receive and Data Enable pin
 
 #define     TIME_BUS_CAPTURE      5000UL
+#define     RS485_F_LEN           100
 #define     SIZE_MQTT_MESSAGE     200
 #define     SIZE_MQTT_PAYLOAD     20
 
@@ -62,7 +61,8 @@ SoftwareSerial RS485Ser(RX, TX, false, 256);
  * Variables to store MQTT information
  **/
 long lastMsg = 0;
-uint8_t frame[100];
+uint8_t frame[RS485_F_LEN];
+uint8_t f_back[RS485_F_LEN];
 char msg[50];
 int value = 0;
 char * mqttMsg[SIZE_MQTT_MESSAGE];
@@ -133,9 +133,22 @@ void reconnect() {
   #endif
 }
 
+uint8_t rs485_write_frame(uint8_t *f, uint16_t len) {
+  uint16_t indx = 0;  
+  for(uint16_t flen = 0; flen < len; flen++) {
+    RS485Ser.write(f[flen]);
+  }
+
+  // delay(1);
+
+  // while(RS485Ser.available()) {
+  //   f_back[indx++] = RS485Ser.read();    
+  // }
+}
+
 // ----------------- Custom functions Codes -------------
 void callback(char* topic, byte* payload, unsigned int length) {
-
+  
   unsigned char cnt = 0;
   char *p = strtok(topic, "/");
 
@@ -162,29 +175,18 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   cnt = 0;
 
-	// char * profName = mqttMsg[1];
-	// uint8_t i = 0;
-	// int profInt = 0;
-
-	// do {
-	// 	uint8_t cVal = (uint8_t)profName[i] - 48;
-	// 	profInt = profInt * 10;
-	// 	profInt = profInt + cVal;	
-	// 	i++;	
-	// }
-	// while(profName[i]);
-
-  // Serial.println("Profilenumber value !!");
-  // Serial.println(profName);
-  // Serial.println(profInt);
   uint16 flen;
   
   if(!mqttToFrame(mqttMsg[1], mqttMsg[2], mqttPayLoad, frame, &flen)) {
-    Serial.print("Length of frame: ");
-    Serial.println(flen);
-    for(int j = 0; j < flen; j++)
-      Serial.write(frame[j]);
-  }    
+    // Serial.print("Length of frame: ");
+    // Serial.println(flen);
+    // for(int j = 0; j < flen; j++)
+    //   Serial.write(frame[j]);
+    // for(uint16_t i = 0; i < flen; i++)
+    //   RS485Ser.write(frame[i]);
+
+    rs485_write_frame(frame, flen);
+  }
 
   // Switch on the LED if an 1 was received as first character
   if ((char)payload[0] == '1') {
@@ -223,9 +225,9 @@ void loop() {
   #endif
 
   
-  if(!(millis() % TIME_BUS_CAPTURE)) {
-    RS485Ser.write(56);
-  }
+  // if(!(millis() % TIME_BUS_CAPTURE)) {
+  //   RS485Ser.write(56);
+  // }
   client.loop();
 
   /*
