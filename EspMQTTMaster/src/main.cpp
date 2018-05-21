@@ -9,8 +9,8 @@
 #include "mqtt_485.h"
 #include "rs485.h"
 
-// #define       HOME
-#define       OFFICE
+#define       HOME
+// #define       OFFICE
 
 // String match
 #define     STR_MATCH       0
@@ -185,6 +185,10 @@ void callback(char* topic, byte* payload, unsigned int length) {
   uint16 flen;
   
   if(!mqttToFrame(mqttMsg[1], mqttMsg[2], mqttPayLoad, frame, &flen)) {
+    for(int i = 0; i < flen; i++) {
+      Serial.write(frame[i]);
+    }
+    Serial.println();
     rs485_write_frame(frame, flen);
   }
 

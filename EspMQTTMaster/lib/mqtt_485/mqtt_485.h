@@ -1,7 +1,8 @@
 #ifndef     MQTT_485_H_
 #define     MQTT_485_H_
 
-
+#include <stdio.h>
+#include <string.h>
 #include <inttypes.h>
 #include "var_codes.h"
 #include "data_types.h"

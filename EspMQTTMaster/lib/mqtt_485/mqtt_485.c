@@ -257,12 +257,21 @@ static uint8_t getIntArg(char * arg) {
 	}
 }
 
+static void getIntTime(char * t, uint8_t * ft) {
+	ft[0] = ((t[0] - 48) * 10) + (t[1] - 48);
+	ft[1] = ((t[3] - 48) * 10) + (t[4] - 48);
+	ft[2] = ((t[6] - 48) * 10) + (t[7] - 48);	
+}
+
 unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_command, uint8_t * f, uint16_t * fLen) {
 	
 	uint16_t indx = 0;
 	uint8_t profNum = 0;
 	uint8_t profInt;
-	uint8_t i = 0;	
+	uint8_t bytes_n = 0;
+	uint8_t i = 0;
+
+	uint8_t timeBuff[sizeof(TIME_M)];
 
 	do {
 		uint8_t cVal = (uint8_t)prof_num[i] - 48;
@@ -276,7 +285,7 @@ unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_co
 	f[indx++] = profInt;			// Profile Number
 
 	if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_Operation_Mode])) {
-		// Var Code Number
+
 		f[indx++] = var_code_Ad1_Light_Operation_Mode;	
 		f[indx++] = 1;								// number of Bytes
 		if(getIntArg(var_command) >= 0) 
@@ -286,13 +295,44 @@ unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_co
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_OnTime])) {
 
+		f[indx++] = var_code_Ad1_Light_OnTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
+
+		getIntTime(var_command, &f[indx]);
+		indx = indx + 3;		
+
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_OffTime])) {
+		f[indx++] = var_code_Ad1_Light_OffTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
+
+		getIntTime(var_command, &f[indx]);
+		indx = indx + 3;	
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_LC_Duration])) {
+		f[indx++] = var_code_Ad1_Light_LC_Duration;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
+
+		getIntTime(var_command, &f[indx]);
+		indx = indx + 3;			
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_DC_Duration])) {
+		f[indx++] = var_code_Ad1_Light_DC_Duration;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
+
+		getIntTime(var_command, &f[indx]);
+		indx = indx + 3;		
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_LC_TimeRemain])) {
+		f[indx++] = var_code_Ad1_Light_DC_Duration;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
+
+		getIntTime(var_command, &f[indx]);
+		indx = indx + 3;				
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_DC_TimeRemain])) {
 

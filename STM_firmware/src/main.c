@@ -234,6 +234,7 @@ int main(void) {
 				printf("Year: %d, \tMonth: %d, \tDay: %d, \t", (myRTCDate.RTC_Year + 2000), myRTCDate.RTC_Month, myRTCDate.RTC_Date);
 				printf("Hour: %d, \tMinute: %d, \tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);							
 				printf("Light Operation Mode: %d\r\n", profile->Ad1_Light_Operation_Mode);
+				printf("Light On Time: %d:%d:%d\r\n", profile->Ad1_Light_OnTime.HH, profile->Ad1_Light_OnTime.MM, profile->Ad1_Light_OnTime.SS);
 			#endif
 		}					
 	}	
