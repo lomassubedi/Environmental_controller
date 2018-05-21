@@ -4,7 +4,7 @@ uint8_t flagPowerUp = NO;
 uint8_t flagProfileTranstionFunction = NO;
 uint8_t profileNumberPrevious = 1;
 
-CYCL_STATE flagCurrentCycle = UNKNOWN;
+CYCL_STATE flagCurrentCycle = (CYCL_STATE)UNKNOWN;
 
 uint8_t flagCycleFlipToLightCycle = NO;
 uint8_t flagCycleFlipToDarkCycle = NO;

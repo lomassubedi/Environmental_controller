@@ -34,3 +34,4 @@ void cont_logging(void);
 
 
 #endif // SDLOG_H_
+

@@ -9,5 +9,6 @@
         "mqtt_485.h": "c",
         "rs485.h": "c"
     },
-    "C_Cpp.dimInactiveRegions": true
+    "C_Cpp.dimInactiveRegions": true,
+    "C_Cpp.errorSquiggles": "Enabled"
 }

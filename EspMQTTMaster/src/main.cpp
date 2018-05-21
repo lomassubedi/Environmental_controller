@@ -7,9 +7,10 @@
 
 #include "data_types.h"
 #include "mqtt_485.h"
+#include "rs485.h"
 
-// #define   HOME
-#define   OFFICE
+// #define       HOME
+#define       OFFICE
 
 // String match
 #define     STR_MATCH       0
@@ -43,28 +44,36 @@
   const int mqtt_port = 18772;
 #endif
 
+#define     TIME_BUS_CAPTURE      5000UL
+#define     SIZE_MQTT_MESSAGE     200
+#define     SIZE_MQTT_PAYLOAD     20
+#define     F_LEN                 100
+
+
 // Software Serial port for RS485 application
 #define     RX      12      // D6
 #define     TX      14      // D5
-#define     RE_DE   2     // RS485 Receive and Data Enable pin
+#define     RE_DE   2       // RS485 Receive and Data Enable pin
 
-#define     TIME_BUS_CAPTURE      5000UL
 #define     RS485_F_LEN           100
-#define     SIZE_MQTT_MESSAGE     200
-#define     SIZE_MQTT_PAYLOAD     20
+
 
 WiFiClient espClient;
 PubSubClient client(espClient);
+
+// RS485 Serial
 SoftwareSerial RS485Ser(RX, TX, false, 256);
+
 
 /**
  * Variables to store MQTT information
  **/
 long lastMsg = 0;
-uint8_t frame[RS485_F_LEN];
-uint8_t f_back[RS485_F_LEN];
 char msg[50];
 int value = 0;
+
+uint8_t frame[F_LEN];
+
 char * mqttMsg[SIZE_MQTT_MESSAGE];
 char mqttPayLoad[SIZE_MQTT_PAYLOAD];
 
@@ -133,18 +142,16 @@ void reconnect() {
   #endif
 }
 
-uint8_t rs485_write_frame(uint8_t *f, uint16_t len) {
+
+uint8_t rs485_write_frame(uint8_t *f, uint16_t len) { 
   uint16_t indx = 0;  
+  // Make the RE/DE pin High
   for(uint16_t flen = 0; flen < len; flen++) {
     RS485Ser.write(f[flen]);
   }
-
-  // delay(1);
-
-  // while(RS485Ser.available()) {
-  //   f_back[indx++] = RS485Ser.read();    
-  // }
+  // Make the RE/DE pin Low
 }
+
 
 // ----------------- Custom functions Codes -------------
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -178,13 +185,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
   uint16 flen;
   
   if(!mqttToFrame(mqttMsg[1], mqttMsg[2], mqttPayLoad, frame, &flen)) {
-    // Serial.print("Length of frame: ");
-    // Serial.println(flen);
-    // for(int j = 0; j < flen; j++)
-    //   Serial.write(frame[j]);
-    // for(uint16_t i = 0; i < flen; i++)
-    //   RS485Ser.write(frame[i]);
-
     rs485_write_frame(frame, flen);
   }
 
@@ -201,7 +201,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 void setup() {
   pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
   Serial.begin(115200);
-  RS485Ser.begin(115200);
+  RS485Ser.begin(9600);
   setup_wifi();
   
   #ifdef LOCALHOST

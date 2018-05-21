@@ -286,7 +286,7 @@ uint8_t modbus_update() {
 					} else if (function == 20) {	// If the function Code is 20 i.e. read EEPRM Registers
 						
 						profileNo = frame[2];					// Get profile Number
-						varCode = frame[3];						// Get variable code 
+						varCode = frame[3];						// Get variable code
 						
 						eeprom_get_var(profileNo, varCode, &byteCount, bytesArry);
 						

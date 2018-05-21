@@ -219,17 +219,21 @@ int main(void) {
 				time_diff(&profile->Ad1_Light_LC_TimeRemain, &profile->Ad1_Light_OnTime, &timeRTC);					
 			}
 		}
+		
 		/* --------- End of Day counter software ------------ */
 		
-		if(flagLEDIndi) {
-			
+		if(flagLEDIndi) {			
 			flagLEDIndi = 0;
+			
+			get_profile(active_profile);
+			
 			STM_EVAL_LEDToggle(LED3);
 			RTC_GetTime(RTC_Format_BIN, &myRTCTime);
 			RTC_GetDate(RTC_Format_BIN, &myRTCDate);
 			#if 1
 				printf("Year: %d, \tMonth: %d, \tDay: %d, \t", (myRTCDate.RTC_Year + 2000), myRTCDate.RTC_Month, myRTCDate.RTC_Date);
 				printf("Hour: %d, \tMinute: %d, \tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);							
+				printf("Light Operation Mode: %d\r\n", profile->Ad1_Light_Operation_Mode);
 			#endif
 		}					
 	}	

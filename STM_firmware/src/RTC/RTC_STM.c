@@ -138,3 +138,4 @@ void RTC_Config_LSI(void) {
 	
 	RTC_SetDate(RTC_Format_BIN, &RTC_DateStructure);
 }
+

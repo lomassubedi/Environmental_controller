@@ -261,8 +261,8 @@ unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_co
 	
 	uint16_t indx = 0;
 	uint8_t profNum = 0;
-	uint8_t i = 0;
-	int profInt = 0;
+	uint8_t profInt;
+	uint8_t i = 0;	
 
 	do {
 		uint8_t cVal = (uint8_t)prof_num[i] - 48;
@@ -276,10 +276,11 @@ unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_co
 	f[indx++] = profInt;			// Profile Number
 
 	if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_Operation_Mode])) {
-
-		f[indx++] = 1;						// number of Bytes
+		// Var Code Number
+		f[indx++] = var_code_Ad1_Light_Operation_Mode;	
+		f[indx++] = 1;								// number of Bytes
 		if(getIntArg(var_command) >= 0) 
-			f[indx++] = getIntArg(var_command);	// data Byte
+			f[indx++] = getIntArg(var_command);		// data Byte
 		else
 			return INVALID;
 
@@ -661,8 +662,8 @@ unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_co
 		return INVALID;
 	}
 	uint16_t crc16_val = CRC16(f, indx);
-	f[indx++] = (uint8_t)(crc16_val >> 8);
 	f[indx++] = (uint8_t)(crc16_val & 0xFF);
+	f[indx++] = (uint8_t)(crc16_val >> 8);
 	*fLen = indx;
 	return 0;
 }

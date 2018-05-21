@@ -76,7 +76,7 @@ uint8_t time_cmpr(TIME_M * time_first, TIME_M * time_second) {
 void time_diff(TIME_M * time_first, TIME_M * time_second, TIME_M * time_dest) {
 	
 	uint32_t total_second_first = 0, total_second_second = 0, total_second_diff = 0;
-	int8_t diff_ind;
+//	int8_t diff_ind;
 	
 	total_second_first = (time_first->HH * 60 * 60) + (time_first->MM * 60) + time_first->SS;
 	total_second_second = (time_second->HH * 60 * 60) + (time_second->MM * 60) + time_second->SS;
@@ -88,3 +88,4 @@ void time_diff(TIME_M * time_first, TIME_M * time_second, TIME_M * time_dest) {
 	time_dest->SS = total_second_diff % 60;
 	
 }
+

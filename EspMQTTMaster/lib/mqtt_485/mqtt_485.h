@@ -12,7 +12,7 @@
 #define   RS485_SLAVE_ENV_CTRL      1
 #define   SLAVE_ID                  RS485_SLAVE_ENV_CTRL
 
-#define     FUNC_WRITE_VAR      0x20
+#define     FUNC_WRITE_VAR          40      // Function code 40 for writing data to EEPROM
 
 
 #ifdef __cplusplus
