@@ -7,7 +7,8 @@
         "functional": "cpp",
         "type_traits": "cpp",
         "mqtt_485.h": "c",
-        "rs485.h": "c"
+        "rs485.h": "c",
+        "array": "c"
     },
     "C_Cpp.dimInactiveRegions": true,
     "C_Cpp.errorSquiggles": "Enabled"

@@ -238,6 +238,8 @@ int main(void) {
 			printf("Light Operation Mode: %d\r\n", profile->Ad1_Light_Operation_Mode);
 			printf("HdV_DeH_DC_OffHum: %f\r\n", profile->Ad1_HdV_DeH_DC_OffHum);
 			printf("Ad1_HdV_Co2_Cyl_StPtPPM: %d\r\n", profile->Ad1_HdV_Co2_Cyl_StPtPPM);
+			printf("Ad1_FXP2_Co2_Cyl_StPtPPM: %d\r\n", profile->Ad1_FXP2_Co2_Cyl_StPtPPM);
+			printf("Ad1_FXP1_DeH_DC_OffHum: %f\r\n", profile->Ad1_FXP1_DeH_DC_OffHum);			
 			printf("Light On Time: %d:%d:%d\r\n", profile->Ad1_Light_OnTime.HH, profile->Ad1_Light_OnTime.MM, profile->Ad1_Light_OnTime.SS);			
 			#endif
 		}					

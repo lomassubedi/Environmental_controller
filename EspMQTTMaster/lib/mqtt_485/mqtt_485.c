@@ -765,293 +765,1357 @@ unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_co
 		indx += sizeof(uint16_t);
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_Gen_OnPPM])) {
+		uint16_t iv = 0;
+		f[indx++] = var_code_Ad1_HdV_Co2_Gen_OnPPM;
+		bytes_n = sizeof(uint16_t);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%d", &iv);
+		intVal.intVar = iv;
+		memcpy(&f[indx], intVal.intArry, sizeof(uint16_t));
+
+		indx += sizeof(uint16_t);		
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_Gen_OffPPM])) {
+		uint16_t iv = 0;
+		f[indx++] = var_code_Ad1_HdV_Co2_Gen_OffPPM;
+		bytes_n = sizeof(uint16_t);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%d", &iv);
+		intVal.intVar = iv;
+		memcpy(&f[indx], intVal.intArry, sizeof(uint16_t));
+
+		indx += sizeof(uint16_t);	
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_OnOff])) {
-
+		f[indx++] = var_code_Ad1_Cir_OnOff;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_LC_OnOff])) {
-
+		f[indx++] = var_code_Ad1_Cir_LC_OnOff;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_LC_SrtDly])) {
+		f[indx++] = var_code_Ad1_Cir_LC_SrtDly;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DC_OnOff])) {
-
+		f[indx++] = var_code_Ad1_Cir_DC_OnOff;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DC_SrtDly])) {
+		f[indx++] = var_code_Ad1_Cir_DC_SrtDly;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_YesNo])) {
-
+		f[indx++] = var_code_Ad1_Cir_FlexFunc_YesNo;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_RptTmr])) {
-
+		f[indx++] = var_code_Ad1_Cir_FlexFunc_RptTmr;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Heat])) {
-
+		f[indx++] = var_code_Ad1_Cir_FlexFunc_Heat;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Cool])) {
-
+		f[indx++] = var_code_Ad1_Cir_FlexFunc_Cool;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Hum])) {
-
+		f[indx++] = var_code_Ad1_Cir_FlexFunc_Hum;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_DeHum])) {
-
+		f[indx++] = var_code_Ad1_Cir_FlexFunc_DeHum;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_CO2])) {
-
+		f[indx++] = var_code_Ad1_Cir_FlexFunc_CO2;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Follow])) {
-
+		f[indx++] = var_code_Ad1_Cir_FlexFunc_Follow;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_FlexFunc_Flip])) {
-
+		f[indx++] = var_code_Ad1_Cir_FlexFunc_Flip;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_VentLoc_YesNo])) {
-
+		f[indx++] = var_code_Ad1_Cir_VentLoc_YesNo;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Tmr_LC_CclTime])) {
+		f[indx++] = var_code_Ad1_Cir_Tmr_LC_CclTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Tmr_LC_RptAftr])) {
+		f[indx++] = var_code_Ad1_Cir_Tmr_LC_RptAftr;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Tmr_DC_CclTime])) {
+		f[indx++] = var_code_Ad1_Cir_Tmr_DC_CclTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Tmr_DC_RptAftr])) {
+		f[indx++] = var_code_Ad1_Cir_Tmr_DC_RptAftr;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Htr_LC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_Htr_LC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Htr_LC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_Htr_LC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Htr_DC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_Htr_DC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Htr_DC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_Htr_DC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Cool_LC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_Cool_LC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Cool_LC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_Cool_LC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Cool_DC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_Cool_DC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Cool_DC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_Cool_DC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Hum_LC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_Hum_LC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Hum_LC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_Hum_LC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Hum_DC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_Hum_DC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Hum_DC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_Hum_DC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DeH_LC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_DeH_LC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DeH_LC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_DeH_LC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DeH_DC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_DeH_DC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_DeH_DC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Cir_DeH_DC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_Opnlp_InjTime])) {
+		f[indx++] = var_code_Ad1_Cir_Co2_Opnlp_InjTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_CylGen])) {
-
+		f[indx++] = var_code_Ad1_Cir_Co2_CylGen;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_Cyl_StPtPPM])) {
+		uint16_t iv = 0;
+		f[indx++] = var_code_Ad1_Cir_Co2_Cyl_StPtPPM;
+		bytes_n = sizeof(uint16_t);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%d", &iv);
+		intVal.intVar = iv;
+		memcpy(&f[indx], intVal.intArry, sizeof(uint16_t));
+
+		indx += sizeof(uint16_t);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_Gen_OnPPM])) {
+		uint16_t iv = 0;
+		f[indx++] = var_code_Ad1_Cir_Co2_Gen_OnPPM;
+		bytes_n = sizeof(uint16_t);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%d", &iv);
+		intVal.intVar = iv;
+		memcpy(&f[indx], intVal.intArry, sizeof(uint16_t));
+
+		indx += sizeof(uint16_t);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Cir_Co2_Gen_OffPPM])) {
+		uint16_t iv = 0;
+		f[indx++] = var_code_Ad1_Cir_Co2_Gen_OffPPM;
+		bytes_n = sizeof(uint16_t);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%d", &iv);
+		intVal.intVar = iv;
+		memcpy(&f[indx], intVal.intArry, sizeof(uint16_t));
+
+		indx += sizeof(uint16_t);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_OnOff])) {
-
+		f[indx++] = var_code_Ad1_Ven_OnOff;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_LC_OnOff])) {
-
+		f[indx++] = var_code_Ad1_Ven_LC_OnOff;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_LC_SrtDly])) {
+		f[indx++] = var_code_Ad1_Ven_LC_SrtDly;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_LC_OnOff])) {
-
+		f[indx++] = var_code_Ad1_Ven_RptVnt_LC_OnOff;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_LC_CclTime])) {
+		f[indx++] = var_code_Ad1_Ven_RptVnt_LC_CclTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_LC_RptAftr])) {
+		f[indx++] = var_code_Ad1_Ven_RptVnt_LC_RptAftr;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_OnOff])) {
-
+		f[indx++] = var_code_Ad1_Ven_TempVnt_OnOff;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_LC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Ven_TempVnt_LC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_LC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Ven_TempVnt_LC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_HumVnt_OnOff])) {
-
+		f[indx++] = var_code_Ad1_Ven_HumVnt_OnOff;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_LC_HumVnt_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Ven_LC_HumVnt_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_LC_HumVnt_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Ven_LC_HumVnt_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_DC_OnOff])) {
-
+		f[indx++] = var_code_Ad1_Ven_DC_OnOff;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_DC_SrtDly])) {
+		f[indx++] = var_code_Ad1_Ven_DC_SrtDly;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_DC_OnOff])) {
-
+		f[indx++] = var_code_Ad1_Ven_RptVnt_DC_OnOff;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_DC_CclTime])) {
+		f[indx++] = var_code_Ad1_Ven_RptVnt_DC_CclTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_RptVnt_DC_RptAftr])) {
+		f[indx++] = var_code_Ad1_Ven_RptVnt_DC_RptAftr;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_DC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Ven_TempVnt_DC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_TempVnt_DC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Ven_TempVnt_DC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_HumVnt_DC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Ven_HumVnt_DC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Ven_HumVnt_DC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_Ven_HumVnt_DC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_OnOff])) {
-
+		f[indx++] = var_code_Ad1_FXP1_OnOff;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_LC_OnOff])) {
-
+		f[indx++] = var_code_Ad1_FXP1_LC_OnOff;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_LC_SrtDly])) {
+		f[indx++] = var_code_Ad1_FXP1_LC_SrtDly;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DC_OnOff])) {
-
+		f[indx++] = var_code_Ad1_FXP1_DC_OnOff;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DC_SrtDly])) {
+		f[indx++] = var_code_Ad1_FXP1_DC_SrtDly;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_YesNo])) {
-
+		f[indx++] = var_code_Ad1_FXP1_FlexFunc_YesNo;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_RptTmr])) {
-
+		f[indx++] = var_code_Ad1_FXP1_FlexFunc_RptTmr;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Heat])) {
-
+		f[indx++] = var_code_Ad1_FXP1_FlexFunc_Heat;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Cool])) {
-
+		f[indx++] = var_code_Ad1_FXP1_FlexFunc_Cool;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Hum])) {
-
+		f[indx++] = var_code_Ad1_FXP1_FlexFunc_Hum;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_DeHum])) {
-
+		f[indx++] = var_code_Ad1_FXP1_FlexFunc_DeHum;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_CO2])) {
-
+		f[indx++] = var_code_Ad1_FXP1_FlexFunc_CO2;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Follow])) {
-
+		f[indx++] = var_code_Ad1_FXP1_FlexFunc_Follow;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_FlexFunc_Flip])) {
-
+		f[indx++] = var_code_Ad1_FXP1_FlexFunc_Flip;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_VentLoc_YesNo])) {
-
+		f[indx++] = var_code_Ad1_FXP1_VentLoc_YesNo;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Tmr_LC_CclTime])) {
+		f[indx++] = var_code_Ad1_FXP1_Tmr_LC_CclTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Tmr_LC_RptAftr])) {
+		f[indx++] = var_code_Ad1_FXP1_Tmr_LC_RptAftr;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Tmr_DC_CclTime])) {
+		f[indx++] = var_code_Ad1_FXP1_Tmr_DC_CclTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Tmr_DC_RptAftr])) {
+		f[indx++] = var_code_Ad1_FXP1_Tmr_DC_RptAftr;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Htr_LC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_Htr_LC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Htr_LC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_Htr_LC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Htr_DC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_Htr_DC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Htr_DC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_Htr_DC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Cool_LC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_Cool_LC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Cool_LC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_Cool_LC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Cool_DC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_Cool_DC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Cool_DC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_Cool_DC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Hum_LC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_Hum_LC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Hum_LC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_Hum_LC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Hum_DC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_Hum_DC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Hum_DC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_Hum_DC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DeH_LC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_DeH_LC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DeH_LC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_DeH_LC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DeH_DC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_DeH_DC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_DeH_DC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP1_DeH_DC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_Opnlp_InjTime])) {
+		f[indx++] = var_code_Ad1_FXP1_Co2_Opnlp_InjTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_CylGen])) {
-
+		f[indx++] = var_code_Ad1_FXP1_Co2_CylGen;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_Cyl_StPtPPM])) {
+		uint16_t iv = 0;
+		f[indx++] = var_code_Ad1_FXP1_Co2_Cyl_StPtPPM;
+		bytes_n = sizeof(uint16_t);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%d", &iv);
+		intVal.intVar = iv;
+		memcpy(&f[indx], intVal.intArry, sizeof(uint16_t));
+
+		indx += sizeof(uint16_t);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_Gen_OnPPM])) {
+		uint16_t iv = 0;
+		f[indx++] = var_code_Ad1_FXP1_Co2_Gen_OnPPM;
+		bytes_n = sizeof(uint16_t);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%d", &iv);
+		intVal.intVar = iv;
+		memcpy(&f[indx], intVal.intArry, sizeof(uint16_t));
+
+		indx += sizeof(uint16_t);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP1_Co2_Gen_OffPPM])) {
+		uint16_t iv = 0;
+		f[indx++] = var_code_Ad1_FXP1_Co2_Gen_OffPPM;
+		bytes_n = sizeof(uint16_t);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%d", &iv);
+		intVal.intVar = iv;
+		memcpy(&f[indx], intVal.intArry, sizeof(uint16_t));
+
+		indx += sizeof(uint16_t);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_OnOff])) {
-
+		f[indx++] = var_code_Ad1_FXP2_OnOff;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_LC_OnOff])) {
-
+		f[indx++] = var_code_Ad1_FXP2_LC_OnOff;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_LC_SrtDly])) {
+		f[indx++] = var_code_Ad1_FXP2_LC_SrtDly;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DC_OnOff])) {
-
+		f[indx++] = var_code_Ad1_FXP2_DC_OnOff;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DC_SrtDly])) {
+		f[indx++] = var_code_Ad1_FXP2_DC_SrtDly;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_YesNo])) {
-
+		f[indx++] = var_code_Ad1_FXP2_FlexFunc_YesNo;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_RptTmr])) {
-
+		f[indx++] = var_code_Ad1_FXP2_FlexFunc_RptTmr;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Heat])) {
-
+		f[indx++] = var_code_Ad1_FXP2_FlexFunc_Heat;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Cool])) {
-
+		f[indx++] = var_code_Ad1_FXP2_FlexFunc_Cool;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Hum])) {
-
+		f[indx++] = var_code_Ad1_FXP2_FlexFunc_Hum;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_DeHum])) {
-
+		f[indx++] = var_code_Ad1_FXP2_FlexFunc_DeHum;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_CO2])) {
-
+		f[indx++] = var_code_Ad1_FXP2_FlexFunc_CO2;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Follow])) {
-
+		f[indx++] = var_code_Ad1_FXP2_FlexFunc_Follow;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_FlexFunc_Flip])) {
-
+		f[indx++] = var_code_Ad1_FXP2_FlexFunc_Flip;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_VentLoc_YesNo])) {
-
+		f[indx++] = var_code_Ad1_FXP2_VentLoc_YesNo;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Tmr_LC_CclTime])) {
+		f[indx++] = var_code_Ad1_FXP2_Tmr_LC_CclTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Tmr_LC_RptAftr])) {
+		f[indx++] = var_code_Ad1_FXP2_Tmr_LC_RptAftr;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Tmr_DC_CclTime])) {
+		f[indx++] = var_code_Ad1_FXP2_Tmr_DC_CclTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Tmr_DC_RptAftr])) {
+		f[indx++] = var_code_Ad1_FXP2_Tmr_DC_RptAftr;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Htr_LC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_Htr_LC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Htr_LC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_Htr_LC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Htr_DC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_Htr_DC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Htr_DC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_Htr_DC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Cool_LC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_Cool_LC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Cool_LC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_Cool_LC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Cool_DC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_Cool_DC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Cool_DC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_Cool_DC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Hum_LC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_Hum_LC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Hum_LC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_Hum_LC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Hum_DC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_Hum_DC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Hum_DC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_Hum_DC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DeH_LC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_DeH_LC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DeH_LC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_DeH_LC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DeH_DC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_DeH_DC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_DeH_DC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_FXP2_DeH_DC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += sizeof(float);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_Opnlp_InjTime])) {
+		f[indx++] = var_code_Ad1_FXP2_Co2_Opnlp_InjTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx += sizeof(TIME_M);
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_CylGen])) {
-
+		f[indx++] = var_code_Ad1_FXP2_Co2_CylGen;	
+		f[indx++] = sizeof(BOOL);					// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_Cyl_StPtPPM])) {
+		uint16_t iv = 0;
+		f[indx++] = var_code_Ad1_FXP2_Co2_Cyl_StPtPPM;
+		bytes_n = sizeof(uint16_t);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%d", &iv);
+		intVal.intVar = iv;
+		memcpy(&f[indx], intVal.intArry, sizeof(uint16_t));
+
+		indx += sizeof(uint16_t);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_Gen_OnPPM])) {
+		uint16_t iv = 0;
+		f[indx++] = var_code_Ad1_FXP2_Co2_Gen_OnPPM;
+		bytes_n = sizeof(uint16_t);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%d", &iv);
+		intVal.intVar = iv;
+		memcpy(&f[indx], intVal.intArry, sizeof(uint16_t));
+
+		indx += sizeof(uint16_t);
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_FXP2_Co2_Gen_OffPPM])) {
+		uint16_t iv = 0;
+		f[indx++] = var_code_Ad1_FXP2_Co2_Gen_OffPPM;
+		bytes_n = sizeof(uint16_t);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%d", &iv);
+		intVal.intVar = iv;
+		memcpy(&f[indx], intVal.intArry, sizeof(uint16_t));
+
+		indx += sizeof(uint16_t);
 	} else {
-		return INVALID;
+		return MSG_ERROR;
 	}
 	uint16_t crc16_val = CRC16(f, indx);
 	f[indx++] = (uint8_t)(crc16_val & 0xFF);
