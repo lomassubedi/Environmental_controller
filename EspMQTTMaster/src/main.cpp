@@ -9,20 +9,20 @@
 #include "mqtt_485.h"
 #include "rs485.h"
 
-#define       HOME
-// #define       OFFICE
+// #define       HOME
+#define       OFFICE
 
 // String match
 #define     STR_MATCH       0
 
-//#define   INTERNET
+// #define   INTERNET
 #define   LOCALHOST
 // Update these with values suitable for your network.
 
 #ifdef HOME
   const char* ssid = "yangobahal";
   const char* password = "43A74C699A";
-  const char* mqtt_server = "192.168.100.81";
+  // const char* mqtt_server = "192.168.100.81";
 #endif
 
 #ifdef HOME_

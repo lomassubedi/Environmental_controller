@@ -226,7 +226,7 @@ static const char * varNameProfile [] = {
 	"FXP2_Co2_Gen_OffPPM"
 };
 
-static uint8_t getIntArg(char * arg) {
+static int8_t getIntArg(char * arg) {
 
 	if(
 		 (!strcmp(arg, "YES")) || (!strcmp(arg, "yes")) 	||
@@ -257,10 +257,32 @@ static uint8_t getIntArg(char * arg) {
 	}
 }
 
-static void getIntTime(char * t, uint8_t * ft) {
-	ft[0] = ((t[0] - 48) * 10) + (t[1] - 48);
-	ft[1] = ((t[3] - 48) * 10) + (t[4] - 48);
-	ft[2] = ((t[6] - 48) * 10) + (t[7] - 48);	
+// static int8_t getFloatArg(char * f, float * fv) {
+// 	sscanf(f, "%f", &fv);
+
+// 	floatVal.floatVar = fv;
+	
+// 	memcpy(&f[indx], floatVal.floatArry, sizeof(float));	
+// 	sscanf(f, "%f", &fv);
+// 	return 0;
+// }
+
+static int8_t getIntTime(char * t, uint8_t * ft) {
+
+	if(strlen(t) == 8) {
+		ft[0] = ((t[0] - 48) * 10) + (t[1] - 48);
+		ft[1] = ((t[3] - 48) * 10) + (t[4] - 48);
+		ft[2] = ((t[6] - 48) * 10) + (t[7] - 48);
+
+		if((ft[0] >= 0 && ft[0] <= 23) | (ft[1] >= 0 && ft[1] <= 59) && (ft[2] >= 0 && ft[2] <= 59)) {	
+			return 0;	
+		} else {
+			return INVALID;
+		}
+	} else {
+		return INVALID;
+	}
+	
 }
 
 unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_command, uint8_t * f, uint16_t * fLen) {
@@ -272,6 +294,16 @@ unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_co
 	uint8_t i = 0;
 
 	uint8_t timeBuff[sizeof(TIME_M)];
+
+	union {
+		float floatVar;
+		uint8_t floatArry[sizeof(float)];
+  	} floatVal;
+
+	union {
+		uint16_t intVar;
+		uint8_t intArry[sizeof(uint16_t)];
+	} intVal;
 
 	do {
 		uint8_t cVal = (uint8_t)prof_num[i] - 48;
@@ -291,7 +323,7 @@ unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_co
 		if(getIntArg(var_command) >= 0) 
 			f[indx++] = getIntArg(var_command);		// data Byte
 		else
-			return INVALID;
+			return MSG_ERROR;
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_OnTime])) {
 
@@ -299,118 +331,438 @@ unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_co
 		bytes_n = sizeof(TIME_M);
 		f[indx++] = bytes_n;						// number of Bytes
 
-		getIntTime(var_command, &f[indx]);
-		indx = indx + 3;		
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx = indx + 3;
+		}		
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_OffTime])) {
 		f[indx++] = var_code_Ad1_Light_OffTime;	
 		bytes_n = sizeof(TIME_M);
 		f[indx++] = bytes_n;						// number of Bytes
 
-		getIntTime(var_command, &f[indx]);
-		indx = indx + 3;	
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx = indx + 3;
+		}		
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_LC_Duration])) {
 		f[indx++] = var_code_Ad1_Light_LC_Duration;	
 		bytes_n = sizeof(TIME_M);
 		f[indx++] = bytes_n;						// number of Bytes
 
-		getIntTime(var_command, &f[indx]);
-		indx = indx + 3;			
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx = indx + 3;
+		}				
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_DC_Duration])) {
 		f[indx++] = var_code_Ad1_Light_DC_Duration;	
 		bytes_n = sizeof(TIME_M);
 		f[indx++] = bytes_n;						// number of Bytes
 
-		getIntTime(var_command, &f[indx]);
-		indx = indx + 3;		
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx = indx + 3;
+		}			
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_LC_TimeRemain])) {
-		f[indx++] = var_code_Ad1_Light_DC_Duration;	
+		f[indx++] = var_code_Ad1_Light_LC_TimeRemain;	
 		bytes_n = sizeof(TIME_M);
 		f[indx++] = bytes_n;						// number of Bytes
 
-		getIntTime(var_command, &f[indx]);
-		indx = indx + 3;				
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx = indx + 3;
+		}				
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_Light_DC_TimeRemain])) {
+		
+		f[indx++] = var_code_Ad1_Light_DC_TimeRemain;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
+
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx = indx + 3;
+		}	
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_OnOff])) {
-
+		f[indx++] = var_code_Ad1_HdV_OnOff;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_LC_OnOff])) {
+		f[indx++] = var_code_Ad1_HdV_LC_OnOff;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_LC_SrtDly])) {
+		
+		f[indx++] = var_code_Ad1_HdV_LC_SrtDly;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx = indx + 3;
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DC_OnOff])) {
+		f[indx++] = var_code_Ad1_HdV_DC_OnOff;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DC_SrtDly])) {
 
+		f[indx++] = var_code_Ad1_HdV_DC_SrtDly;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
+
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx = indx + 3;
+		}
+
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_YesNo])) {
-
+		f[indx++] = var_code_Ad1_HdV_FlexFunc_YesNo;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_RptTmr])) {
-
+		f[indx++] = var_code_Ad1_HdV_FlexFunc_RptTmr;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Heat])) {
-
+		f[indx++] = var_code_Ad1_HdV_FlexFunc_Heat;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Cool])) {
-
+		f[indx++] = var_code_Ad1_HdV_FlexFunc_Cool;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Hum])) {
-
+		f[indx++] = var_code_Ad1_HdV_FlexFunc_Hum;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_DeHum])) {
-
+		f[indx++] = var_code_Ad1_HdV_FlexFunc_DeHum;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_CO2])) {
-
+		f[indx++] = var_code_Ad1_HdV_FlexFunc_CO2;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Follow])) {
-
+		f[indx++] = var_code_Ad1_HdV_FlexFunc_Follow;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_FlexFunc_Flip])) {
-
+		f[indx++] = var_code_Ad1_HdV_FlexFunc_Flip;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_VentLoc_YesNo])) {
-
+		f[indx++] = var_code_Ad1_HdV_VentLoc_YesNo;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Tmr_LC_CclTime])) {
+		f[indx++] = var_code_Ad1_HdV_Tmr_LC_CclTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx = indx + 3;
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Tmr_LC_RptAftr])) {
+		f[indx++] = var_code_Ad1_HdV_Tmr_LC_RptAftr;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx = indx + 3;
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Tmr_DC_CclTime])) {
+		f[indx++] = var_code_Ad1_HdV_Tmr_DC_CclTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx = indx + 3;
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Tmr_DC_RptAftr])) {
+		f[indx++] = var_code_Ad1_HdV_Tmr_DC_RptAftr;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx = indx + 3;
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Htr_LC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_Htr_LC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
+
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Htr_LC_OffTemp])) {
+		
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_Htr_LC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
+
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Htr_DC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_Htr_DC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
+
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Htr_DC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_Htr_DC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
+
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Cool_LC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_Cool_LC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
+
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Cool_LC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_Cool_LC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
+
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Cool_DC_OnTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_Cool_DC_OnTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
+
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Cool_DC_OffTemp])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_Cool_DC_OffTemp;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
+
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Hum_LC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_Hum_LC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
+
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Hum_LC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_Hum_LC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;				
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Hum_DC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_Hum_DC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Hum_DC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_Hum_DC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DeH_LC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_DeH_LC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DeH_LC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_DeH_LC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DeH_DC_OnHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_DeH_DC_OnHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_DeH_DC_OffHum])) {
+		float fv = 0.0;
+		f[indx++] = var_code_Ad1_HdV_DeH_DC_OffHum;
+		bytes_n = sizeof(float);
+		f[indx++] = bytes_n;
 
+		sscanf(var_command, "%f", &fv);
+		floatVal.floatVar = fv;
+		memcpy(&f[indx], floatVal.floatArry, sizeof(float));
+
+		indx += 4;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_Opnlp_InjTime])) {
+		f[indx++] = var_code_Ad1_HdV_Co2_Opnlp_InjTime;	
+		bytes_n = sizeof(TIME_M);
+		f[indx++] = bytes_n;						// number of Bytes
 
+		if(getIntTime(var_command, &f[indx]) < 0) {
+			return MSG_ERROR;
+		} else {
+			indx = indx + 3;
+		}
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_CylGen])) {
-
+		f[indx++] = var_code_Ad1_HdV_Co2_CylGen;	
+		f[indx++] = 1;								// number of Bytes
+		if(getIntArg(var_command) >= 0) 
+			f[indx++] = getIntArg(var_command);		// data Byte
+		else
+			return MSG_ERROR;
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_Cyl_StPtPPM])) {
+		uint16_t iv = 0;
+		f[indx++] = var_code_Ad1_HdV_Co2_Cyl_StPtPPM;
+		bytes_n = sizeof(uint16_t);
+		f[indx++] = bytes_n;
+
+		sscanf(var_command, "%d", &iv);
+		intVal.intVar = iv;
+		memcpy(&f[indx], intVal.intArry, sizeof(uint16_t));
+
+		indx += sizeof(uint16_t);
 
 	} else if(!strcmp(profile_var_name, varNameProfile[var_code_Ad1_HdV_Co2_Gen_OnPPM])) {
 

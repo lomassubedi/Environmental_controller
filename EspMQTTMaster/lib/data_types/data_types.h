@@ -45,6 +45,7 @@
 
 #define			INVALID			-1
 #define			UNKNOWN			-1
+#define			MSG_ERROR		10
 
 // ---- Typedefs --
 typedef 		uint8_t		BOOL;
