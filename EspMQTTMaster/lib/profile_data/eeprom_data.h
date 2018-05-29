@@ -84,7 +84,7 @@ enum profileNo {
 	PROFILE_NUMBER_20
 };
 
-typedef __packed struct tools {
+typedef struct tools {
 	
 	uint8_t Ad1_DeviceType;
 	
@@ -143,7 +143,7 @@ typedef __packed struct tools {
 // --- tools instantiation ---
 extern TOOLS *tools;
 
-typedef __packed struct profile {
+typedef struct profile {
 	
 	TRISTATE_OPERATION_MODE Ad1_Light_Operation_Mode;
 	

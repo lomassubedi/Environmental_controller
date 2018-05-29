@@ -230,11 +230,11 @@ int main(void) {
 			STM_EVAL_LEDToggle(LED3);
 			RTC_GetTime(RTC_Format_BIN, &myRTCTime);
 			RTC_GetDate(RTC_Format_BIN, &myRTCDate);
-			#if 1
+			#if 0
 			/*	
 			printf("Year: %d, \tMonth: %d, \tDay: %d, \t", (myRTCDate.RTC_Year + 2000), myRTCDate.RTC_Month, myRTCDate.RTC_Date);
 				printf("Hour: %d, \tMinute: %d, \tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);							
-			*/	
+			*/				
 			printf("Light Operation Mode: %d\r\n", profile->Ad1_Light_Operation_Mode);
 			printf("HdV_DeH_DC_OffHum: %f\r\n", profile->Ad1_HdV_DeH_DC_OffHum);
 			printf("Ad1_HdV_Co2_Cyl_StPtPPM: %d\r\n", profile->Ad1_HdV_Co2_Cyl_StPtPPM);

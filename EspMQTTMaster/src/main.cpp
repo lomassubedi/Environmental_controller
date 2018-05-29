@@ -47,7 +47,7 @@
 #define     TIME_BUS_CAPTURE      5000UL
 #define     SIZE_MQTT_MESSAGE     200
 #define     SIZE_MQTT_PAYLOAD     20
-#define     F_LEN                 100
+#define     F_LEN                 600
 
 
 // Software Serial port for RS485 application
@@ -76,6 +76,9 @@ uint8_t frame[F_LEN];
 
 char * mqttMsg[SIZE_MQTT_MESSAGE];
 char mqttPayLoad[SIZE_MQTT_PAYLOAD];
+
+
+bool flag_read_prof = false;
 
 void setup_wifi() {
 
@@ -115,13 +118,14 @@ void reconnect() {
         Serial.println("connected");
         // ... and resubscribe
         client.subscribe("profile/+/+");
+        client.subscribe("get_prof");
       } else {
         Serial.print("failed, rc=");
         Serial.print(client.state());
         Serial.println(" try again in 5 seconds");
         // Wait 5 seconds before retrying
         delay(5000);
-      }    
+      }  
     }
   #endif
 
@@ -143,7 +147,7 @@ void reconnect() {
 }
 
 
-uint8_t rs485_write_frame(uint8_t *f, uint16_t len) { 
+uint8_t rs485_write_frame(uint8_t *f, uint16_t len) {
   uint16_t indx = 0;  
   // Make the RE/DE pin High
   for(uint16_t flen = 0; flen < len; flen++) {
@@ -152,54 +156,81 @@ uint8_t rs485_write_frame(uint8_t *f, uint16_t len) {
   // Make the RE/DE pin Low
 }
 
+uint8_t rs485_read_frame(uint8_t *f) {
+  uint16_t indx = 0;  
+
+  while(RS485Ser.available()) {
+    f[indx++] = RS485Ser.read();
+  }
+  return 0;
+}
 
 // ----------------- Custom functions Codes -------------
 void callback(char* topic, byte* payload, unsigned int length) {
   
   unsigned char cnt = 0;
-  char *p = strtok(topic, "/");
-
-  while(p != NULL) {
-    mqttMsg[cnt++] = p;
-    p = strtok(NULL, "/");
-  }
-
+    
   for (int i = 0; i < length; i++) {
     mqttPayLoad[i] = (char)payload[i];
   }
 
-  mqttPayLoad[length] = '\0';  
-  mqttMsg[cnt] = mqttPayLoad;
+  mqttPayLoad[length] = '\0';
 
-  for(int i = 0; i <= cnt; i++) {
-    Serial.print(i);
-    Serial.print(". ");
-    Serial.print(mqttMsg[i]); 
-    Serial.write("\t");
-  }
+  if(strcmp(topic, "get_prof")) {
 
-  Serial.println();
+    char *p = strtok(topic, "/");
 
-  cnt = 0;
-
-  uint16 flen;
-  
-  if(!mqttToFrame(mqttMsg[1], mqttMsg[2], mqttPayLoad, frame, &flen)) {
-    for(int i = 0; i < flen; i++) {
-      Serial.write(frame[i]);
+    while(p != NULL) {
+      mqttMsg[cnt++] = p;
+      p = strtok(NULL, "/");
     }
+ 
+    mqttMsg[cnt] = mqttPayLoad;
+
+    for(int i = 0; i <= cnt; i++) {
+      Serial.print(i);
+      Serial.print(". ");
+      Serial.print(mqttMsg[i]); 
+      Serial.write("\t");
+    }
+
     Serial.println();
-    rs485_write_frame(frame, flen);
+
+    cnt = 0;
+
+    uint16_t flen;
+    
+    if(mqttToFrame(mqttMsg[1], mqttMsg[2], mqttPayLoad, frame, &flen) == 0) {
+      for(int i = 0; i < flen; i++) {
+        Serial.write(frame[i]);
+      }
+      Serial.println();
+      rs485_write_frame(frame, flen);
+    } else { 
+      Serial.println("Error: Invalid profile received !!!");
+    }
+  } else {
+    uint16_t fln;
+
+    Serial.println("Get Profile received !!");
+
+    if(mqttToPrfFrame(mqttPayLoad, frame, &fln) == 0) {
+      for(int i = 0; i < fln; i++) {
+        Serial.write(frame[i]);
+      }
+      Serial.println();
+      rs485_write_frame(frame, fln);
+      if(!rs485_read_frame(frame)) {
+        flag_read_prof = true;
+      }
+    } else {
+      Serial.println("Error: Invalid profile received !!!");
+    }
   }
 
-  // Switch on the LED if an 1 was received as first character
-  if ((char)payload[0] == '1') {
-    digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
-    // but actually the LED is on; this is because
-    // it is acive low on the ESP-01)
-  } else {
-    digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
-  }
+  // Toggle LED on each call back !!!
+  digitalWrite(BUILTIN_LED, !digitalRead(BUILTIN_LED)); 
+
 }
 
 void setup() {
@@ -245,4 +276,10 @@ void loop() {
     client.publish("outTopic", msg);
   }
   */
+
+ if(flag_read_prof) {
+   
+   flag_read_prof = false;
+
+ }
 }

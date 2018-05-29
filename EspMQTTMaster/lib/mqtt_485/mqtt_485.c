@@ -257,16 +257,6 @@ static int8_t getIntArg(char * arg) {
 	}
 }
 
-// static int8_t getFloatArg(char * f, float * fv) {
-// 	sscanf(f, "%f", &fv);
-
-// 	floatVal.floatVar = fv;
-	
-// 	memcpy(&f[indx], floatVal.floatArry, sizeof(float));	
-// 	sscanf(f, "%f", &fv);
-// 	return 0;
-// }
-
 static int8_t getIntTime(char * t, uint8_t * ft) {
 
 	if(strlen(t) == 8) {
@@ -285,11 +275,11 @@ static int8_t getIntTime(char * t, uint8_t * ft) {
 	
 }
 
-unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_command, uint8_t * f, uint16_t * fLen) {
+int8_t mqttToFrame(char * prof_num, char * profile_var_name, char * var_command, uint8_t * f, uint16_t * fLen) {
 	
 	uint16_t indx = 0;
 	uint8_t profNum = 0;
-	uint8_t profInt;
+	uint8_t profInt = 0;
 	uint8_t bytes_n = 0;
 	uint8_t i = 0;
 
@@ -311,6 +301,9 @@ unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_co
 		profInt = profInt + cVal;	
 		i++;	
 	} while(prof_num[i]);
+
+	if((profInt < 0) || (profInt > 20))
+		return PRF_ERROR;
 
 	f[indx++] = SLAVE_ID;			// Slave ID 
 	f[indx++] = FUNC_WRITE_VAR;		// Function Code
@@ -2121,5 +2114,32 @@ unsigned int mqttToFrame(char * prof_num, char * profile_var_name, char * var_co
 	f[indx++] = (uint8_t)(crc16_val & 0xFF);
 	f[indx++] = (uint8_t)(crc16_val >> 8);
 	*fLen = indx;
+	return 0;
+}
+
+int8_t mqttToPrfFrame(char * prof_num, uint8_t * f, uint16_t * fLen) {
+	uint8_t profInt = 0;
+	uint8_t i = 0;	
+	uint8_t indx = 0;
+
+	do {
+		uint8_t cVal = (uint8_t)prof_num[i] - 48;
+		profInt = profInt * 10;
+		profInt = profInt + cVal;	
+		i++;	
+	} while(prof_num[i]);	
+
+	if((profInt < 0) || (profInt > 20))
+		return PRF_ERROR;
+
+	f[indx++] = SLAVE_ID;			// Slave ID 
+	f[indx++] = FUNC_READ_PROF;		// Function Code
+	f[indx++] = profInt;			// Profile Number
+
+	uint16_t crc16_val = CRC16(f, indx);
+	f[indx++] = (uint8_t)(crc16_val & 0xFF);
+	f[indx++] = (uint8_t)(crc16_val >> 8);
+	*fLen = indx;
+
 	return 0;
 }

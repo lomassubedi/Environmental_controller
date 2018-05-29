@@ -30,8 +30,8 @@ a = 1
 while a:
 	
 	the_input = input('->')
-	profileCommand, profileNoCommand, var_cmd, argument = the_input.split()
-	command = profileCommand + "/" + profileNoCommand + "/" + var_cmd
+	profileCommand, argument = the_input.split()
+	command = profileCommand
 	client.publish(command, argument) #publish
 	print("Publishing : " + command + " " + argument)
 	#time.sleep(1)

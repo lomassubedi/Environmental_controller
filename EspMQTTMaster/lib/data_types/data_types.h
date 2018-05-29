@@ -30,8 +30,8 @@
 
 
 // -- CYCL or GEN Constants ---
-#define 		CYL					1
-#define 		GEN					0
+#define 		CYL				1
+#define 		GEN				0
 
 // --- Unit Standard Flag Constants
 #define 		ENGLISH			0
@@ -46,6 +46,7 @@
 #define			INVALID			-1
 #define			UNKNOWN			-1
 #define			MSG_ERROR		10
+#define			PRF_ERROR		20
 
 // ---- Typedefs --
 typedef 		uint8_t		BOOL;
