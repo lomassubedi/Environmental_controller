@@ -13,6 +13,7 @@
 #define   RS485_SLAVE_ENV_CTRL      1
 #define   SLAVE_ID                  RS485_SLAVE_ENV_CTRL
 
+#define     FUNC_READ_VAR           20      // Function code 20 for reading data from EEPROM
 #define     FUNC_WRITE_VAR          40      // Function code 40 for writing data to EEPROM
 #define     FUNC_READ_PROF          60      // Function code 60 for reading profile from EEPROM
 
@@ -22,9 +23,9 @@ extern "C" {
 #endif
 
 
-int8_t mqttToFrame(char * prof_num, char * profile_var_name, char * var_command, uint8_t * f, uint16_t * fLen);
+int8_t mqttToFrameSetProf(char * prof_num, char * profile_var_name, char * var_command, uint8_t * f, uint16_t * fLen);
 
-int8_t mqttToPrfFrame(char * prof_num, uint8_t * f, uint16_t * fLen);
+int8_t mqttToFrameGetProf(char * prof_num, char * profile_var_name, uint8_t * f, uint16_t * fLen);
 
 
 #ifdef __cplusplus

@@ -8,7 +8,7 @@
 // ---------- Var Code Tools Enum -------
 enum varCodeTools {
 	
-	var_code_Ad1_DeviceType = 1,
+	var_code_Ad1_DeviceType = 0,
 	
 	var_code_Ad1_Tools_Units_EnglishMetric,
 	
@@ -59,7 +59,8 @@ enum varCodeTools {
 	var_code_Ad1_Tools_Switch_YesNo,
 	var_code_Ad1_Tools_HdVent_DC_DeAct_FactSet_Delay,
 	var_code_Ad1_Tools_CO2_PVA_PostVent_FactSet_Delay,
-	var_code_Ad1_Tools_LED_OnOff
+	var_code_Ad1_Tools_LED_OnOff,
+	var_code_tools_end
 };
 
 
@@ -310,7 +311,8 @@ enum varCodeProfile {
 	
 	var_code_Ad1_FXP2_Co2_Cyl_StPtPPM,
 	var_code_Ad1_FXP2_Co2_Gen_OnPPM,
-	var_code_Ad1_FXP2_Co2_Gen_OffPPM
+	var_code_Ad1_FXP2_Co2_Gen_OffPPM,
+	var_code_prof_end
 };
 
 #endif // VAR_CODES_H_

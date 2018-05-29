@@ -21,6 +21,10 @@ void get_profile(uint8_t prof_num) {
 	/* read the respective profile */
 	switch(prof_num) {
 		
+		case TOOLS_NUMBER:
+			I2C_EEPROM_24C0x_ReadStructTools(tools, EEPROM_ADDRESS_TOOLS, TOOLS_SIZE);
+		break;
+		
 		case PROFILE_NUMBER_1:
 			I2C_EEPROM_24C0x_ReadStructProfile(profile, EEPROM_ADDRESS_PROFILE_1, PROFILE_SIZE);
 			break;
@@ -224,23 +228,33 @@ int main(void) {
 		
 		if(flagLEDIndi) {			
 			flagLEDIndi = 0;
-			
-			get_profile(active_profile);
+						
 			
 			STM_EVAL_LEDToggle(LED3);
 			RTC_GetTime(RTC_Format_BIN, &myRTCTime);
 			RTC_GetDate(RTC_Format_BIN, &myRTCDate);
-			#if 0
+			#if 1
 			/*	
 			printf("Year: %d, \tMonth: %d, \tDay: %d, \t", (myRTCDate.RTC_Year + 2000), myRTCDate.RTC_Month, myRTCDate.RTC_Date);
 				printf("Hour: %d, \tMinute: %d, \tSec: %d\r\n", myRTCTime.RTC_Hours, myRTCTime.RTC_Minutes, myRTCTime.RTC_Seconds);							
 			*/				
+			printf("------------------------------------------------\r\n");
+			// tools
+			get_profile(0);
+			printf("Ad1_Tools_Sensor_Fault: %d\r\n", tools->Ad1_Tools_Sensor_Fault);
+			printf("Ad1_Tools_HiHum_Warning_StPt: %f\r\n", tools->Ad1_Tools_HiHum_Warning_StPt);
+			printf("Ad1_Tools_ReStrike_Delay_Time: %d:%d:%d\r\n", tools->Ad1_Tools_ReStrike_Delay_Time.HH, tools->Ad1_Tools_ReStrike_Delay_Time.MM, tools->Ad1_Tools_ReStrike_Delay_Time.SS);			
+			printf("Ad1_Tools_Light_Relay_Cycle_Counter: %d\r\n", tools->Ad1_Tools_Light_Relay_Cycle_Counter);	
+			printf("------------------------------------------------\r\n");
+			// profiles
+			get_profile(active_profile);
 			printf("Light Operation Mode: %d\r\n", profile->Ad1_Light_Operation_Mode);
 			printf("HdV_DeH_DC_OffHum: %f\r\n", profile->Ad1_HdV_DeH_DC_OffHum);
 			printf("Ad1_HdV_Co2_Cyl_StPtPPM: %d\r\n", profile->Ad1_HdV_Co2_Cyl_StPtPPM);
 			printf("Ad1_FXP2_Co2_Cyl_StPtPPM: %d\r\n", profile->Ad1_FXP2_Co2_Cyl_StPtPPM);
 			printf("Ad1_FXP1_DeH_DC_OffHum: %f\r\n", profile->Ad1_FXP1_DeH_DC_OffHum);			
 			printf("Light On Time: %d:%d:%d\r\n", profile->Ad1_Light_OnTime.HH, profile->Ad1_Light_OnTime.MM, profile->Ad1_Light_OnTime.SS);			
+			printf("------------------------------------------------\r\n");
 			#endif
 		}					
 	}	

@@ -8,7 +8,7 @@
 #include "stm32f0_discovery.h"
 #include "eeprom_profile.h"
 
-#define 	BUFFER_SIZE 			600
+#define 	BUFFER_SIZE 			100
 #define 	DEVICE_SLAVE_ID			1
 
 TIM_TimeBaseInitTypeDef timerInitStructure; 
@@ -339,32 +339,6 @@ uint8_t modbus_update() {
 						sendPacket(address);
 						// ------------------- End of Reply -------------------------
 					
-					} else if(function == 60) {		// function code 60 for reading a complete profile
-						profileNo = frame[2];				// Get profile Number
-						
-						byteCountProfRd = sizeof(PROFILE);						
-						// MSB n bytes
-						frame[3] = (uint8_t)(byteCountProfRd >> 8);
-						
-						// LSB n bytes
-						frame[4] = (uint8_t)(byteCountProfRd & 0xFF);
-						
-						address = 5;
-						
-						get_profile(profileNo);					
-						
-						memcpy(&frame[address], (void *)profile, byteCountProfRd);
-						
-						address += byteCountProfRd;
-						
-						tmpCRC = CRC16(frame, address);
-						
-						frame[address++] = (uint8_t)(tmpCRC & 0x00FF);					// LSB
-						frame[address++] = (uint8_t)((tmpCRC >> 8) & 0x00FF);		// MSB						
-						
-						sendPacket(address);
-
-						
 					} else {
 						exceptionResponse(1); // exception 1 ILLEGAL FUNCTION
 					}

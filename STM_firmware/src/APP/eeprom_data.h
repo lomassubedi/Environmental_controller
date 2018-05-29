@@ -403,7 +403,7 @@ extern PROFILE *profile;
 // ---------- Var Code Tools Enum -------
 enum varCodeTools {
 	
-	var_code_Ad1_DeviceType = 1,
+	var_code_Ad1_DeviceType = 0,
 	
 	var_code_Ad1_Tools_Units_EnglishMetric,
 	

@@ -47,7 +47,7 @@
 #define     TIME_BUS_CAPTURE      5000UL
 #define     SIZE_MQTT_MESSAGE     200
 #define     SIZE_MQTT_PAYLOAD     20
-#define     F_LEN                 600
+#define     F_LEN                 100
 
 
 // Software Serial port for RS485 application
@@ -117,8 +117,8 @@ void reconnect() {
       if (client.connect(clientId.c_str())) {
         Serial.println("connected");
         // ... and resubscribe
-        client.subscribe("profile/+/+");
-        client.subscribe("get_prof");
+        client.subscribe("setProf/+/+");
+        client.subscribe("getProf/+");
       } else {
         Serial.print("failed, rc=");
         Serial.print(client.state());
@@ -176,44 +176,53 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   mqttPayLoad[length] = '\0';
 
-  if(strcmp(topic, "get_prof")) {
+  char *p = strtok(topic, "/");
+  while(p != NULL) {
+    mqttMsg[cnt++] = p;
+    p = strtok(NULL, "/");
+  }
 
-    char *p = strtok(topic, "/");
+  mqttMsg[cnt] = mqttPayLoad;
 
-    while(p != NULL) {
-      mqttMsg[cnt++] = p;
-      p = strtok(NULL, "/");
-    }
- 
-    mqttMsg[cnt] = mqttPayLoad;
+  for(int i = 0; i <= cnt; i++) {
+    Serial.print(i);
+    Serial.print(". ");
+    Serial.print(mqttMsg[i]); 
+    Serial.write("\t");
+  }
 
-    for(int i = 0; i <= cnt; i++) {
-      Serial.print(i);
-      Serial.print(". ");
-      Serial.print(mqttMsg[i]); 
-      Serial.write("\t");
-    }
+  Serial.println();
+  cnt = 0;
 
-    Serial.println();
-
-    cnt = 0;
+  if(strcmp(mqttMsg[0], "setProf") == 0) {
 
     uint16_t flen;
     
-    if(mqttToFrame(mqttMsg[1], mqttMsg[2], mqttPayLoad, frame, &flen) == 0) {
+    if(mqttToFrameSetProf(mqttMsg[1], mqttMsg[2], mqttPayLoad, frame, &flen) == 0) {
       for(int i = 0; i < flen; i++) {
         Serial.write(frame[i]);
       }
       Serial.println();
       rs485_write_frame(frame, flen);
+
     } else { 
       Serial.println("Error: Invalid profile received !!!");
     }
-  } else {
+
+  } else if(strcmp(mqttMsg[0], "getProf") == 0) {
+    
     uint16_t fln;
 
     Serial.println("Get Profile received !!");
 
+    if(mqttToFrameGetProf(mqttMsg[1], mqttPayLoad, frame, &fln) == 0) {
+      for(int i = 0; i < fln; i++) {
+        Serial.write(frame[i]);
+      }
+    } else {
+      Serial.println("Error: Invalid profile received !!!");
+    }     
+    /*
     if(mqttToPrfFrame(mqttPayLoad, frame, &fln) == 0) {
       for(int i = 0; i < fln; i++) {
         Serial.write(frame[i]);
@@ -226,6 +235,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
     } else {
       Serial.println("Error: Invalid profile received !!!");
     }
+    */
+  } else {
+    Serial.println("Unknown topic !!");
   }
 
   // Toggle LED on each call back !!!
@@ -277,8 +289,7 @@ void loop() {
   }
   */
 
- if(flag_read_prof) {
-   
+ if(flag_read_prof) {   
    flag_read_prof = false;
 
  }

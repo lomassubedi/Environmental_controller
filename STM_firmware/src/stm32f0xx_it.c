@@ -94,12 +94,13 @@ void PendSV_Handler(void)
   * @retval None
   */
 unsigned char flagLEDIndi = 0;
+
 void SysTick_Handler(void){
 	static unsigned int tmrTmpVal = 0;	
 	disk_timerproc();
 	TimingDelay_Decrement();
 	tmrTmpVal++;
-	if(!(tmrTmpVal % 1000))
+	if(!(tmrTmpVal % 2000))
 		flagLEDIndi = 1;
 }
 
