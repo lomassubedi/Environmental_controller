@@ -8,6 +8,7 @@
 #include "data_types.h"
 #include "mqtt_485.h"
 #include "rs485.h"
+#include "mbcrc.h"
 
 // #define       HOME
 #define       OFFICE
@@ -46,7 +47,7 @@
 
 #define     TIME_BUS_CAPTURE      5000UL
 #define     SIZE_MQTT_MESSAGE     200
-#define     SIZE_MQTT_PAYLOAD     20
+#define     SIZE_MQTT_PAYLOAD     50
 #define     F_LEN                 100
 
 
@@ -77,8 +78,11 @@ uint8_t frame[F_LEN];
 char * mqttMsg[SIZE_MQTT_MESSAGE];
 char mqttPayLoad[SIZE_MQTT_PAYLOAD];
 
-
-bool flag_read_prof = false;
+/*
+ * Flags definations :
+ */
+bool flag_mqtt_read_prof_var = false;
+bool flag_mqtt_write_prof_var = false;
 
 void setup_wifi() {
 
@@ -162,11 +166,13 @@ uint8_t rs485_read_frame(uint8_t *f) {
   while(RS485Ser.available()) {
     f[indx++] = RS485Ser.read();
   }
-  return 0;
+  return indx;
 }
 
 // ----------------- Custom functions Codes -------------
 void callback(char* topic, byte* payload, unsigned int length) {
+
+  // client.publish("openhab/himitsu/command","acknowedging OFF");
   
   unsigned char cnt = 0;
     
@@ -195,47 +201,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
   cnt = 0;
 
   if(strcmp(mqttMsg[0], "setProf") == 0) {
-
-    uint16_t flen;
-    
-    if(mqttToFrameSetProf(mqttMsg[1], mqttMsg[2], mqttPayLoad, frame, &flen) == 0) {
-      for(int i = 0; i < flen; i++) {
-        Serial.write(frame[i]);
-      }
-      Serial.println();
-      rs485_write_frame(frame, flen);
-
-    } else { 
-      Serial.println("Error: Invalid profile received !!!");
-    }
-
+    flag_mqtt_write_prof_var = true;
   } else if(strcmp(mqttMsg[0], "getProf") == 0) {
-    
-    uint16_t fln;
-
-    Serial.println("Get Profile received !!");
-
-    if(mqttToFrameGetProf(mqttMsg[1], mqttPayLoad, frame, &fln) == 0) {
-      for(int i = 0; i < fln; i++) {
-        Serial.write(frame[i]);
-      }
-    } else {
-      Serial.println("Error: Invalid profile received !!!");
-    }     
-    /*
-    if(mqttToPrfFrame(mqttPayLoad, frame, &fln) == 0) {
-      for(int i = 0; i < fln; i++) {
-        Serial.write(frame[i]);
-      }
-      Serial.println();
-      rs485_write_frame(frame, fln);
-      if(!rs485_read_frame(frame)) {
-        flag_read_prof = true;
-      }
-    } else {
-      Serial.println("Error: Invalid profile received !!!");
-    }
-    */
+    flag_mqtt_read_prof_var = true;  
   } else {
     Serial.println("Unknown topic !!");
   }
@@ -246,6 +214,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
 }
 
 void setup() {
+
+  // systerm_soft_wdt_stop();
+
   pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
   Serial.begin(115200);
   RS485Ser.begin(9600);
@@ -271,11 +242,50 @@ void loop() {
     }
   #endif
 
-  
+  if(flag_mqtt_write_prof_var) {
+    
+    uint16_t flen;
+    flag_mqtt_write_prof_var = false;
+
+    if(mqttToFrameSetProf(mqttMsg[1], mqttMsg[2], mqttPayLoad, frame, &flen) == 0) {
+      for(int i = 0; i < flen; i++) {
+        Serial.write(frame[i]);
+      }
+      Serial.println();
+      rs485_write_frame(frame, flen);
+    } else {
+      Serial.println("Error: Invalid profile received !!!");
+    }
+  }
+
+  // In case of MQTT read profile value command 
+  if(flag_mqtt_read_prof_var) {
+    
+    uint16_t fln;
+
+    flag_mqtt_read_prof_var = false;
+
+    Serial.println("Get Profile received !!");
+    if(mqttToFrameGetProf(mqttMsg[1], mqttPayLoad, frame, &fln) == 0) {
+
+      rs485_write_frame(frame, fln);
+      
+      fln = rs485_read_frame(frame);
+
+      for(int i = 0; i < fln; i++) {
+        Serial.write(frame[i]);
+      }    
+    } else {
+      Serial.println("Error: Invalid profile received !!!");
+    }  
+  }
+
   // if(!(millis() % TIME_BUS_CAPTURE)) {
   //   RS485Ser.write(56);
   // }
   client.loop();
+
+  // Serial.print();
 
   /*
   long now = millis();
@@ -288,9 +298,4 @@ void loop() {
     client.publish("outTopic", msg);
   }
   */
-
- if(flag_read_prof) {   
-   flag_read_prof = false;
-
- }
 }

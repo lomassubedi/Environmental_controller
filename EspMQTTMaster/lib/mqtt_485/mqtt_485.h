@@ -27,6 +27,8 @@ int8_t mqttToFrameSetProf(char * prof_num, char * profile_var_name, char * var_c
 
 int8_t mqttToFrameGetProf(char * prof_num, char * profile_var_name, uint8_t * f, uint16_t * fLen);
 
+// uint16_t frameToMqtt(uint8_t * f, uint16_t flen, uint8_t * profNo, char * varName, char * arg);
+uint16_t frameToMqtt(uint8_t * f, uint16_t flen);
 
 #ifdef __cplusplus
 }

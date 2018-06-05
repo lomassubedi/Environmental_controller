@@ -2486,3 +2486,17 @@ int8_t mqttToFrameGetProf(char * prof_num, char * profile_var_name, uint8_t * f,
 	return 0;
 
 }
+
+// uint16_t frameToMqtt(uint8_t * f, uint16_t flen, uint8_t * profNo, char * varName, char * arg) {
+uint16_t frameToMqtt(uint8_t * f, uint16_t flen) {	
+	uint8_t profileNo;
+	uint8_t varCode;
+	uint8_t byteCount = 0;
+	uint8_t bytesArry[4];
+	uint8_t byteIndex = 0;
+
+	// Check CRC first
+	uint16_t crc_frame = CRC16(f, (flen - 2));	
+
+	return crc_frame;	
+}
