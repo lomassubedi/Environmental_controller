@@ -12,5 +12,5 @@
         "data_types.h": "c"
     },
     "C_Cpp.dimInactiveRegions": true,
-    "C_Cpp.errorSquiggles": "Enabled"
+    "C_Cpp.errorSquiggles": "Disabled"
 }

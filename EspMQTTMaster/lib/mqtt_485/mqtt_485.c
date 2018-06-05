@@ -2487,16 +2487,54 @@ int8_t mqttToFrameGetProf(char * prof_num, char * profile_var_name, uint8_t * f,
 
 }
 
-// uint16_t frameToMqtt(uint8_t * f, uint16_t flen, uint8_t * profNo, char * varName, char * arg) {
-uint16_t frameToMqtt(uint8_t * f, uint16_t flen) {	
+uint16_t frameToPayload(uint8_t * f, uint16_t flen, char * payLoad) {
 	uint8_t profileNo;
 	uint8_t varCode;
 	uint8_t byteCount = 0;
 	uint8_t bytesArry[4];
 	uint8_t byteIndex = 0;
 
-	// Check CRC first
-	uint16_t crc_frame = CRC16(f, (flen - 2));	
+	// Get profile number 
+	profileNo = f[2];
 
-	return crc_frame;	
+	// Get variable code 
+	varCode = f[3];
+
+	// Get number of bytes 
+	byteCount = f[4];
+
+	union {
+		float floatVar;
+		uint8_t floatArry[sizeof(float)];
+  	} floatVal;
+
+	union {
+		uint16_t intVar;
+		uint8_t intArry[sizeof(uint16_t)];
+	} intVal;
+
+	switch(byteCount) {
+		case 1:
+			sprintf(payLoad, "%d", f[5]);
+		break;
+
+		case 2:
+			memcpy((void *)intVal.intArry, &f[5], sizeof(uint16_t));				
+			sprintf(payLoad, "%d", intVal.intVar);
+		break;
+
+		case 3:
+			sprintf(payLoad, "%d:%d:%d", f[5], f[6], f[7]);
+		break;
+
+		case 4:
+			memcpy((void *)floatVal.floatArry, &f[5], sizeof(float));				
+			sprintf(payLoad, "%f", floatVal.floatVar);
+		break;
+
+		default:
+		break;
+	}
+
+	return 0;
 }

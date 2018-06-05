@@ -72,11 +72,13 @@ SoftwareSerial RS485Ser(RX, TX, false, 256);
 long lastMsg = 0;
 char msg[50];
 int value = 0;
+const int LED = D0;
 
 uint8_t frame[F_LEN];
 
 char * mqttMsg[SIZE_MQTT_MESSAGE];
 char mqttPayLoad[SIZE_MQTT_PAYLOAD];
+char str_mqtt[SIZE_MQTT_MESSAGE];
 
 /*
  * Flags definations :
@@ -152,12 +154,12 @@ void reconnect() {
 
 
 uint8_t rs485_write_frame(uint8_t *f, uint16_t len) {
-  uint16_t indx = 0;  
   // Make the RE/DE pin High
   for(uint16_t flen = 0; flen < len; flen++) {
     RS485Ser.write(f[flen]);
   }
   // Make the RE/DE pin Low
+  return 0;
 }
 
 uint8_t rs485_read_frame(uint8_t *f) {
@@ -172,8 +174,6 @@ uint8_t rs485_read_frame(uint8_t *f) {
 // ----------------- Custom functions Codes -------------
 void callback(char* topic, byte* payload, unsigned int length) {
 
-  // client.publish("openhab/himitsu/command","acknowedging OFF");
-  
   unsigned char cnt = 0;
     
   for (int i = 0; i < length; i++) {
@@ -209,15 +209,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
 
   // Toggle LED on each call back !!!
-  digitalWrite(BUILTIN_LED, !digitalRead(BUILTIN_LED)); 
-
+  digitalWrite(LED, !digitalRead(LED)); 
 }
 
 void setup() {
 
   // systerm_soft_wdt_stop();
 
-  pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
+  pinMode(LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
   Serial.begin(115200);
   RS485Ser.begin(9600);
   setup_wifi();
@@ -262,6 +261,7 @@ void loop() {
   if(flag_mqtt_read_prof_var) {
     
     uint16_t fln;
+    // static uint8_t k = 0;
 
     flag_mqtt_read_prof_var = false;
 
@@ -272,9 +272,53 @@ void loop() {
       
       fln = rs485_read_frame(frame);
 
-      for(int i = 0; i < fln; i++) {
-        Serial.write(frame[i]);
-      }    
+      if(fln) {
+        
+        uint16_t crc16_val_calc = CRC16(frame, fln-2);
+        uint16_t crc16_val_frm = ((frame[fln - 1] << 8) | (frame[fln - 2]));
+
+        if(crc16_val_calc != crc16_val_frm) {
+          Serial.println("CRC Error !!!");
+          return;
+        }
+
+        // Serial.print("CRCC: ");
+        // Serial.print(crc16_val_calc);
+        // Serial.print("   CRCF: ");
+        // Serial.println(crc16_val_frm);        
+      } else {
+        Serial.println("No frame read !!!");
+      }
+
+      // f[indx++] = (uint8_t)(crc16_val & 0xFF);
+      // f[indx++] = (uint8_t)(crc16_val >> 8);
+      
+
+      // for(int i = 0; i < fln; i++) {
+      //   Serial.write(frame[i]);
+      // }
+      // str_mqtt[0] = '\0';
+      strcat(str_mqtt, "sendProf");
+      strcat(str_mqtt, "/");  
+      strcat(str_mqtt, mqttMsg[1]);
+      strcat(str_mqtt, "/");  
+      strcat(str_mqtt, mqttPayLoad);  
+      mqttPayLoad[0] = '\0';
+
+      frameToPayload(frame, fln, mqttPayLoad);
+
+      Serial.print("MQTT String :");
+      Serial.print(str_mqtt);
+      Serial.print(" ");
+      Serial.println(mqttPayLoad);
+
+      // Send the read value over MQTT again 
+      client.publish(str_mqtt, mqttPayLoad);
+
+      mqttPayLoad[0] = '\0';
+      str_mqtt[0] = '\0';
+      // fln = 0;
+      
     } else {
       Serial.println("Error: Invalid profile received !!!");
     }  
