@@ -246,6 +246,7 @@ int main(void) {
 			printf("Ad1_Tools_ReStrike_Delay_Time: %d:%d:%d\r\n", tools->Ad1_Tools_ReStrike_Delay_Time.HH, tools->Ad1_Tools_ReStrike_Delay_Time.MM, tools->Ad1_Tools_ReStrike_Delay_Time.SS);			
 			printf("Ad1_Tools_Light_Relay_Cycle_Counter: %d\r\n", tools->Ad1_Tools_Light_Relay_Cycle_Counter);	
 			printf("------------------------------------------------\r\n");
+			
 			// profiles
 			get_profile(active_profile);
 			printf("Light Operation Mode: %d\r\n", profile->Ad1_Light_Operation_Mode);

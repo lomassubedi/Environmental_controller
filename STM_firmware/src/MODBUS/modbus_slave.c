@@ -350,11 +350,11 @@ uint8_t modbus_update() {
 		} else if (buffer > 0 && buffer < 6) {
 			errorCount++; // corrupted packet
 		}
-		buffer = 0;						// Reset the queue
-		flag_rx_complete = 0; // Reset the receive complete flag for new reception
-		// Ready for next data reception on the bus
-		USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
-	}
+			buffer = 0;						// Reset the queue
+		}
+	flag_rx_complete = 0; // Reset the receive complete flag for new reception
+	// Ready for next data reception on the bus
+	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
   return errorCount;
 }
 

@@ -18,6 +18,11 @@
 
 // #define   INTERNET
 #define   LOCALHOST
+
+// #define   SW_SER
+#define   HW_SER
+
+#define   DEBUG_ON
 // Update these with values suitable for your network.
 
 #ifdef HOME
@@ -58,23 +63,34 @@
 
 #define     RS485_F_LEN           100
 
-
+// WiFi Client
 WiFiClient espClient;
+
+// MQTT Client
 PubSubClient client(espClient);
 
-// RS485 Serial
-SoftwareSerial RS485Ser(RX, TX, false, 256);
+#ifdef    SW_SER
+  // RS485 Serial
+  SoftwareSerial RS485Ser(RX, TX, false, 256);
+#endif
 
+
+#ifdef    HW_SER
+  // Softwar Debug port 
+  SoftwareSerial DebugSerial(RX, TX, false, 256);
+#endif
 
 /**
  * Variables to store MQTT information
  **/
+
 long lastMsg = 0;
 char msg[50];
 int value = 0;
 const int LED = D0;
 
 uint8_t frame[F_LEN];
+uint8_t rxFrame[F_LEN];
 
 char * mqttMsg[SIZE_MQTT_MESSAGE];
 char mqttPayLoad[SIZE_MQTT_PAYLOAD];
@@ -85,28 +101,35 @@ char str_mqtt[SIZE_MQTT_MESSAGE];
  */
 bool flag_mqtt_read_prof_var = false;
 bool flag_mqtt_write_prof_var = false;
+bool flag_modbus_write_done = false;
 
 void setup_wifi() {
 
   delay(10);
   // We start by connecting to a WiFi network
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
+  #ifdef    DEBUG_ON
+    DebugSerial.println();
+    DebugSerial.print("Connecting to ");
+    DebugSerial.println(ssid);
+  #endif
 
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(".");
+    #ifdef    DEBUG_ON
+      DebugSerial.print(".");
+    #endif
   }
 
   randomSeed(micros());
 
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
+  #ifdef    DEBUG_ON
+    DebugSerial.println("");
+    DebugSerial.println("WiFi connected");
+    DebugSerial.println("IP address: ");
+    DebugSerial.println(WiFi.localIP());
+  #endif
 }
 
 void reconnect() {
@@ -114,21 +137,30 @@ void reconnect() {
   #ifdef LOCALHOST
     // Loop until we're reconnected
     while (!client.connected()) {
-      Serial.print("Attempting MQTT connection...");
+
+      #ifdef    DEBUG_ON
+        DebugSerial.print("Attempting MQTT connection...");
+      #endif
+
       // Create a random client ID
       String clientId = "ESP8266Client-";
       clientId += String(random(0xffff), HEX);
           
       // Attempt to connect
       if (client.connect(clientId.c_str())) {
-        Serial.println("connected");
+        #ifdef    DEBUG_ON
+          DebugSerial.println("connected");
+        #endif
         // ... and resubscribe
         client.subscribe("setProf/+/+");
         client.subscribe("getProf/+");
       } else {
-        Serial.print("failed, rc=");
-        Serial.print(client.state());
-        Serial.println(" try again in 5 seconds");
+
+        #ifdef    DEBUG_ON
+          DebugSerial.print("failed, rc=");
+          DebugSerial.print(client.state());
+          DebugSerial.println(" try again in 5 seconds");
+        #endif
         // Wait 5 seconds before retrying
         delay(5000);
       }  
@@ -137,15 +169,22 @@ void reconnect() {
 
   #ifdef INTERNET
     while (!client.connected()) {
-      Serial.println("Connecting to MQTT...");
+      #ifdef    DEBUG_ON
+        DebugSerial.println("Connecting to MQTT...");
+      #endif
 
       if (client.connect("ESP8266Client", mqttUser, mqttPassword )) {
-        Serial.println("connected");  
+        #ifdef    DEBUG_ON
+          DebugSerial.println("connected");  
+        #endif
         // client.publish("esp/test", "Hello from ESP8266 and its Lomas !!!");
-        client.subscribe("profile/+/+");
-      } else {  
-        Serial.print("failed with state ");
-        Serial.print(client.state());
+        client.subscribe("setProf/+/+");
+        client.subscribe("getProf/+");
+      } else { 
+        #ifdef    DEBUG_ON
+          DebugSerial.print("failed with state ");
+          DebugSerial.print(client.state());
+        #endif
         delay(2000);  
       }
     }
@@ -154,19 +193,32 @@ void reconnect() {
 
 
 uint8_t rs485_write_frame(uint8_t *f, uint16_t len) {
+  uint16_t flen;  
   // Make the RE/DE pin High
-  for(uint16_t flen = 0; flen < len; flen++) {
-    RS485Ser.write(f[flen]);
+  for(flen = 0; flen < len; flen++) {
+    Serial.write(f[flen]);
   }
   // Make the RE/DE pin Low
   return 0;
 }
 
 uint8_t rs485_read_frame(uint8_t *f) {
-  uint16_t indx = 0;  
+  uint16_t indx = 0; 
+  uint16_t serialTry = 300;
+  
+  memset(f, 0, F_LEN);
 
-  while(RS485Ser.available()) {
-    f[indx++] = RS485Ser.read();
+  Serial.flush();
+  while(serialTry > 0) {
+    serialTry--;
+
+    while(Serial.available()) {
+    f[indx++] = Serial.read();
+      if(indx > F_LEN) {
+        break;
+      }
+    }
+    delay(1);
   }
   return indx;
 }
@@ -176,7 +228,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   unsigned char cnt = 0;
     
-  for (int i = 0; i < length; i++) {
+  for (unsigned int i = 0; i < length; i++) {
     mqttPayLoad[i] = (char)payload[i];
   }
 
@@ -189,15 +241,17 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
 
   mqttMsg[cnt] = mqttPayLoad;
+  #ifdef    DEBUG_ON
+  // for(int i = 0; i <= cnt; i++) {
+  //   DebugSerial.print(i);
+  //   DebugSerial.print(". ");
+  //   DebugSerial.print(mqttMsg[i]); 
+  //   DebugSerial.write("\t");
+  // }
 
-  for(int i = 0; i <= cnt; i++) {
-    Serial.print(i);
-    Serial.print(". ");
-    Serial.print(mqttMsg[i]); 
-    Serial.write("\t");
-  }
+  // DebugSerial.println();
+  #endif
 
-  Serial.println();
   cnt = 0;
 
   if(strcmp(mqttMsg[0], "setProf") == 0) {
@@ -205,7 +259,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   } else if(strcmp(mqttMsg[0], "getProf") == 0) {
     flag_mqtt_read_prof_var = true;  
   } else {
-    Serial.println("Unknown topic !!");
+    DebugSerial.println("Unknown topic !!");
   }
 
   // Toggle LED on each call back !!!
@@ -214,11 +268,21 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 void setup() {
 
-  // systerm_soft_wdt_stop();
-
   pinMode(LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
-  Serial.begin(115200);
-  RS485Ser.begin(9600);
+
+  // #ifdef    DEBUG_ON
+    DebugSerial.begin(115200);
+    DebugSerial.println("Debug serial started !!! ");
+  // #endif
+
+  #ifdef    SW_SER
+    RS485Ser.begin(9600);
+  #endif
+
+  #ifdef    HW_SER
+    Serial.begin(9600);
+  #endif
+
   setup_wifi();
   
   #ifdef LOCALHOST
@@ -230,8 +294,6 @@ void setup() {
   #endif
   client.setCallback(callback);
 }
-
-int i = 0;
 
 void loop() {
 
@@ -248,56 +310,81 @@ void loop() {
 
     if(mqttToFrameSetProf(mqttMsg[1], mqttMsg[2], mqttPayLoad, frame, &flen) == 0) {
       for(int i = 0; i < flen; i++) {
-        Serial.write(frame[i]);
+        #ifdef    DEBUG_ON
+          DebugSerial.write(frame[i]);
+        #endif
       }
-      Serial.println();
+
+      #ifdef    DEBUG_ON
+        DebugSerial.println();
+      #endif
+
       rs485_write_frame(frame, flen);
+
     } else {
-      Serial.println("Error: Invalid profile received !!!");
+
+      #ifdef    DEBUG_ON
+        DebugSerial.println("Error: Invalid profile received !!!");
+      #endif
+
     }
   }
 
   // In case of MQTT read profile value command 
   if(flag_mqtt_read_prof_var) {
     
-    uint16_t fln;
-    // static uint8_t k = 0;
-
+    uint16_t fln = 0;
+    // static uint8_t k = 0;    
     flag_mqtt_read_prof_var = false;
 
-    Serial.println("Get Profile received !!");
+    #ifdef    DEBUG_ON
+      DebugSerial.println("Get Profile received !!");
+    #endif
+
     if(mqttToFrameGetProf(mqttMsg[1], mqttPayLoad, frame, &fln) == 0) {
-
-      rs485_write_frame(frame, fln);
       
-      fln = rs485_read_frame(frame);
+      // uint8_t frame_itr = 0;
+      // do {
+        // RS485Ser.flush();
+        rs485_write_frame(frame, fln);
+        // flag_modbus_write_done = true;
+        fln = rs485_read_frame(rxFrame);
+        // DebugSerial.println("Hello World!!!");
+        // while(Serial.available() > 0) {
+        // f[indx++] = Serial.read();
+          // DebugSerial.write(Serial.read());
+        // }
 
-      if(fln) {
-        
-        uint16_t crc16_val_calc = CRC16(frame, fln-2);
-        uint16_t crc16_val_frm = ((frame[fln - 1] << 8) | (frame[fln - 2]));
+        // DebugSerial.println("Reading RS485 frame !!!");
+        // frame_itr++;
+      // } while((!fln) && (frame_itr <= 5));
 
-        if(crc16_val_calc != crc16_val_frm) {
-          Serial.println("CRC Error !!!");
-          return;
-        }
-
-        // Serial.print("CRCC: ");
-        // Serial.print(crc16_val_calc);
-        // Serial.print("   CRCF: ");
-        // Serial.println(crc16_val_frm);        
-      } else {
-        Serial.println("No frame read !!!");
+      for(int i = 0; i < fln; i++) {
+        #ifdef    DEBUG_ON
+          DebugSerial.write(rxFrame[i]);
+        #endif
       }
 
-      // f[indx++] = (uint8_t)(crc16_val & 0xFF);
-      // f[indx++] = (uint8_t)(crc16_val >> 8);
-      
+      if(fln) {
+        uint16_t crc16_val_calc = CRC16(rxFrame, fln-2);
+        uint16_t crc16_val_frm = ((rxFrame[fln - 1] << 8) | (rxFrame[fln - 2]));
 
-      // for(int i = 0; i < fln; i++) {
-      //   Serial.write(frame[i]);
-      // }
-      // str_mqtt[0] = '\0';
+        if(crc16_val_calc != crc16_val_frm) {
+
+          #ifdef    DEBUG_ON
+            DebugSerial.println("CRC Error !!!");
+          #endif
+
+          return;
+        } 
+      } else {
+
+        #ifdef    DEBUG_ON
+          DebugSerial.println("No frame read !!!");
+        #endif
+
+      }
+
       strcat(str_mqtt, "sendProf");
       strcat(str_mqtt, "/");  
       strcat(str_mqtt, mqttMsg[1]);
@@ -305,31 +392,47 @@ void loop() {
       strcat(str_mqtt, mqttPayLoad);  
       mqttPayLoad[0] = '\0';
 
-      frameToPayload(frame, fln, mqttPayLoad);
+      frameToPayload(rxFrame, fln, mqttPayLoad);
 
-      Serial.print("MQTT String :");
-      Serial.print(str_mqtt);
-      Serial.print(" ");
-      Serial.println(mqttPayLoad);
+      #ifdef    DEBUG_ON
+        DebugSerial.print("MQTT String :");
+        DebugSerial.print(str_mqtt);
+        DebugSerial.print(" ");
+        DebugSerial.println(mqttPayLoad);
+      #endif
 
       // Send the read value over MQTT again 
       client.publish(str_mqtt, mqttPayLoad);
 
       mqttPayLoad[0] = '\0';
       str_mqtt[0] = '\0';
-      // fln = 0;
+      fln = 0;
       
     } else {
-      Serial.println("Error: Invalid profile received !!!");
+      
+      #ifdef    DEBUG_ON
+        DebugSerial.println("Error: Invalid profile received !!!");
+      #endif
+
     }  
   }
 
+  /*
+  if(flag_modbus_write_done) {      
+    if(Serial.available()) {
+      while(Serial.available()) {
+        DebugSerial.write(Serial.read());
+      }
+      flag_modbus_write_done = false;
+    }
+  }
+  */
   // if(!(millis() % TIME_BUS_CAPTURE)) {
   //   RS485Ser.write(56);
   // }
   client.loop();
 
-  // Serial.print();
+  // DebugSerial.print();
 
   /*
   long now = millis();
@@ -337,8 +440,8 @@ void loop() {
     lastMsg = now;
     ++value;
     snprintf (msg, 75, "hello world #%ld", value);
-    Serial.print("Publish messageS: ");
-    Serial.println(msg);
+    DebugSerial.print("Publish messageS: ");
+    DebugSerial.println(msg);
     client.publish("outTopic", msg);
   }
   */
